@@ -1,0 +1,35 @@
+/* Footer Styling */
+.footer {
+    background: white;
+    border-top: 1px solid black;
+    font-size: 14px;
+}
+
+.footer-logo {
+    max-width: 150px;
+}
+
+.footer h5 {
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.footer p {
+    margin: 0;
+    color: #333;
+}
+
+.footer a {
+    text-decoration: none;
+    color: black;
+}
+
+.footer a:hover {
+    text-decoration: underline;
+}
+
+.footer-bottom {
+    background: black;
+    color: white;
+    font-size: 12px;
+}
