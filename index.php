@@ -39,8 +39,8 @@
         </div>
 
     <div class="text-center position-absolute top-50 start-50 translate-middle text-white">
-        <h1 class="fw-bold">SMJ Furnishings</h1>
-        <h1 class="fw-bold">Philippines Inc.</h1>
+    <h1 class="fw-bold display-4" style="letter-spacing: 1.5px;">SMJ Furnishings</h1>
+    <h2 class="fw-semibold" style="letter-spacing: 1px;">Philippines Inc.</h2>
     </div>
 
         <!-- Navigation Controls -->
@@ -55,14 +55,14 @@
 
 <!-- Introduction Section -->
 <div class="container text-center my-5">
-    <h1 class="fw-bold">Your one-stop carpet service provider.</h1>
-    <h5 class="text-muted">SMJ Group is one of the leading premier carpet specialists serving the commercial and institutional sectors in Asia.</h5> 
+    <h1 class="fw-bold">Your one-stop carpet service provider.</h1> <br>
+    <h5 class="text-muted">SMJ Group is one of the leading premier carpet specialists serving the commercial <br><br> and institutional sectors in Asia.</h5>
 </div>
 
 <!-- Line -->
 <div class="container text-center my-5">
-    <br><br> 
-    <hr class="border border-black border-1"> 
+    <br><br>
+    <hr class="border border-black border-1">
     <br><br>
 </div>
 
@@ -70,10 +70,10 @@
 <div class="container text-center my-5">
     <h1 class="fw-bold">Featured Products</h1><br>
     <div class="row g-4 mt-3">
-        <div class="col-md-3"><img src="assets/bluestone-sq.jpg" class="img-fluid" alt="Bluestone SQ"><h5>Bluestone SQ</h5></div>
-        <div class="col-md-3"><img src="assets/brightstone-sq.jpg" class="img-fluid" alt="Brightstone SQ"><h5>Brightstone SQ</h5></div>
-        <div class="col-md-3"><img src="assets/cadence-sq.jpg" class="img-fluid" alt="Candence SQ"><h5>Candence SQ</h5></div>
-        <div class="col-md-3"><img src="assets/camborne-sq.jpg" class="img-fluid" alt="Camborne SQ"><h5>Camborne SQ</h5></div>
+        <div class="col-md-3"><img src="assets/bluestone-sq.jpg" class="img-fluid" alt="Bluestone SQ"><h5 class="mt-2 fs-6 fw-semibold">Bluestone SQ</h5></div>
+        <div class="col-md-3"><img src="assets/brightstone-sq.jpg" class="img-fluid" alt="Brightstone SQ"><h5 class="mt-2 fs-6 fw-semibold">Brightstone SQ</h5></div>
+        <div class="col-md-3"><img src="assets/cadence-sq.jpg" class="img-fluid" alt="Candence SQ"><h5 class="mt-2 fs-6 fw-semibold">Candence SQ</h5></div>
+        <div class="col-md-3"><img src="assets/camborne-sq.jpg" class="img-fluid" alt="Camborne SQ"><h5 class="mt-2 fs-6 fw-semibold">Camborne SQ</h5></div>
     </div>
     <br>
     <a class="btn btn-dark btn-lg mt-3">See more</a>
@@ -81,8 +81,8 @@
 
 <!-- Line -->
 <div class="container text-center my-5">
-    <br><br> 
-    <hr class="border border-black border-1"> 
+    <br><br>
+    <hr class="border border-black border-1">
     <br><br>
 </div>
 
@@ -136,8 +136,8 @@
 
 <!-- Line -->
 <div class="container text-center my-5">
-    <br><br> 
-    <hr class="border border-black border-1"> 
+    <br><br>
+    <hr class="border border-black border-1">
     <br><br>
 </div>
 
@@ -147,25 +147,25 @@
     <div class="row g-4 mt-3">
         <div class="col-md-4">
             <img src="assets/project1.jpg" class="img-fluid project-img" alt="Project 1" style="height: 500px;">
-            <h5>Taguig City</h5>
+            <h5 class= "mt-3 fs-6 fw-semibold">@ Taguig City</h5>
         </div>
         <div class="col-md-4">
             <img src="assets/project2.jpg" class="img-fluid project-img" alt="Project 2"style="height: 500px;">
-            <h5>Makati City</h5>
+            <h5 class= "mt-3 fs-6 fw-semibold">@ Makati City</h5>
         </div>
         <div class="col-md-4">
             <img src="assets/project3.jpg" class="img-fluid project-img" alt="Project 3"style="height: 500px;">
-            <h5>Taguig City</h5>
+            <h5 class= "mt-3 fs-6 fw-semibold">@ Taguig City</h5>
         </div>
     </div>
     <br>
-    <a class="btn btn-dark btn-lg mt-3">See more</a>
+    <a class="btn btn-dark btn-lg mt-4">See more</a>
 </div>
 
 <!-- Line -->
 <div class="container text-center my-5">
-    <br><br> 
-    <hr class="border border-black border-1"> 
+    <br><br>
+    <hr class="border border-black border-1">
     <br><br>
 </div>
 
@@ -173,21 +173,27 @@
 <div class="container my-5">
     <h1 class="fw-bold text-center">About us</h1><br>
     <div class="row align-items-center mt-3">
-        <div class="col-md-6">
-            <h5>SMJ Furnishings was set up in 1986 and specializes in carpet tiles, broadloom carpets, and luxury vinyl tiles. With an established reputation and track record, SMJ Furnishings is arguably the top largest leading premier flooring specialist serving the commercial and institutional sectors in Asia.</h5>
+
+        <div class="col-md-6 pe-md-5 text-start">
+            <h5 class="mb-1 lh-lg fs-6" style="text-align: justify;">
+                SMJ Furnishings was set up in 1986 and specializes in carpet tiles, broadloom carpets, and luxury vinyl tiles. With an established reputation and track record, SMJ Furnishings is arguably the top largest leading premier flooring specialist serving the commercial and institutional sectors in Asia.
+            </h5>
             <a class="btn btn-outline-dark mt-3" href="aboutus.php">Learn more</a>
         </div>
-        <div class="col-md-6">
+
+        <div class="col-md-6 ps-md-5">
             <img src="assets/aboutus.jpg" class="img-fluid" alt="About Us">
         </div>
     </div>
 </div>
 
+
+
 <!-- Footer -->
 <?php include 'footer.php'; ?>
 
 <!-- Bootstrap JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
 integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 </html>
