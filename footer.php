@@ -43,10 +43,10 @@
             <!-- Socials -->
             <div class="col-md-3">
                 <h5>Socials</h5>
-                <p><a href="#">Facebook</a></p>
+                <p><a href="https://www.facebook.com/smjfurnishingsph">Facebook</a></p>
                 <p><a href="#">Email</a></p>
                 <p><a href="#">Twitter</a></p>
-                <p><a href="#">Instagram</a></p>
+                <p><a href="https://www.instagram.com/smjfurnishingsphils/">Instagram</a></p>
             </div>
 
             <!-- About -->
