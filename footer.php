@@ -20,15 +20,15 @@
 <!-- Footer -->
 <footer class="footer">
     <div class="container py-4">
-        <div class="row align-items-center">
+        <div class="row align-items-start">
             <!-- Logo Section -->
-            <div class="col-md-3 text-center">
-                <img src="assets/footer-logo.png" class="footer-logo img-fluid" alt="SMJ Logo">
-                <p class="tagline">PREMIER FLOORING SPECIALIST</p>
+            <div class="col-md-3 text-start">
+                <img src="assets/navbar-logo1.png" class="footer-logo img-fluid" alt="SMJ Logo">
+                <p class="tagline text-start mt-4 ms-n2" style="font-size: 10px;" >© 2025 SMJ Furnishings Philippines Inc. All rights reserved</p>
             </div>
 
             <!-- Company Info -->
-            <div class="col-md-3">
+            <div class="col-md-3 ms-auto">
                 <h5>Company</h5>
                 <p>Salcedo Village, LGO1, <br>
                    Herrera Tower Condo, 98 <br>
@@ -41,7 +41,7 @@
             </div>
 
             <!-- Socials -->
-            <div class="col-md-3">
+            <div class="col-md-3 ms-auto">
                 <h5>Socials</h5>
                 <p><a href="https://www.facebook.com/smjfurnishingsph">Facebook</a></p>
                 <p><a href="#">Email</a></p>
@@ -50,7 +50,7 @@
             </div>
 
             <!-- About -->
-            <div class="col-md-3">
+            <div class="col-md-3 ms-auto">
                 <h5>About</h5>
                 <p><a href="#">Terms & Conditions</a></p>
                 <p><a href="#">Privacy Policy</a></p>
