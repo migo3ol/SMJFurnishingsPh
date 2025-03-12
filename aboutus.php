@@ -32,8 +32,10 @@
     <?php include 'navbar.php'; ?>
     
 <!-- Hero Section -->
-<div class="container my-5">
-    <h1 class="fw-bold text-center">About us</h1><br>
+<div class="container my-5 text-center">
+<h1 style="border-bottom: 3px solid #ED4135;" class="fw-bold d-inline-block pb-2 w-25 mb-5">
+    About us
+</h1>
     <div class="row align-items-center mt-3">
     <div class="col-md-6">
         <img src="assets/aboutus1.jpg" class="img-fluid shadow-lg" alt="About Us 1">
@@ -57,7 +59,7 @@
 <!-- SMJ Map -->
 <div class="container my-5">
     <div class="row align-items-center mt-3">
-            <img src="assets/smj-map1.png" class="img-fluid" alt="SMJ Map">
+            <img src="assets/SMJ_Map_Phil.png" class="img-fluid" alt="SMJ Map">
 </div>
 </div>
 

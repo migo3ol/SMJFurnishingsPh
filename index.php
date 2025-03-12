@@ -47,8 +47,8 @@
         </div>
 
     <div class="text-center position-absolute top-50 start-50 translate-middle text-white">
-        <h1 class="fw-bold">SMJ Furnishings</h1>
-        <h1 class="fw-bold">Philippines Inc.</h1>
+        <h1 class="fs-20 fw-bold">SMJ Furnishings</h1>
+        <h4 class="fs-10 fw-bold">Philippines Inc.</h4>
     </div>
 
         <!-- Navigation Controls -->
@@ -78,10 +78,10 @@
 <div class="container text-center my-5">
     <h1 class="fw-bold">Featured Products</h1><br>
     <div class="row g-4 mt-3">
-        <div class="col-md-3"><img src="assets/bluestone-sq.jpg" class="img-fluid" alt="Bluestone SQ"><h5>Bluestone SQ</h5></div>
-        <div class="col-md-3"><img src="assets/brightstone-sq.jpg" class="img-fluid" alt="Brightstone SQ"><h5>Brightstone SQ</h5></div>
-        <div class="col-md-3"><img src="assets/cadence-sq.jpg" class="img-fluid" alt="Candence SQ"><h5>Candence SQ</h5></div>
-        <div class="col-md-3"><img src="assets/camborne-sq.jpg" class="img-fluid" alt="Camborne SQ"><h5>Camborne SQ</h5></div>
+        <div class="col-md-3"><img src="assets/bluestone-sq.jpg" class="img-fluid" alt="Bluestone SQ"><h5 class="mt-2 fs-6">Bluestone SQ</h5></div>
+        <div class="col-md-3"><img src="assets/brightstone-sq.jpg" class="img-fluid" alt="Brightstone SQ"><h5 class="mt-2 fs-6">Brightstone SQ</h5></div>
+        <div class="col-md-3"><img src="assets/cadence-sq.jpg" class="img-fluid" alt="Candence SQ"><h5 class="mt-2 fs-6">Candence SQ</h5></div>
+        <div class="col-md-3"><img src="assets/camborne-sq.jpg" class="img-fluid" alt="Camborne SQ"><h5 class="mt-2 fs-6">Camborne SQ</h5></div>
     </div>
     <br>
     <a class="btn btn-dark btn-lg mt-3">See more</a>
@@ -181,11 +181,16 @@
 <div class="container my-5">
     <h1 class="fw-bold text-center">About us</h1><br>
     <div class="row align-items-center mt-3">
-        <div class="col-md-6">
-            <h5>SMJ Furnishings was set up in 1986 and specializes in carpet tiles, broadloom carpets, and luxury vinyl tiles. With an established reputation and track record, SMJ Furnishings is arguably the top largest leading premier flooring specialist serving the commercial and institutional sectors in Asia.</h5>
+        <!-- Text on the left -->
+        <div class="col-md-6 pe-md-5 text-start">
+            <h5 class="mb-1 lh-lg fs-6" style="text-align: justify;">
+                SMJ Furnishings was set up in 1986 and specializes in carpet tiles, broadloom carpets, and luxury vinyl tiles. With an established reputation and track record, SMJ Furnishings is arguably the top largest leading premier flooring specialist serving the commercial and institutional sectors in Asia.
+            </h5>
             <a class="btn btn-outline-dark mt-3" href="aboutus.php">Learn more</a>
         </div>
-        <div class="col-md-6">
+
+        <!-- Image on the right -->
+        <div class="col-md-6 ps-md-5">
             <img src="assets/aboutus.jpg" class="img-fluid" alt="About Us">
         </div>
     </div>
