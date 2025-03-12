@@ -24,7 +24,7 @@
             <!-- Logo Section -->
             <div class="col-md-3 text-start">
                 <img src="assets/navbar-logo1.png" class="footer-logo img-fluid" alt="SMJ Logo">
-                <p class="tagline text-start mt-4 ms-n2" style="font-size: 10px;" >© 2025 SMJ Furnishings Philippines Inc. All rights reserved</p>
+                <p class="tagline text-start mt-4 ms-n2" style="font-size: 10px;" ></p>
             </div>
 
             <!-- Company Info -->
@@ -60,7 +60,7 @@
     
     <!-- Copyright -->
     <div class="footer-bottom text-center py-2">
-        Copyright © 2025 SMJ Furnishings Philippines Inc.
+        Copyright © 2025 SMJ Furnishings Philippines Inc. All rights reserved
     </div>
 </footer>
 
