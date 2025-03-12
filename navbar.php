@@ -29,11 +29,11 @@
         </button>
         <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
             <ul class="navbar-nav">
-                <li class="nav-item"><a class="nav-link fw-medium" href="index.php">Home</a></li>
-                <li class="nav-item"><a class="nav-link fw-medium" href="aboutus.php">About us</a></li>
+                <li class="nav-item"><a class="nav-link" href="index.php">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="aboutus.php">About us</a></li>
 
                 <li class="nav-item dropdown">
-                    <a class="nav-link fw-medium dropdown-toggle" href="#" id="collectionsDropdown" role="button" data-bs-toggle="dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="collectionsDropdown" role="button" data-bs-toggle="dropdown">
                         Collections
                     </a>
                     <ul class="dropdown-menu">
@@ -44,9 +44,8 @@
                     </ul>
                 </li>
                 
-                <li class="nav-item"><a class="nav-link fw-medium" href="#">Projects</a></li>
-                <li class="nav-item"><a class="nav-link fw-medium" href="#">Contact us</a></li>
-                <li class="nav-item"><a class="nav-link fw-medium" href="#">Admin</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Projects</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Contact us</a></li>
             </ul>
         </div>
     </div>

@@ -1,3 +1,4 @@
+/* Font */
 body {
     font-family: 'Poppins', sans-serif;
 }
@@ -29,3 +30,36 @@ display: inline-block;
     height: 500px; /* Set the desired height */
     object-fit: cover; /* Ensure the image covers the area without distortion */
 }
+
+.password-container {
+    position: relative;
+}
+.toggle-password {
+    background: transparent;
+    border: none;
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+
+/* Dashboard */
+.sidebar {
+    height: 100vh;
+    width: 250px;
+    background-color: #f8f9fa;
+    padding: 20px;
+}
+.dashboard-content {
+    margin-left: 260px;
+    padding: 20px;
+}
+.card-custom {
+    padding: 20px;
+    border-radius: 8px;
+    color: black;
+}
+.sales-card { background-color: #ffff99; }
+.orders-card { background-color: #ffcc80; }
+.employees-card { background-color: #ff8a65; }
