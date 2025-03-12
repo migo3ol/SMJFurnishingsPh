@@ -6,7 +6,17 @@
 }
 
 .footer-logo {
-    max-width: 150px;
+    max-width: 150px;  
+    position: relative; /* Keeps it in the normal document flow */
+    margin-top: 15px;  
+    transform: scale(1.5); 
+}
+
+h4 {
+    margin-top: 0;
+}
+p {
+    line-height: 1.4; 
 }
 
 .footer h5 {
