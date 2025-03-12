@@ -73,7 +73,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </style>
 </head>
 <body class="d-flex justify-content-center align-items-center vh-100 bg-light">
-    <div class="card p-4 shadow-lg" style="width: 600px;">
+    <div class="card p-4 shadow-lg" style="max-width: 600px; width: 100%;">
         <h3 class="text-center mb-5">Account Registration</h3>
 
         <?php if ($message): ?>
