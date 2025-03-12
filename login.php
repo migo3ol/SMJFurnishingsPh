@@ -1,30 +1,43 @@
 <!-- Log in Process -->
 <?php
-    include 'database.php';
+session_start();
+include 'database.php';
 
-    $message = '';
+$message = '';
 
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        $username = $_POST["username"];
-        $password = $_POST["password"];
-    
-        $sql = "SELECT * FROM user_admins WHERE username='$username'";
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $username = $_POST['username'];
+    $password = $_POST['password'];
+
+    try {
+        $sql = "SELECT * FROM users_admin WHERE username = '$username'";
         $result = $conn->query($sql);
-    
-        if ($result->num_rows > 0) {
-            $row = $result->fetch_assoc();
-            if (password_verify($password, $row["password"])) {
-                $_SESSION["admin"] = $username;
+
+        if ($result->num_rows == 1) {
+            $user = $result->fetch_assoc();
+            $hashed_password = $user['password'];
+            if (password_verify($password, $hashed_password)) {
+                $_SESSION['user_id'] = $user['id'];
+                $_SESSION['username'] = $user['username'];
+                $_SESSION['pfp'] = $user['pfp'];
                 header("Location: index.php");
                 exit();
             } else {
-                $message = "Invalid password!";
+                $message = 'Invalid password!';
+                error_log("Password verification failed for user: $username");
+                error_log("Hashed password from DB: $hashed_password");
+                error_log("Entered password: $password");
             }
         } else {
-            $message = "User not found!";
+            $message = 'User not found!';
+            error_log("User not found: $username");
         }
+    } catch (mysqli_sql_exception $e) {
+        $message = 'Database error: ' . $e->getMessage();
+        error_log("Database error: " . $e->getMessage());
     }
-    ?>
+}
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -96,7 +109,7 @@
             </div>
         </div>
         <p class="text-end"><a href="#">Forgot password?</a></p>
-        <button type="submit" class="btn btn-primary w-100" href="dashboard.php">Log in</button>
+        <button type="submit" class="btn btn-primary w-100">Log in</button>
     </form>
     <button class="btn btn-outline-danger w-100 mt-2" onclick="window.location.href='register.php'">Register</button>
 </div>

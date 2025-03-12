@@ -10,29 +10,32 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
     $phone = $_POST['phone'];
     $username = $_POST['username'];
-    $password = password_hash($_POST['password'], PASSWORD_DEFAULT); // Hash the password for security
+    $password = $_POST['password'];
+    $confirmPassword = $_POST['confirmPassword'];
 
-    // Handle file upload
-    $pfp = null;
-    if (isset($_FILES['pfp']) && $_FILES['pfp']['error'] == 0) {
-        $pfp = 'uploads/' . basename($_FILES['pfp']['name']);
-        move_uploaded_file($_FILES['pfp']['tmp_name'], $pfp);
-    }
-
-    // Prepare and bind
-    $stmt = $conn->prepare("INSERT INTO user_admins (firstname, middlename, surname, email, phone, username, password, pfp) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-    $stmt->bind_param("ssssssss", $firstname, $middlename, $surname, $email, $phone, $username, $password, $pfp);
-
-    // Execute the statement
-    if ($stmt->execute()) {
-        $message = "New record created successfully";
+    if ($password !== $confirmPassword) {
+        $message = 'Passwords do not match!';
     } else {
-        $message = "Error: " . $stmt->error;
-    }
+        $hashed_password = password_hash($password, PASSWORD_BCRYPT); // Hash the password for security
 
-    // Close the statement and connection
-    $stmt->close();
-    $conn->close();
+        // Handle file upload
+        $pfp = "default.jpg"; // Default
+        if (!empty($_FILES['pfp']['name'])) {
+            $target_dir = "uploads/";
+            $pfp = time() . "_" . basename($_FILES["pfp"]["name"]);
+            $target_file = $target_dir . $pfp;
+            move_uploaded_file($_FILES["pfp"]["tmp_name"], $target_file);
+        }
+
+        $sql = "INSERT INTO users_admin (firstname, middlename, surname, email, phone, username, password, pfp) 
+                VALUES ('$firstname', '$middlename', '$surname', '$email', '$phone', '$username', '$hashed_password', '$pfp')";
+
+        if ($conn->query($sql) === TRUE) {
+            $message = "Registration successful! <a href='login.php'>Login here</a>";
+        } else {
+            $message = "Error: " . $sql . "<br>" . $conn->error;
+        }
+    }
 }
 ?>
 
@@ -78,7 +81,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <?php endif; ?>
 
         <!-- Registration Form -->
-        <form action="register.php" method="POST" enctype="multipart/form-data">
+        <form action="register.php" method="POST" enctype="multipart/form-data" onsubmit="return validateForm()">
             <div class="row mb-3">
                 <div class="col-md-4">
                     <label for="firstName" class="form-label">First Name</label>
@@ -144,6 +147,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 }
             });
         });
+
+        function validateForm() {
+            var password = document.getElementById("password").value;
+            var confirmPassword = document.getElementById("confirmPassword").value;
+            if (password !== confirmPassword) {
+                alert("Passwords do not match!");
+                return false;
+            }
+            return true;
+        }
     </script>
 </body>
 </html>
