@@ -47,9 +47,9 @@
         </div>
 
     <div class="text-center position-absolute top-50 start-50 translate-middle text-white">
-        <h1 class="fs-20 fw-bold">SMJ Furnishings</h1>
-        <h4 class="fs-10 fw-bold">Philippines Inc.</h4>
-    </div>
+    <h1 class="fw-bold display-4">SMJ Furnishings</h1>
+    <h2 class="fw-semibold">Philippines Inc.</h2>
+</div>
 
         <!-- Navigation Controls -->
         <button class="carousel-control-prev" type="button" data-bs-target="#imageSlider" data-bs-slide="prev">
@@ -63,8 +63,11 @@
 
 <!-- Introduction Section -->
 <div class="container text-center my-5">
-    <h1 class="fw-bold">Your one-stop carpet service provider.</h1>
-    <h5 class="text-muted">SMJ Group is one of the leading premier carpet specialists serving the commercial and institutional sectors in Asia.</h5> 
+    <h1 class="fw-bold mb-4">Your one-stop carpet service provider.</h1>
+    <h5 class="text-muted lh-lg w-75 mx-auto">
+        SMJ Group is one of the leading premier carpet specialists serving the <br> 
+        commercial and institutional sectors in Asia.
+    </h5> 
 </div>
 
 <!-- Line -->
@@ -155,15 +158,15 @@
     <div class="row g-4 mt-3">
         <div class="col-12 col-md-4">
             <img src="assets/project1.jpg" class="img-fluid project-img" alt="Project 1" style="height: 500px;">
-            <h5>Taguig City</h5>
+            <h5 class="mt-2 fw-bold fs-6">@ Taguig City</h5>
         </div>
         <div class="col-12 col-md-4">
             <img src="assets/project2.jpg" class="img-fluid project-img" alt="Project 2"style="height: 500px;">
-            <h5>Makati City</h5>
+            <h5 class="mt-2 fw-bold fs-6">@ Makati City</h5>
         </div>
         <div class="col-12 col-md-4">
             <img src="assets/project3.jpg" class="img-fluid project-img" alt="Project 3"style="height: 500px;">
-            <h5>Taguig City</h5>
+            <h5 class="mt-2 fw-bold fs-6">@ Taguig City</h5>
         </div>
     </div>
     <br>

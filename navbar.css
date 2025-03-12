@@ -17,10 +17,12 @@
 }
 
 .navbar-nav .nav-link {
-    font-weight: 350;
+    font-weight: 500 !important; 
     color: black;
     margin-left: 20px;
     transition: color 0.3s;
+    font-family: 'Poppins', sans-serif !important;
+    
 }
 
 .navbar-nav .nav-link:hover {
