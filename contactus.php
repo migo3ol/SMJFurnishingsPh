@@ -1,33 +1,3 @@
-<?php
-
-include 'database.php';
-
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $name = htmlspecialchars($_POST["name"]);
-    $email = htmlspecialchars($_POST["email"]);
-    $subject = htmlspecialchars($_POST["subject"]);
-    $message = htmlspecialchars($_POST["message"]);
-
-    // Save to Database
-    $stmt = $conn->prepare("INSERT INTO messages (name, email, subject, message) VALUES (?, ?, ?, ?)");
-    $stmt->bind_param("ssss", $name, $email, $subject, $message);
-    $stmt->execute();
-    $stmt->close();
-
-    // Send Email to Admin
-    $admin_email = "smjsalesph@gmail.com";
-    $email_subject = "New Contact Message from $name";
-    $email_body = "Name: $name\nEmail: $email\nSubject: $subject\nMessage:\n$message";
-    $headers = "From: $email\r\nReply-To: $email\r\n";
-
-    if (mail($admin_email, $email_subject, $email_body, $headers)) {
-        $success_message = "Message sent and saved successfully!";
-    } else {
-        $error_message = "Message saved, but email sending failed.";
-    }
-}
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -51,37 +21,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
         .contact-section {
             background: url('assets/contact-us-cover.png') no-repeat center center/cover;
-            color: white;
-            padding: 100px;
+            height: 90vh;
             display: flex;
-            flex-direction: column;
             justify-content: center;
-            align-items: flex-start;
-            text-align: left;
-            height: 100vh;
-        }
-        .contact-section h2 {
-            font-weight: 600;
-        }
-        .contact-section p {
-            margin: 5px 0;
-            font-size: 16px;
-        }
-        .form-section {
-            padding: 50px;
-        }
-        .form-section h2 {
-            font-weight: 600;
-        }
-        .form-control {
-            max-width: 500px;
             align-items: center;
-            border-radius: 10px;
         }
-        .btn-custom {
+        .contact-text {
+            color: white;
+            text-align: left;
+            padding: 20px;
+            border-radius: 10px;
             max-width: 500px;
             width: 100%;
-            border-radius: 10px;
+        }
+        .form-section {
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 90vh;
+        }
+        .form-section > div {
+            width: 100%;
+            max-width: 700px; /* Set a fixed width for the form container */
         }
     </style>
 </head>
@@ -93,48 +55,55 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <div class="container-fluid">
         <div class="row">
             <!-- Left Section -->
-            <div class="col-md-6 contact-section">
-                <h1><strong>Contact us</h1></strong><br><br>
-                <h4><strong>Address:</strong><br>
-                    Salcedo Village, LGO1, Herrera Tower<br>
-                    Condo., 98 V.A. Rufino St., Cor, 1227<br>
-                    Valero, Makati, Metro Manila</h4><br>
-                <h4><strong>Contact:</strong><br> +632 8133972 / +6328928701</h4><br>
-                <h4><strong>Email:</strong><br> smjsalesph@gmail.com</h4><br>
+            <div class="col-md-4 contact-section">
+                <div class="contact-text bg-dark bg-opacity-50 p-3 rounded">
+                    <h1 class="fw-bold">Contact us</h1><br><br>
+                    <h4><strong>Address:</strong><br>
+                        Salcedo Village, LGO1, Herrera Tower<br>
+                        Condo., 98 V.A. Rufino St., Cor, 1227<br>
+                        Valero, Makati, Metro Manila</h4><br>
+                    <h4><strong>Contact:</strong><br> +632 8133972 / +6328928701</h4><br>
+                    <h4><strong>Email:</strong><br> smjsalesph@gmail.com</h4><br>
+                </div>
             </div>
 
             <!-- Right Section -->
-            <div class="col-md-6 form-section">
-                <h2>Send us a message</h2>
+            <div class="col-md-8 form-section">
+                <div class="w-100" style="max-width: 700px;">
+                    <h1 class="mb-5 fw-bold">Send us a message</h1>
 
-                <?php if (isset($success_message)): ?>
-                    <div class="alert alert-success"><?= $success_message; ?></div>
-                <?php elseif (isset($error_message)): ?>
-                    <div class="alert alert-danger"><?= $error_message; ?></div>
-                <?php endif; ?>
+                    <?php if (isset($success_message)): ?>
+                        <div class="alert alert-success"><?= $success_message; ?></div>
+                    <?php elseif (isset($error_message)): ?>
+                        <div class="alert alert-danger"><?= $error_message; ?></div>
+                    <?php endif; ?>
 
-                <form action="" method="POST">
-                    <div class="mb-3">
-                        <label class="form-label">Your Name (required)</label>
-                        <input type="text" class="form-control" name="name" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Your Email (required)</label>
-                        <input type="email" class="form-control" name="email" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Subject</label>
-                        <input type="text" class="form-control" name="subject">
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Message</label>
-                        <textarea class="form-control" name="message" rows="4"></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-primary btn-custom">Send</button>
-                </form>
+                    <form action="" method="POST">
+                        <div class="mb-3">
+                            <label class="form-label">Your Name (required)</label>
+                            <input type="text" class="form-control rounded-3" name="name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Your Email (required)</label>
+                            <input type="email" class="form-control rounded-3" name="email" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Subject</label>
+                            <input type="text" class="form-control rounded-3" name="subject">
+                        </div>
+                        <div class="mb-5">
+                            <label class="form-label">Message</label>
+                            <textarea class="form-control rounded-3" name="message" rows="6" style="resize: none; overflow: hidden"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-danger w-100 rounded-3">Send</button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
+
+    <!-- Footer -->
+    <?php include 'footer.php'; ?>
     
 </body>
 </html>
