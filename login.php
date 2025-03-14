@@ -50,6 +50,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
         body { 
+            font-family: 'Poppins', sans-serif;
             display: flex; 
             height: 100vh; 
             align-items: center; 
@@ -90,7 +91,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <!-- Log in Form --> 
 <div class="login-container text-center">
     <img src="assets/footer-logo.png" alt="Company Logo" width="120">
-    <h3 class="mt-3">Log in</h3>
+    <h3 class="mt-3 fw-bold">Log in</h3>
 
     <?php if ($message): ?>
         <div class="alert alert-danger"><?php echo $message; ?></div>
