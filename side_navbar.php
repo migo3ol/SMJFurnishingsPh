@@ -37,15 +37,15 @@
         <!-- Sidebar -->
         <div class="sidebar d-flex flex-column">
             <img src="assets/navbar-logo1.png" alt="SMJ Logo" class="mb-5" width="100%">
-            <h4 href="#" class="text-dark mb-5"><i class="fas fa-home"></i> Dashboard</h4>
-            <h4 href="#" class="text-dark mb-5"><i class="fas fa-box"></i> Sales</h4>
-            <h4 href="#" class="text-dark mb-5" id="inventoryLink"><i class="fas fa-warehouse"></i> Inventory</h4>
+            <h4 href="#" class="text-dark mb-5"><img src="assets/dashboard.png" class="img-fluid me-3"></img> Dashboard</h4>
+            <h4 href="#" class="text-dark mb-5"><img src="assets/sales.png" class="img-fluid me-3"></img> Sales</h4>
+            <h4 href="#" class="text-dark mb-5" id="inventoryLink"><img src="assets/inventory.png" class="img-fluid me-3"></img> Inventory</h4>
             <div class="submenu" id="inventorySubmenu">
                 <h4 href="#" class="text-dark mb-5">Nylon Tiles</h4>
                 <h4 href="#" class="text-dark mb-5">Polypropylene Tiles</h4>
                 <h4 href="#" class="text-dark mb-5">Luxury Vinyl Tiles</h4>
             </div>
-            <h4 href="#" class="text-dark mb-5"><i class="fas fa-users"></i> Employees</h4>
+            <h4 href="#" class="text-dark mb-5"><img src="assets/employees.png" class="img-fluid me-3"></img> Employees</h4>
         </div>
     </div>
 
