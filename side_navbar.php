@@ -38,7 +38,7 @@
         <div class="sidebar d-flex flex-column">
             <img src="assets/navbar-logo1.png" alt="SMJ Logo" class="mb-5" width="100%">
             <h4 href="#" class="text-dark mb-5"><img src="assets/dashboard.png" class="img-fluid me-3"></img> Dashboard</h4>
-            <h4 href="#" class="text-dark mb-5"><img src="assets/sales.png" class="img-fluid me-3"></img> Sales</h4>
+            <h4 href="sales.php" class="text-dark mb-5"><img src="assets/sales.png" class="img-fluid me-3"></img> Sales</h4>
             <h4 href="#" class="text-dark mb-5" id="inventoryLink"><img src="assets/inventory.png" class="img-fluid me-3"></img> Inventory</h4>
             <div class="submenu" id="inventorySubmenu">
                 <h4 href="#" class="text-dark mb-5">Nylon Tiles</h4>
