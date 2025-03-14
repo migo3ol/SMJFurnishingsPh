@@ -26,34 +26,37 @@
 <!-- Hero Section -->
 <div class="container">
 <div id="imageSlider" class="carousel slide position-relative">
-    <!-- Text Overlay - Positioned relative to the carousel -->
+    
     <div class="text-center position-absolute top-50 start-50 translate-middle text-white" style="z-index: 10;">
-        <!-- Main heading with improved letter spacing and text shadow -->
+
         <h1 class="fw-bold display-4" style="letter-spacing: 1px; text-shadow: 2px 2px 4px rgba(0,0,0,0.5);">SMJ Furnishings</h1>
         
-        <!-- Smaller subheading -->
+ 
         <h2 class="fw-semibold fs-3" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.5);">Philippines Inc.</h2>
-        
-        <!-- Added tagline -->
+
         <p class="mt-2 fs-5" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.5);">Premier Flooring Solutions</p>
     </div>
         <!-- Indicators -->
         <div class="carousel-indicators">
             <button type="button" data-bs-target="#imageSlider" data-bs-slide-to="0" class="active"></button>
-            <button type="button" data-bs-target="#imageSlider" data-bs-slide-to="1"></button>
-            <button type="button" data-bs-target="#imageSlider" data-bs-slide-to="2"></button>
+            <button type="button" data-bs-target="#imageSlider" data-bs-slide-to="1" class="active" ></button>
+            <button type="button" data-bs-target="#imageSlider" data-bs-slide-to="2" class="active"></button>
+            <button type="button" data-bs-target="#imageSlider" data-bs-slide-to="3" class="active"></button>
         </div>
 
         <!-- Image Slides -->
         <div class="carousel-inner">
-        <div class="carousel-item active" style="height: 630px;">
-            <img src="assets/header1.png" class="d-block w-100 h-100" alt="Slide 1" style="object-fit: cover;">
+        <div class="carousel-item active" style="height: 600px;">
+            <img src="assets/header1.png" class="d-block w-100 h-100" alt="Slide 0" style="object-fit: cover;">
         </div>
-        <div class="carousel-item active" style="height: 630px;">
+        <div class="carousel-item" style="height: 600px;">
             <img src="assets/header2.png" class="d-block w-100 h-100" alt="Slide 1" style="object-fit: cover;">
         </div>
-        <div class="carousel-item active" style="height: 630px;">
-            <img src="assets/header3.png" class="d-block w-100 h-100" alt="Slide 1" style="object-fit: cover;">
+        <div class="carousel-item " style="height: 600px;">
+            <img src="assets/header3.png" class="d-block w-100 h-100" alt="Slide 2" style="object-fit: cover;">
+        </div>
+        <div class="carousel-item" style="height: 600px;">
+            <img src="assets/header4.png" class="d-block w-100 h-100" alt="Slide 3" style="object-fit: cover;">
         </div>
         </div>
 
