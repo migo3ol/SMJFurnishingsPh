@@ -58,12 +58,12 @@
             <div class="col-md-4 contact-section">
                 <div class="contact-text bg-dark bg-opacity-50 p-3 rounded">
                     <h1 class="fw-bold">Contact us</h1><br><br>
-                    <h4><strong>Address:</strong><br>
+                    <h4 class="mb-1 lh-lg fs-6"><strong>Address:</strong><br>
                         Salcedo Village, LGO1, Herrera Tower<br>
                         Condo., 98 V.A. Rufino St., Cor, 1227<br>
                         Valero, Makati, Metro Manila</h4><br>
-                    <h4><strong>Contact:</strong><br> +632 8133972 / +6328928701</h4><br>
-                    <h4><strong>Email:</strong><br> smjsalesph@gmail.com</h4><br>
+                    <h4 class="mb-1 lh-lg fs-6"><strong>Contact:</strong><br> +632 8133972 / +6328928701</h4><br>
+                    <h4 class="mb-1 lh-lg fs-6"><strong>Email:</strong><br> smjsalesph@gmail.com</h4><br>
                 </div>
             </div>
 
