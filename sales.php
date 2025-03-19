@@ -69,7 +69,10 @@ $selected_month = isset($_GET['month']) ? $_GET['month'] : date('Y-m');
                 <tbody>
                 <?php
                 $result = $conn->query("SELECT * FROM sales_records WHERE DATE_FORMAT(date, '%Y-%m') = '$selected_month'");
-                while ($row = $result->fetch_assoc()): ?>
+                $totalAmount = 0;
+                while ($row = $result->fetch_assoc()):
+                    $totalAmount += $row['total_amount'];
+                ?>
                     <tr>
                         <td><?= $row['order_no'] ?></td>
                         <td><?= $row['po_no'] ?></td>
@@ -88,6 +91,12 @@ $selected_month = isset($_GET['month']) ? $_GET['month'] : date('Y-m');
                     </tr>
                 <?php endwhile; ?>
                 </tbody>
+                <tfoot>
+                    <tr>
+                        <th colspan="6" class="text-end">Total Sales:</th>
+                        <th colspan="5">₱<?= number_format($totalAmount, 2) ?></th>
+                    </tr>
+                </tfoot>
             </table>
         </div>
     </div>
