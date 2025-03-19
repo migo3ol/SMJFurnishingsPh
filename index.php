@@ -157,15 +157,15 @@
     <h1 class="fw-bold">Latest Projects</h1><br>
     <div class="row g-4 mt-3">
         <div class="col-12 col-md-4">
-            <img src="assets/Project1_Alorica_Philippines_3.png" class="img-fluid project-img" alt="Project 1" style="height: 500px;">
+            <img src="assets/projects/Project1_Alorica_Philippines_3.png" class="img-fluid project-img" alt="Project 1" style="height: 500px;">
             <h5 class="mt-2 fw-bold fs-6">@ Taguig City</h5>
         </div>
         <div class="col-12 col-md-4">
-            <img src="assets/Project2_BPI_Ayala_Triangle.png" class="img-fluid project-img" alt="Project 2"style="height: 500px;">
+            <img src="assets/projects/Project2_BPI_Ayala_Triangle.png" class="img-fluid project-img" alt="Project 2"style="height: 500px;">
             <h5 class="mt-2 fw-bold fs-6">@ Makati City</h5>
         </div>
         <div class="col-12 col-md-4">
-            <img src="assets/Project3_Ayala_Exec_Office.png" class="img-fluid project-img" alt="Project 3"style="height: 500px;">
+            <img src="assets/projects/Project3_Ayala_Exec_Office.png" class="img-fluid project-img" alt="Project 3"style="height: 500px;">
             <h5 class="mt-2 fw-bold fs-6">@ Taguig City</h5>
         </div>
     </div>
