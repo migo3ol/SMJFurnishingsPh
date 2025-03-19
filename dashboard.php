@@ -44,13 +44,13 @@ $stmt->close();
 </head>
 <body>
     <div class="d-flex">
-        <div class="col-md-3">
+        <div class="col-md-2">
             <?php include 'side_navbar.php'; ?>
         </div>
         <div class="container col-md-9 ms-auto">
             <h1 class="mb-5 fw-bold">Admin Dashboard</h1>
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <div class="card text-center">
                         <div class="card-body">
                             <h5 class="card-title">Total Sales for the Month</h5>
@@ -58,10 +58,18 @@ $stmt->close();
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <div class="card text-center">
                         <div class="card-body">
                             <h5 class="card-title">Total Orders for the Month</h5>
+                            <p class="card-text fs-3"><?= $totalOrders ?></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <h5 class="card-title">Employees</h5>
                             <p class="card-text fs-3"><?= $totalOrders ?></p>
                         </div>
                     </div>
