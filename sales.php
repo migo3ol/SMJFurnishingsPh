@@ -1,3 +1,11 @@
+<?php
+// sales.php - Display all sales records
+include 'database.php';
+
+// Get the selected month from the query parameter or use the current month
+$selected_month = isset($_GET['month']) ? $_GET['month'] : date('Y-m');
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -19,41 +27,66 @@
         .table {
             box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
         }
-
     </style>
 </head>
 <body>
     <div class="d-flex">
-        <div class="col-md-3">
+        <div class="col-md-2">
             <?php include 'side_navbar.php'; ?>
         </div>
         <div class="container col-md-9 ms-auto">
-            <h1 class="mb-5 fw-bold">Point of Sales</h1>
+            <div class="d-flex justify-content-between align-items-center mb-5">
+                <h1 class="fw-bold">Sales Record</h1>
+                <button class="btn btn-success" onclick="window.location.href='add_sales.php'">Add Sales</button>
+            </div>
+            <form method="GET" action="sales.php" class="mb-4">
+                <div class="row">
+                    <div class="col-md-4">
+                        <label for="month" class="form-label">Select Month</label>
+                        <input type="month" id="month" name="month" class="form-control" value="<?= $selected_month ?>">
+                    </div>
+                    <div class="col-md-2 align-self-end">
+                        <button type="submit" class="btn btn-primary">Search</button>
+                    </div>
+                </div>
+            </form>
             <table class="table table-bordered table-striped">
                 <thead class="table-dark">
                     <tr>
                         <th>Order No.</th>
+                        <th>PO No</th>
                         <th>Client Name</th>
-                        <th>Product</th>
-                        <th>Quantity</th>
-                        <th>Total</th>
-                        <th>Date</th>
+                        <th>Project Name</th>
+                        <th>Product Classification</th>
+                        <th>Area</th>
+                        <th>Total Amount</th>
+                        <th>OR No.</th>
+                        <th>DR No.</th>
+                        <th>Status</th>
                         <th>Action</th>
-                    
                     </tr>
                 </thead>
                 <tbody>
+                <?php
+                $result = $conn->query("SELECT * FROM sales_records WHERE DATE_FORMAT(date, '%Y-%m') = '$selected_month'");
+                while ($row = $result->fetch_assoc()): ?>
                     <tr>
-                        <td>031425</td>
-                        <td>John Doe</td>
-                        <td>Bluestone SQ</td>
-                        <td>300</td>
-                        <td>P15000</td>
-                        <td>March 14, 2025</td>
-                        <td><button class="btn btn-primary">Edit</button>
-                        <button class="btn btn-secondary">Delete</button></td>
-                        
+                        <td><?= $row['order_no'] ?></td>
+                        <td><?= $row['po_no'] ?></td>
+                        <td><?= $row['client_name'] ?></td>
+                        <td><?= $row['project_name'] ?></td>
+                        <td><?= $row['product_specification'] ?></td>
+                        <td><?= $row['area'] ?></td>
+                        <td>₱<?= number_format($row['total_amount'], 2) ?></td>
+                        <td><?= $row['or_no'] ?></td>
+                        <td><?= $row['dr_no'] ?></td>
+                        <td><?= $row['status'] ?></td>
+                        <td>
+                            <a href="edit_sales.php?id=<?= $row['id'] ?>" class="btn btn-outline-primary btn-sm">Edit</a>
+                            <a href="delete_sales.php?id=<?= $row['id'] ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?');">Delete</a>
+                        </td>
                     </tr>
+                <?php endwhile; ?>
                 </tbody>
             </table>
         </div>

@@ -17,18 +17,20 @@
             background-color: #f8f9fa;
             padding: 20px;
             border-right: 1px solid #ddd;
-            cursor: pointer
+            cursor: pointer;
         }
         .sidebar a {
             text-decoration: none;
+            color: #000;
         }
         .submenu {
             display: none;
             padding-left: 20px;
         }
-        .submenu h4 {
+        .submenu a {
             display: block;
             margin-bottom: 10px;
+            color: #000;
         }
     </style>
 </head>
@@ -37,15 +39,15 @@
         <!-- Sidebar -->
         <div class="sidebar d-flex flex-column">
             <img src="assets/navbar-logo1.png" alt="SMJ Logo" class="mb-5" width="100%">
-            <h4 href="#" class="text-dark mb-5"><img src="assets/dashboard.png" class="img-fluid me-3"></img> Dashboard</h4>
-            <h4 href="sales.php" class="text-dark mb-5"><img src="assets/sales.png" class="img-fluid me-3"></img> Sales</h4>
-            <h4 href="#" class="text-dark mb-5" id="inventoryLink"><img src="assets/inventory.png" class="img-fluid me-3"></img> Inventory</h4>
+            <a href="#" class="text-dark mb-5"><img src="assets/dashboard.png" class="img-fluid me-3"> Dashboard</a>
+            <a href="sales.php" class="text-dark mb-5"><img src="assets/sales.png" class="img-fluid me-3"> Sales</a>
+            <a href="#" class="text-dark mb-5" id="inventoryLink"><img src="assets/inventory.png" class="img-fluid me-3"> Inventory</a>
             <div class="submenu" id="inventorySubmenu">
-                <h4 href="#" class="text-dark mb-5">Nylon Tiles</h4>
-                <h4 href="#" class="text-dark mb-5">Polypropylene Tiles</h4>
-                <h4 href="#" class="text-dark mb-5">Luxury Vinyl Tiles</h4>
+                <a href="#" class="text-dark mb-5">Nylon Tiles</a>
+                <a href="#" class="text-dark mb-5">Polypropylene Tiles</a>
+                <a href="#" class="text-dark mb-5">Luxury Vinyl Tiles</a>
             </div>
-            <h4 href="#" class="text-dark mb-5"><img src="assets/employees.png" class="img-fluid me-3"></img> Employees</h4>
+            <a href="#" class="text-dark mb-5"><img src="assets/employees.png" class="img-fluid me-3"> Employees</a>
         </div>
     </div>
 
