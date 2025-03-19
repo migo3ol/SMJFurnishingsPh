@@ -39,7 +39,7 @@
         <!-- Sidebar -->
         <div class="sidebar d-flex flex-column">
             <img src="assets/navbar-logo1.png" alt="SMJ Logo" class="mb-5" width="100%">
-            <a href="#" class="text-dark mb-5"><img src="assets/dashboard.png" class="img-fluid me-3"> Dashboard</a>
+            <a href="dashboard.php" class="text-dark mb-5"><img src="assets/dashboard.png" class="img-fluid me-3"> Dashboard</a>
             <a href="sales.php" class="text-dark mb-5"><img src="assets/sales.png" class="img-fluid me-3"> Sales</a>
             <a href="#" class="text-dark mb-5" id="inventoryLink"><img src="assets/inventory.png" class="img-fluid me-3"> Inventory</a>
             <div class="submenu" id="inventorySubmenu">
