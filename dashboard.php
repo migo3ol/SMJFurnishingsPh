@@ -1,3 +1,23 @@
+<?php
+include 'database.php';
+
+// Fetch total sales and number of orders for the current month
+$currentMonth = date('m');
+$currentYear = date('Y');
+
+$query = "SELECT SUM(total_amount) AS total_sales, COUNT(*) AS total_orders FROM sales_records WHERE MONTH(date) = ? AND YEAR(date) = ?";
+$stmt = $conn->prepare($query);
+$stmt->bind_param("ii", $currentMonth, $currentYear);
+$stmt->execute();
+$result = $stmt->get_result();
+$data = $result->fetch_assoc();
+
+$totalSales = $data['total_sales'] ?? 0;
+$totalOrders = $data['total_orders'] ?? 0;
+
+$stmt->close();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -34,7 +54,7 @@
                     <div class="card text-center">
                         <div class="card-body">
                             <h5 class="card-title">Total Sales for the Month</h5>
-                            <p class="card-text fs-3">₱0.00</p> <!-- Placeholder value -->
+                            <p class="card-text fs-3">₱<?= number_format($totalSales, 2) ?></p>
                         </div>
                     </div>
                 </div>
@@ -42,7 +62,7 @@
                     <div class="card text-center">
                         <div class="card-body">
                             <h5 class="card-title">Total Orders for the Month</h5>
-                            <p class="card-text fs-3">0</p> <!-- Placeholder value -->
+                            <p class="card-text fs-3"><?= $totalOrders ?></p>
                         </div>
                     </div>
                 </div>
