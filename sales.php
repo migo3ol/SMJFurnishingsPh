@@ -71,7 +71,9 @@ $selected_month = isset($_GET['month']) ? $_GET['month'] : date('Y-m');
                 $result = $conn->query("SELECT * FROM sales_records WHERE DATE_FORMAT(date, '%Y-%m') = '$selected_month'");
                 $totalAmount = 0;
                 while ($row = $result->fetch_assoc()):
-                    $totalAmount += $row['total_amount'];
+                    if ($row['status'] !== 'Pending' && $row['status'] !== 'Cancelled') {
+                        $totalAmount += $row['total_amount'];
+                    }
                 ?>
                     <tr>
                         <td><?= $row['order_no'] ?></td>
