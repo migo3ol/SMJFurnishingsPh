@@ -44,8 +44,8 @@
 }
 
 .dropdown-item:hover {
-    background-color: #ED4135;
-    color: white;
+    background-color: #ED4135 !important;;
+    color: white !important;
 }
 
 /* Mobile Responsive */

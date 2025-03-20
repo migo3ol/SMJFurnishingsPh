@@ -12,7 +12,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="navbar.css?v=1">
+    <link rel="stylesheet" href="navbar.css">
 
 </head>
 <body>
@@ -22,7 +22,7 @@
     <div class="container">
         <a class="navbar-brand" href="index.php">
             <img src="assets/navbar-logo1.png" alt="Logo"> <!-- Place your logo in the assets folder -->
-        </a>
+        </a>        
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -51,7 +51,6 @@
 </nav>
     
     <!-- JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" 
-    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" ></script>
 </body>
 </html>
