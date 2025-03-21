@@ -20,31 +20,92 @@
             font-family: 'Poppins', sans-serif;
         }
         .contact-section {
-            background: url('assets/contact-us-cover.png') no-repeat center center/cover;
-            height: 90vh;
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+            url('assets/contact-us-cover.png') no-repeat center center/cover;
+            height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
+            padding:30px 15px;
+            max-width: 90%;
+            width: 100%;
         }
         .contact-text {
             color: white;
             text-align: left;
-            padding: 20px;
+            padding: 30px;
             border-radius: 10px;
-            max-width: 500px;
+            max-width: 80%;
             width: 100%;
-        }
+            position: relative;
+            margin-top: -150px; /* Remove extra space above */
+            padding: 20px; /* More spacing for readability */
+            line-height: 1.6;
+        }    
+        .contact-text h1 {
+            position: absolute; /* Moves independently of the rest */
+            top: 10px; /* Moves only 'Contact us' down */
+            margin-bottom: 10px;
+        }  
         .form-section {
-            padding: 20px;
+            padding: 40px 20px;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 90vh;
+            min-height: 100vh;
+            
         }
-        .form-section > div {
-            width: 100%;
-            max-width: 700px; /* Set a fixed width for the form container */
+        
+        .form-section input,
+        .form-section textarea {
+            border: 1px solid #ccc !important;
+            border-radius: 5px !important;
+            padding: 12px !important;
+            transition: 0.3s !important;
         }
+       .form-section input:focus,
+       .form-section textarea:focus {
+           border-color: #d9534f !important;
+           box-shadow: 0px 0px 5px rgba(217, 83, 79, 0.5) !important;
+        }       
+        .form-control {
+            border-radius: 10px;
+            transition: all 0.3s ease-in-out;
+        }
+        .form-control:focus {
+            box-shadow: 0px 0px 10px rgba(220, 53, 69, 0.5);
+            border-color: #dc3545;
+        }
+        .form-control, .btn-danger {
+    border-radius: 8px;
+}
+        .btn-danger {
+            background-color: #d9534f;
+            border: none;
+            transition: 0.3s;
+        }
+        .btn-danger:hover {
+            background-color: #c9302c;
+            transition: 0.3s ease-in-out;
+            width: 100%; 
+            transform: scale(1.02); 
+        }
+        .send-btn {
+        background-color: #d9534f;
+        border: none;
+        padding: 12px 20px;
+        border-radius: 5px;
+        font-size: 16px;
+        transition: 0.3s ease-in-out;
+        width: 100%; /* Makes it full-width for consistency */
+        }
+
+       .send-btn:hover {
+       background-color: #c9302c;
+       box-shadow: 0px 0px 8px rgba(217, 83, 79, 0.5);
+       transform: scale(1.02); /* Slight pop effect */
+       }
+
     </style>
 </head>
 <body>
@@ -55,22 +116,24 @@
 <div class="container-fluid">
         <div class="row">
             <!-- Left Section -->
-            <div class="col-md-4 contact-section">
-                <div class="contact-text bg-dark bg-opacity-50 p-3 rounded">
+            <div class="col-lg-4 col-md-5 contact-section">
+                <div class="contact-text">
                     <h1 class="fw-bold">Contact us</h1><br><br>
-                    <h4 class="mb-1 lh-lg fs-6"><strong>Address:</strong><br>
-                        Salcedo Village, LGO1, Herrera Tower<br>
-                        Condo., 98 V.A. Rufino St., Cor, 1227<br>
-                        Valero, Makati, Metro Manila</h4><br>
-                    <h4 class="mb-1 lh-lg fs-6"><strong>Contact:</strong><br> +632 8133972 / +6328928701</h4><br>
-                    <h4 class="mb-1 lh-lg fs-6"><strong>Email:</strong><br> smjsalesph@gmail.com</h4><br>
+                    <hr class="border border-light">
+                    <h5><strong>Address:</strong></h5>
+                    <p>Salcedo Village, LGO1, Herrera Tower<br>98 V.A. Rufino St., Cor, 1227
+                    <br>Valero, Makati, Metro Manila</p>
+                    <h5><strong>Contact:</strong></h5>
+                    <p>+632 8133972 <br> +6328928701</p>
+                    <h5><strong>Email:</strong></h5>
+                    <p>smjsalesph@gmail.com</p>
                 </div>
             </div>
 
             <!-- Right Section -->
-            <div class="col-md-8 form-section">
+            <div class="col-lg-8 col-md-7 form-section">
                 <div class="w-100" style="max-width: 700px;">
-                    <h1 class="mb-5 fw-bold">Send us a message</h1>
+                    <h1 class="mb-4 fw-bold">Send us a message</h1>
 
                     <?php if (isset($success_message)): ?>
                         <div class="alert alert-success"><?= $success_message; ?></div>
@@ -81,21 +144,21 @@
                     <form action="" method="POST">
                         <div class="mb-3">
                             <label class="form-label">Your Name (required)</label>
-                            <input type="text" class="form-control rounded-3" name="name" required>
+                            <input type="text" class="form-control" name="name" required>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Your Email (required)</label>
-                            <input type="email" class="form-control rounded-3" name="email" required>
+                            <input type="email" class="form-control" name="email" required>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Subject</label>
-                            <input type="text" class="form-control rounded-3" name="subject">
+                            <input type="text" class="form-control" name="subject">
                         </div>
-                        <div class="mb-5">
+                        <div class="mb-4">
                             <label class="form-label">Message</label>
-                            <textarea class="form-control rounded-3" name="message" rows="6" style="resize: none; overflow: hidden"></textarea>
+                            <textarea class="form-control" name="message" rows="5"></textarea>
                         </div>
-                        <button type="submit" class="btn btn-danger w-100 rounded-3">Send</button>
+                        <button type="submit" class="btn btn-danger send-btn sw-100">Send</button>
                     </form>
                 </div>
             </div>
