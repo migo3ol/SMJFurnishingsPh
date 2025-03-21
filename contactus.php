@@ -38,13 +38,13 @@
             max-width: 80%;
             width: 100%;
             position: relative;
-            margin-top: -150px; /* Remove extra space above */
-            padding: 20px; /* More spacing for readability */
+            margin-top: -150px; 
+            padding: 20px; 
             line-height: 1.6;
         }    
         .contact-text h1 {
-            position: absolute; /* Moves independently of the rest */
-            top: 10px; /* Moves only 'Contact us' down */
+            position: absolute; 
+            top: 10px; 
             margin-bottom: 10px;
         }  
         .form-section {
@@ -65,8 +65,8 @@
         }
        .form-section input:focus,
        .form-section textarea:focus {
-           border-color: #d9534f !important;
-           box-shadow: 0px 0px 5px rgba(217, 83, 79, 0.5) !important;
+            border-color: #d9534f !important;
+            box-shadow: 0px 0px 5px rgba(217, 83, 79, 0.5) !important;
         }       
         .form-control {
             border-radius: 10px;
@@ -77,8 +77,8 @@
             border-color: #dc3545;
         }
         .form-control, .btn-danger {
-    border-radius: 8px;
-}
+            border-radius: 8px;
+        }
         .btn-danger {
             background-color: #d9534f;
             border: none;
@@ -91,20 +91,41 @@
             transform: scale(1.02); 
         }
         .send-btn {
-        background-color: #d9534f;
-        border: none;
-        padding: 12px 20px;
-        border-radius: 5px;
-        font-size: 16px;
-        transition: 0.3s ease-in-out;
-        width: 100%; /* Makes it full-width for consistency */
+            background-color: #d9534f;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: 0.3s ease-in-out;
+            width: 100%; 
         }
 
        .send-btn:hover {
-       background-color: #c9302c;
-       box-shadow: 0px 0px 8px rgba(217, 83, 79, 0.5);
-       transform: scale(1.02); /* Slight pop effect */
+            background-color: #c9302c;
+            box-shadow: 0px 0px 8px rgba(217, 83, 79, 0.5);
+            transform: scale(1.02); 
        }
+
+       /* Responsive Design */
+       @media (max-width: 992px) {   
+       .form-section {
+            width: 100%;
+            padding: 20px;
+            text-align: left;
+       }
+       .form-section h1{
+            display: block;  
+            text-align: left !important; 
+            width: 100%;
+            padding: 20px;
+            margin: 0 auto; 
+            position: relative; 
+       }
+       .form-section form {
+            max-width: 90%;
+            margin: auto;
+       }
+    }
 
     </style>
 </head>
