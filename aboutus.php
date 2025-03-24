@@ -18,14 +18,12 @@
             font-family: 'Poppins', sans-serif;
         }
         .scroll-container {
-    overflow: hidden;
-    white-space: nowrap;
-    width: 100%;
-    background: #f8f9fa;
-    padding: 20px 0;
-    
-  }
-  
+           overflow: hidden;
+           white-space: nowrap;
+           width: 100%;
+           background: #f8f9fa;
+           padding: 20px 0;
+        } 
 </style>
 </head>
 

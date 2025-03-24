@@ -35,6 +35,7 @@
                 <button type="button" data-bs-target="#imageSlider" data-bs-slide-to="1"></button>
                 <button type="button" data-bs-target="#imageSlider" data-bs-slide-to="2"></button>
                 <button type="button" data-bs-target="#imageSlider" data-bs-slide-to="3"></button>
+                <button type="button" data-bs-target="#imageSlider" data-bs-slide-to="4"></button>
             </div>
 
             <!-- Image Slides -->
@@ -50,6 +51,9 @@
                 </div>
                 <div class="carousel-item" style="height: 600px;">
                     <img src="assets/header4.png" class="d-block w-100 h-100" alt="Slide 3" style="object-fit: cover;">
+                </div>
+                <div class="carousel-item" style="height: 600px;">
+                    <img src="assets/header5.png" class="d-block w-100 h-100" alt="Slide 3" style="object-fit: cover;">
                 </div>
             </div>
 

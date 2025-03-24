@@ -52,6 +52,11 @@
     color: white !important;
 }
 
+.navbar-nav .nav-link.active {
+    font-weight: bold;
+    color: #ED4135 !important; /
+}
+
 /* Mobile Responsive */
 @media (max-width: 991px) {
     .navbar-nav {
@@ -62,3 +67,5 @@
         margin: 10px 0;
     }
 }
+
+
