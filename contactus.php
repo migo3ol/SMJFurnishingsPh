@@ -65,33 +65,33 @@
         }
        .form-section input:focus,
        .form-section textarea:focus {
-            border-color: #d9534f !important;
-            box-shadow: #d9534f !important;
+            border-color: #ED4135 !important;
+            box-shadow: #ED4135 !important;
         }       
         .form-control {
             border-radius: 10px;
             transition: all 0.3s ease-in-out;
         }
         .form-control:focus {
-            box-shadow: #d9534f;
-            border-color: #dc3545;
+            box-shadow: #ED4135;
+            border-color: #ED4135;
         }
         .form-control, .btn-danger {
             border-radius: 8px;
         }
         .btn-danger {
-            background-color: #d9534f !important;
+            background-color: #ED4135 !important;
             border: none;
             transition: 0.3s; 
         }
         .btn-danger:hover {
-            background-color: #d9534f !important;
+            background-color: #ED4135 !important;
             transition: 0.3s ease-in-out;
             width: 100%; 
             transform: scale(1.02); 
         }
         .send-btn {
-            background-color: #d9534f !important;
+            background-color: #ED4135 !important;
             border: none;
             padding: 12px 20px;
             border-radius: 5px;
@@ -101,8 +101,8 @@
         }
 
        .send-btn:hover {
-            background-color: #d9534f !important;
-            box-shadow: #d9534f !important;
+            background-color: #ED4135  !important;
+            box-shadow: #ED4135  !important;
             transform: scale(1.02); 
        }
 

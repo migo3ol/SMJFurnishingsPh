@@ -190,26 +190,33 @@
     <br><br>
 </div>
 
-    <!-- About Section -->
-    <div class="container my-5">
-        <h1 class="fw-bold text-center">About us</h1><br>
-        <div class="row align-items-center mt-3">
-            <!-- Text on the left -->
-            <div class="col-md-6 pe-md-5 text-start">
-                <h5 class="mb-1 lh-lg fs-6" style="text-align: justify;">
-                    SMJ Furnishings was set up in 1986 and specializes in carpet tiles, broadloom carpets, and luxury vinyl tiles. With an established reputation and track record, SMJ Furnishings is arguably the top largest leading premier flooring specialist serving the commercial and institutional sectors in Asia.
-                </h5>
-                <a class="btn btn-outline-dark mt-3" href="aboutus.php">Learn more</a>
-            </div>
 
-            <!-- Image on the right -->
-            <div class="col-md-6 ps-md-5">
-                <img src="assets/aboutus.jpg" class="img-fluid" alt="About Us">
-            </div>
+<div class="container my-5">
+    <h1 class="fw-bold text-center">About us</h1><br>
+    <div class="row flex-column-reverse flex-md-row align-items-center mt-3">
+    <!-- Text Column -->
+    <div class="col-12 col-md-6 pe-md-4 mt-3 mt-md-0">
+            <h5 class="mb-1 lh-lg text-justify fs-10" style="text-align: justify;">
+                SMJ Furnishings was set up in 1986 and specializes in carpet tiles, broadloom carpets,
+                 and luxury vinyl tiles. With an established reputation and track record, 
+                 SMJ Furnishings is arguably the top largest leading premier flooring specialist serving the commercial and institutional sectors in Asia.
+            </h5>
+            <a class="btn btn-outline-dark mt-3" href="aboutus.php">Learn more</a>
         </div>
-    </div>
 
-    <script> 
+        <!-- Image Column -->
+<div class="col-12 col-md-6 ps-md-4 transition-zoom-slow">
+    <img src="assets/aboutus.jpg" class="img-fluid shadow-sm" alt="About Us">
+</div>
+    </div>
+</div>
+
+
+
+
+
+
+    <script>    
         document.addEventListener("DOMContentLoaded", function () {
     const heroText = document.querySelector(".hero-text");
 
