@@ -3,6 +3,25 @@ body {
     font-family: 'Poppins', sans-serif;
 }
 
+.hero-text {
+    opacity: 0;
+    transform: translateY(-20px);
+    transition: opacity 1s ease-out, transform 1s ease-out;
+  }
+
+.hero-text.show {
+    opacity: 1;
+    transform: translateY(0);
+  }
+ 
+.btn:hover {
+      background-color: #ED4135 !important;
+      border-color: #ED4135 !important;
+      color: white !important;
+      transform: scale(1.05);
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  }
+  
 /* Our Clients */
 .scroll-container {
 overflow: hidden;

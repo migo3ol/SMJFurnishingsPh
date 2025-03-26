@@ -23,53 +23,57 @@
 
     <!-- Hero Section -->
     <div class="container">
-        <div id="imageSlider" class="carousel slide position-relative" data-bs-ride="carousel" data-bs-interval="3000">
-            <div class="text-center position-absolute top-50 start-50 translate-middle text-white" style="z-index: 10;">
-                <h1 class="fw-bold display-4" style="letter-spacing: 1px; text-shadow: 2px 2px 4px rgba(0,0,0,0.5);">SMJ Furnishings</h1>
-                <h2 class="fw-semibold fs-3" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.5);">Philippines Inc.</h2>
-                <p class="mt-2 fs-5" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.5);">Premier Flooring Solutions</p>
-            </div>
-            <!-- Indicators -->
-            <div class="carousel-indicators">
-                <button type="button" data-bs-target="#imageSlider" data-bs-slide-to="0" class="active"></button>
-                <button type="button" data-bs-target="#imageSlider" data-bs-slide-to="1"></button>
-                <button type="button" data-bs-target="#imageSlider" data-bs-slide-to="2"></button>
-                <button type="button" data-bs-target="#imageSlider" data-bs-slide-to="3"></button>
-                <button type="button" data-bs-target="#imageSlider" data-bs-slide-to="4"></button>
-            </div>
-
-            <!-- Image Slides -->
-            <div class="carousel-inner">
-                <div class="carousel-item active" style="height: 600px;">
-                    <img src="assets/header1.png" class="d-block w-100 h-100" alt="Slide 0" style="object-fit: cover;">
-                </div>
-                <div class="carousel-item" style="height: 600px;">
-                    <img src="assets/header2.png" class="d-block w-100 h-100" alt="Slide 1" style="object-fit: cover;">
-                </div>
-                <div class="carousel-item" style="height: 600px;">
-                    <img src="assets/header3.png" class="d-block w-100 h-100" alt="Slide 2" style="object-fit: cover;">
-                </div>
-                <div class="carousel-item" style="height: 600px;">
-                    <img src="assets/header4.png" class="d-block w-100 h-100" alt="Slide 3" style="object-fit: cover;">
-                </div>
-                <div class="carousel-item" style="height: 600px;">
-                    <img src="assets/header5.png" class="d-block w-100 h-100" alt="Slide 3" style="object-fit: cover;">
-                </div>
-            </div>
-
-            <!-- Navigation Controls -->
-            <button class="carousel-control-prev" type="button" data-bs-target="#imageSlider" data-bs-slide="prev">
-                <span class="carousel-control-prev-icon"></span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#imageSlider" data-bs-slide="next">
-                <span class="carousel-control-next-icon"></span>
-            </button>
+    <div id="imageSlider" class="carousel slide position-relative" data-bs-ride="carousel" data-bs-interval="3000">
+        <!-- Hero Text -->
+        <div class="hero-text text-center position-absolute top-50 start-50 translate-middle text-white" 
+                    style="z-index: 10; text-shadow:  3px 3px 10px rgba(0, 0, 0, 0.7);">
+            <h1 class="fw-bold display-4" style="letter-spacing: 1px;">SMJ Furnishings</h1>
+            <h2 class="fw-semibold fs-3">Philippines Inc.</h2>
+            <p class="mt-2 fs-5">Premier Flooring Solutions</p>
         </div>
+
+        <!-- Indicators -->
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#imageSlider" data-bs-slide-to="0" class="active"></button>
+            <button type="button" data-bs-target="#imageSlider" data-bs-slide-to="1"></button>
+            <button type="button" data-bs-target="#imageSlider" data-bs-slide-to="2"></button>
+            <button type="button" data-bs-target="#imageSlider" data-bs-slide-to="3"></button>
+            <button type="button" data-bs-target="#imageSlider" data-bs-slide-to="4"></button>
+        </div>
+
+        <!-- Image Slides -->
+        <div class="carousel-inner">
+            <div class="carousel-item active" style="height: 600px;">
+                <img src="assets/h1.png" class="d-block w-100 h-100" alt="Slide 0" style="object-fit: cover;">
+            </div>
+            <div class="carousel-item" style="height: 600px;">
+                <img src="assets/h2.png" class="d-block w-100 h-100" alt="Slide 1" style="object-fit: cover;">
+            </div>
+            <div class="carousel-item" style="height: 600px;">
+                <img src="assets/h3.png" class="d-block w-100 h-100" alt="Slide 2" style="object-fit: cover;">
+            </div>
+            <div class="carousel-item" style="height: 600px;">
+                <img src="assets/h4.png" class="d-block w-100 h-100" alt="Slide 3" style="object-fit: cover;">
+            </div>
+            <div class="carousel-item" style="height: 600px;">
+                <img src="assets/h5.png" class="d-block w-100 h-100" alt="Slide 4" style="object-fit: cover;">
+            </div>
+        </div>
+
+        <!-- Navigation Controls -->
+        <button class="carousel-control-prev" type="button" data-bs-target="#imageSlider" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon"></span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#imageSlider" data-bs-slide="next">
+            <span class="carousel-control-next-icon"></span>
+        </button>
     </div>
+</div>
+
 
     <!-- Introduction Section -->
     <div class="container text-center my-5">
-        <h1 class="fw-bold mb-4">Your one-stop carpet service provider.</h1>
+       <br> <h1 class="fw-bold mb-4">Your one-stop carpet service provider.</h1>
         <h5 class="text-muted lh-lg w-75 mx-auto">
             SMJ Group is one of the leading premier carpet specialists serving the <br> 
             commercial and institutional sectors in Asia.
@@ -78,10 +82,10 @@
 
     <!-- Line -->
     <div class="container text-center my-5">
-        <br><br> 
-        <hr class="border border-black border-1"> 
-        <br><br>
-    </div>
+    <br><br> 
+    <div style="border-bottom: 1px solid #ED4135; width: 90%; max-width: 750px; margin: 10px auto;"></div>
+    <br><br>
+</div>
 
     <!-- Featured Products -->
     <div class="container text-center my-5">
@@ -98,10 +102,10 @@
 
     <!-- Line -->
     <div class="container text-center my-5">
-        <br><br> 
-        <hr class="border border-black border-1"> 
-        <br><br>
-    </div>
+    <br><br> 
+    <div style="border-bottom: 1px solid #ED4135; width: 90%; max-width: 750px; margin: 10px auto;"></div>
+    <br><br>
+</div>
 
     <!-- Clients Section -->
     <div class="container-fluid text-center my-5 p-3 mb-2 bg-light">
@@ -153,10 +157,10 @@
 
     <!-- Line -->
     <div class="container text-center my-5">
-        <br><br> 
-        <hr class="border border-black border-1"> 
-        <br><br>
-    </div>
+    <br><br> 
+    <div style="border-bottom: 1px solid #ED4135; width: 90%; max-width: 750px; margin: 10px auto;"></div>
+    <br><br>
+</div>
 
     <!-- Latest Projects -->
     <div class="container text-center my-5">
@@ -176,15 +180,15 @@
             </div>
         </div>
         <br>
-        <a class="btn btn-dark btn-lg mt-3">See more</a>
+        <a class="btn btn-dark btn-lg mt-3" style="background-color: #333; color: white; transition: all 0.3s ease;">See more</a>
     </div>
 
-    <!-- Line -->
+        <!-- Line -->
     <div class="container text-center my-5">
-        <br><br> 
-        <hr class="border border-black border-1"> 
-        <br><br>
-    </div>
+    <br><br> 
+    <div style="border-bottom: 1px solid #ED4135; width: 90%; max-width: 750px; margin: 10px auto;"></div>
+    <br><br>
+</div>
 
     <!-- About Section -->
     <div class="container my-5">
@@ -205,12 +209,37 @@
         </div>
     </div>
 
+    <script> 
+        document.addEventListener("DOMContentLoaded", function () {
+    const heroText = document.querySelector(".hero-text");
+
+    // Delay initial fade-in effect
+    setTimeout(() => {
+        heroText.classList.add("show");
+    }, 500); // Adjust timing if needed
+
+    // Listen for Bootstrap carousel events
+    document.getElementById("imageSlider").addEventListener("slide.bs.carousel", function () {
+        heroText.classList.remove("show"); // Hide text before slide transition
+    });
+
+    document.getElementById("imageSlider").addEventListener("slid.bs.carousel", function () {
+        setTimeout(() => {
+            heroText.classList.add("show"); // Fade-in after slide transition
+        }, 500);
+    });
+});
+
+   </script>
+
     <!-- Footer -->
     <?php include 'footer.php'; ?>
 
     <!-- JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" 
     integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+
 
 
     </body>

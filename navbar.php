@@ -18,7 +18,7 @@
 <body>
 
     <!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm p-3 bg-body-tertiary rounded">
+    <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm p-3 bg-body-tertiary sticky-top">
     <div class="container">
         <a class="navbar-brand" href="index.php">
             <img src="assets/navbar-logo1.png" alt="Logo">

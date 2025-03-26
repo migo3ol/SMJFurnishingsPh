@@ -66,32 +66,32 @@
        .form-section input:focus,
        .form-section textarea:focus {
             border-color: #d9534f !important;
-            box-shadow: 0px 0px 5px rgba(217, 83, 79, 0.5) !important;
+            box-shadow: #d9534f !important;
         }       
         .form-control {
             border-radius: 10px;
             transition: all 0.3s ease-in-out;
         }
         .form-control:focus {
-            box-shadow: 0px 0px 10px rgba(220, 53, 69, 0.5);
+            box-shadow: #d9534f;
             border-color: #dc3545;
         }
         .form-control, .btn-danger {
             border-radius: 8px;
         }
         .btn-danger {
-            background-color: #d9534f;
+            background-color: #d9534f !important;
             border: none;
-            transition: 0.3s;
+            transition: 0.3s; 
         }
         .btn-danger:hover {
-            background-color: #c9302c;
+            background-color: #d9534f !important;
             transition: 0.3s ease-in-out;
             width: 100%; 
             transform: scale(1.02); 
         }
         .send-btn {
-            background-color: #d9534f;
+            background-color: #d9534f !important;
             border: none;
             padding: 12px 20px;
             border-radius: 5px;
@@ -101,8 +101,8 @@
         }
 
        .send-btn:hover {
-            background-color: #c9302c;
-            box-shadow: 0px 0px 8px rgba(217, 83, 79, 0.5);
+            background-color: #d9534f !important;
+            box-shadow: #d9534f !important;
             transform: scale(1.02); 
        }
 
