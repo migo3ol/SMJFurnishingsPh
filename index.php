@@ -203,7 +203,7 @@
             </div>
         </div>
         <br>
-        <a class="btn btn-dark btn-lg mt-3" style="background-color: #333; color: white; transition: all 0.3s ease;">See more</a>
+        <a href="projects.php" class="btn btn-dark btn-lg mt-3" style="background-color: #333; color: white; transition: all 0.3s ease;">See more</a>
     </div>
 
         <!-- Line -->
