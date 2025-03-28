@@ -12,6 +12,23 @@
 
         <!-- CSS -->
         <link rel="stylesheet" href="index.css">
+
+        <style>
+        /* Custom CSS for zoom effect */
+        .project-img-container {
+            overflow: hidden;
+            position: relative;
+        }
+
+        .project-img-container img {
+            transition: transform 0.5s ease;
+            object-fit: cover;
+        }
+
+        .project-img-container:hover img {
+            transform: scale(1.2);
+        }
+    </style>
         
     </head>
 
@@ -91,10 +108,10 @@
     <div class="container text-center my-5">
         <h1 class="fw-bold">Featured Products</h1><br>
         <div class="row g-4 mt-3">
-            <div class="col-md-3"><img src="assets/bluestone-sq.jpg" class="img-fluid" alt="Bluestone SQ"><h5 class="mt-2 fs-6">Bluestone SQ</h5></div>
-            <div class="col-md-3"><img src="assets/brightstone-sq.jpg" class="img-fluid" alt="Brightstone SQ"><h5 class="mt-2 fs-6">Brightstone SQ</h5></div>
-            <div class="col-md-3"><img src="assets/cadence-sq.jpg" class="img-fluid" alt="Candence SQ"><h5 class="mt-2 fs-6">Candence SQ</h5></div>
-            <div class="col-md-3"><img src="assets/camborne-sq.jpg" class="img-fluid" alt="Camborne SQ"><h5 class="mt-2 fs-6">Camborne SQ</h5></div>
+            <div class="col-md-3"><img src="assets/bluestone-sq.jpg" class="img-fluid" alt="Bluestone SQ"><h5 class="mt-2 fs-6 fw-600">Bluestone SQ</h5></div>
+            <div class="col-md-3"><img src="assets/brightstone-sq.jpg" class="img-fluid" alt="Brightstone SQ"><h5 class="mt-2 fs-6 fw-600">Brightstone SQ</h5></div>
+            <div class="col-md-3"><img src="assets/cadence-sq.jpg" class="img-fluid" alt="Candence SQ"><h5 class="mt-2 fs-6 fw-600">Candence SQ</h5></div>
+            <div class="col-md-3"><img src="assets/camborne-sq.jpg" class="img-fluid" alt="Camborne SQ"><h5 class="mt-2 fs-6 fw-600">Camborne SQ</h5></div>
         </div>
         <br>
         <a class="btn btn-dark btn-lg mt-3">See more</a>
@@ -167,15 +184,21 @@
         <h1 class="fw-bold">Latest Projects</h1><br>
         <div class="row g-4 mt-3">
             <div class="col-12 col-md-4">
-                <img src="assets/projects/Project1.png" class="img-fluid project-img" alt="Project 1">
+                <div class="project-img-container">
+                    <img src="assets/projects/Project1.png" class="img-fluid" alt="Project 1">
+                </div>
                 <h5 class="mt-2 fw-bold fs-6">@ Taguig City</h5>
             </div>
             <div class="col-12 col-md-4">
-                <img src="assets/projects/Project2.png" class="img-fluid project-img" alt="Project 2">
+                <div class="project-img-container">
+                    <img src="assets/projects/Project2.png" class="img-fluid" alt="Project 2">
+                </div>
                 <h5 class="mt-2 fw-bold fs-6">@ Makati City</h5>
             </div>
             <div class="col-12 col-md-4">
-                <img src="assets/projects/Project3.png" class="img-fluid project-img" alt="Project 3">
+                <div class="project-img-container">
+                    <img src="assets/projects/Project3.png" class="img-fluid" alt="Project 3">
+                </div>
                 <h5 class="mt-2 fw-bold fs-6">@ Taguig City</h5>
             </div>
         </div>
@@ -223,7 +246,7 @@
     // Delay initial fade-in effect
     setTimeout(() => {
         heroText.classList.add("show");
-    }, 500); // Adjust timing if needed
+    }, 500);
 
     // Listen for Bootstrap carousel events
     document.getElementById("imageSlider").addEventListener("slide.bs.carousel", function () {

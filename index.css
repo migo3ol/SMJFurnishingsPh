@@ -43,27 +43,6 @@ display: inline-block;
 }
 }
 
-/* Latest Projects */
-.project-img {
-    width: 100%;
-    height: 500px; /* Set the desired height */
-    object-fit: cover; /* Ensure the image covers the area without distortion */
-}
-
-.password-container {
-    position: relative;
-}
-
-.toggle-password {
-    background: transparent;
-    border: none;
-    position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    cursor: pointer;
-}
-
 
 
 /*About us */
