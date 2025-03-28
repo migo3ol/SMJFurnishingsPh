@@ -33,7 +33,7 @@
     
 <!-- Hero Section -->
 <div class="container my-5 text-center">
-    <h1 style="border-bottom: 3px solid #ED4135;" class="fw-bold d-inline-block pb-2 w-25 mb-5">
+    <h1 style="border-bottom: 2px solid #ED4135;" class="fw-bold d-inline-block pb-2 w-25 mb-5">
         About us
     </h1>
     <div class="row align-items-center mt-3">

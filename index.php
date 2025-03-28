@@ -14,7 +14,7 @@
         <link rel="stylesheet" href="index.css">
 
         <style>
-        /* Custom CSS for zoom effect */
+        /* Project img zoom effect */
         .project-img-container {
             overflow: hidden;
             position: relative;
@@ -148,7 +148,7 @@
                     <img src="assets/clients/teletech.png" alt="Client 16" class="img-fluid mx-2" style="height: 72px;">
                     <img src="assets/clients/vertiv.png" alt="Client 17" class="img-fluid mx-2" style="height: 72px;">
                     <img src="assets/clients/visa.png" alt="Client 18" class="img-fluid mx-2" style="height: 72px;">
-                    <!-- Duplicate the logos for continuous looping -->
+                    <!-- Duplicate logos for continuous looping -->
                     <img src="assets/clients/accenture.png" alt="Client 1" class="img-fluid mx-2" style="height: 72px;">
                     <img src="assets/clients/alorica.png" alt="Client 2" class="img-fluid mx-2" style="height: 72px;">
                     <img src="assets/clients/bpi.png" alt="Client 3" class="img-fluid mx-2" style="height: 72px;">

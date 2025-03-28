@@ -43,7 +43,7 @@
                     </ul>
                 </li>
                 
-                <li class="nav-item"><a class="nav-link" href="#">Projects</a></li>
+                <li class="nav-item"><a class="nav-link" href="projects.php">Projects</a></li>
                 <li class="nav-item"><a class="nav-link" href="contactus.php">Contact us</a></li>
             </ul>
         </div>
