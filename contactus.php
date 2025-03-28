@@ -145,7 +145,7 @@
                     <p>Salcedo Village, LGO1, Herrera Tower<br>98 V.A. Rufino St., Cor, 1227
                     <br>Valero, Makati, Metro Manila</p>
                     <h5><strong>Contact:</strong></h5>
-                    <p>+632 8133972 <br> +6328928701</p>
+                    <p># 893-3337/ 813-3972 <br> +63 917 847 6287 <br> +63 925 535 1381</p>
                     <h5><strong>Email:</strong></h5>
                     <p>smjsalesph@gmail.com</p>
                 </div>

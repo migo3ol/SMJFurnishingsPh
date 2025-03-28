@@ -28,7 +28,9 @@
             <div class="col-12 col-md-3 mb-3">
                 <h5>Company</h5>
                 <p class="mb-1 lh-lg">Salcedo Village, LGO1,<br> Herrera Tower Condo,<br>98 V.A. Rufino St, Cor. <br> 1227 Valero, Makati, Metro Manila</p>
+                <p class="mb-1 lh-lg"># 893-3337/ 813-3972</p>
                 <p class="mb-1 lh-lg">+63 917 847 6287 <br> +63 925 535 1381</p>
+                
             </div>
 
             <!-- Socials -->
