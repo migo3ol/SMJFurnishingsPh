@@ -10,7 +10,7 @@
     <!-- Font -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 
-    <style>
+    <<style>
 body {
     font-family: 'Poppins', sans-serif;
     background-color: #f4f4f4;
@@ -64,11 +64,31 @@ body {
     background: rgba(0,0,0,0.2);
 }
 
+.view-btn {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0,0,0,0.7);
+    color: white;
+    border: none;
+    padding: 10px 30px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 3;
+}
+
+.project-card:hover .view-btn {
+    opacity: 1;
+}
+
 .project-location {
     display: inline-block;
     color: #333;
     font-weight: 600;
-    padding: 10px 15px 8px;
+    padding: 10px 0 8px 15px;
     margin-top: 15px;
     font-size: 0.9rem;
     position: relative;
@@ -79,7 +99,7 @@ body {
     position: absolute;
     bottom: 5px;
     left: 15px;
-    right: 15px;
+    width: 150px; /* Fixed width for the underline */
     height: 2px;
     background-color: #ED4135;
 }
@@ -90,6 +110,13 @@ body {
     }
     .project-card img {
         height: 250px;
+    }
+    .view-btn {
+        padding: 8px 20px;
+        font-size: 0.8rem;
+    }
+    .project-location::after {
+        width: 40px; /* Slightly smaller width for mobile */
     }
 }
 </style>
@@ -107,28 +134,30 @@ body {
         </div>
 
         <div class="container projects-section">
-
-        <div class="row">
-            <div class="col-md-4 col-sm-6">
-                <div class="project-card">
-                    <img src="assets/projects/Project1.png" alt="Project in Quezon City, Taguig City">
-                    <div class="project-location">Quezon City, Taguig City</div>
-                </div>
+    <div class="row">
+        <div class="col-md-4 col-sm-6">
+            <div class="project-card">
+                <img src="assets/projects/Project1.png" alt="Project in Quezon City, Taguig City">
+                <button class="view-btn">VIEW</button>
+                <div class="project-location">Quezon City, Taguig City</div>
             </div>
-            <div class="col-md-4 col-sm-6">
-                <div class="project-card">
-                    <img src="assets/projects/Project2.png" alt="Project in Makati, Cebu, Mandaluyong">
-                    <div class="project-location">Makati, Cebu, Mandaluyong</div>
-                </div>
+        </div>
+        <div class="col-md-4 col-sm-6">
+            <div class="project-card">
+                <img src="assets/projects/Project2.png" alt="Project in Makati, Cebu, Mandaluyong">
+                <button class="view-btn">VIEW</button>
+                <div class="project-location">Makati, Cebu, Mandaluyong</div>
             </div>
-            <div class="col-md-4 col-sm-6">
-                <div class="project-card">
-                    <img src="assets/projects/Project3.png" alt="Project in Makati City, Quezon City">
-                    <div class="project-location">Makati City, Quezon City</div>
-                </div>
+        </div>
+        <div class="col-md-4 col-sm-6">
+            <div class="project-card">
+                <img src="assets/projects/Project3.png" alt="Project in Makati City, Quezon City">
+                <button class="view-btn">VIEW</button>
+                <div class="project-location">Makati City, Quezon City</div>
             </div>
         </div>
     </div>
+</div>
 
     <!-- Footer -->
     <?php include 'footer.php'; ?>   
