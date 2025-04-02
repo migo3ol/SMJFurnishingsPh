@@ -139,21 +139,21 @@ body {
             <div class="project-card">
                 <img src="assets/projects/Project1.png" alt="Project in Quezon City, Taguig City">
                 <button class="view-btn">VIEW</button>
-                <div class="project-location">Quezon City, Taguig City</div>
+                <div class="project-location">Taguig City</div>
             </div>
         </div>
         <div class="col-md-4 col-sm-6">
             <div class="project-card">
                 <img src="assets/projects/Project2.png" alt="Project in Makati, Cebu, Mandaluyong">
                 <button class="view-btn">VIEW</button>
-                <div class="project-location">Makati, Cebu, Mandaluyong</div>
+                <div class="project-location">Makati City</div>
             </div>
         </div>
         <div class="col-md-4 col-sm-6">
             <div class="project-card">
                 <img src="assets/projects/Project3.png" alt="Project in Makati City, Quezon City">
                 <button class="view-btn">VIEW</button>
-                <div class="project-location">Makati City, Quezon City</div>
+                <div class="project-location">Quezon City</div>
             </div>
         </div>
     </div>
