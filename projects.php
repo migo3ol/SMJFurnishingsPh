@@ -1,3 +1,11 @@
+<?php
+include 'database.php';
+
+// Fetch all projects from the database
+$query = "SELECT * FROM projects";
+$result = $conn->query($query);
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -127,37 +135,35 @@ body {
     <?php include 'navbar.php'; ?>
 
 
-        <div class="container my-5 text-center">
-        <h1 style="border-bottom: 2px solid #ED4135;" class="fw-bold d-inline-block pb-2 w-25 mb-5">
-        Projects
+    <div class="container my-5 text-center">
+    <h1 style="border-bottom: 2px solid #ED4135;" class="fw-bold d-inline-block pb-2 w-25 mb-5">
+    Projects
     </h1>
-        </div>
+    </div>
 
-        <div class="container projects-section">
-    <div class="row">
-        <div class="col-md-4 col-sm-6">
-            <div class="project-card">
-                <img src="assets/projects/Project1.png" alt="Project in Quezon City, Taguig City">
-                <button class="view-btn">VIEW</button>
-                <div class="project-location">Quezon City, Taguig City</div>
+    <div class="container projects-section">
+    <div class="row g-4">
+        <?php while ($row = $result->fetch_assoc()): ?>
+            <?php
+            $images = json_decode($row['images'], true); // Decode the JSON-encoded images
+            $firstImage = $images[0] ?? 'default.jpg'; // Use the first image or a default image
+            ?>
+            <div class="col-md-4 col-sm-6">
+                <div class="project-card">
+                    <!-- Project Image -->
+                    <img src="uploads/projects/<?= $firstImage ?>" alt="Project Image" class="card-img-top">
+                    
+                    <!-- View Button -->
+                    <a href="project_details.php?id=<?= $row['id'] ?>" class="view-btn">View</a>
+                </div>
+                <!-- Project Name -->
+                <div class="text-center mt-3">
+                    <h5 class="card-title"><?= htmlspecialchars($row['name']) ?></h5>
+                </div>
             </div>
-        </div>
-        <div class="col-md-4 col-sm-6">
-            <div class="project-card">
-                <img src="assets/projects/Project2.png" alt="Project in Makati, Cebu, Mandaluyong">
-                <button class="view-btn">VIEW</button>
-                <div class="project-location">Makati, Cebu, Mandaluyong</div>
-            </div>
-        </div>
-        <div class="col-md-4 col-sm-6">
-            <div class="project-card">
-                <img src="assets/projects/Project3.png" alt="Project in Makati City, Quezon City">
-                <button class="view-btn">VIEW</button>
-                <div class="project-location">Makati City, Quezon City</div>
-            </div>
+            <?php endwhile; ?>
         </div>
     </div>
-</div>
 
     <!-- Footer -->
     <?php include 'footer.php'; ?>   

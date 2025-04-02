@@ -60,25 +60,11 @@
 </div>
 
 
-<!-- Line -->
-<div class="container text-center my-5">
-    <br>
-    <hr class="border border-black border-0"> 
-    <br>
-</div>
-
 <!-- SMJ Map -->
 <div class="container my-5">
     <div class="row align-items-center mt-3">
             <img src="assets/SMJ_Map_Phil.png" class="img-fluid" alt="SMJ Map">
 </div>
-</div>
-
-<!-- Line -->
-<div class="container text-center my-5">
-    <br>
-    <hr class="border border-black border-0"> 
-    <br>
 </div>
 
 <!-- Global Distribution -->
@@ -93,13 +79,6 @@
 </div>
 </div>
 
-<!-- Line -->
-<div class="container text-center my-5">
-    <br>
-    <hr class="border border-black border-0"> 
-    <br>
-</div>
-
 <!-- Services Section -->
 <div class="container text-center my-5">
     <h1 class="fw-bold">Services</h1><br>
@@ -108,13 +87,6 @@
         <div class="col-md-4"><img src="assets/install.png" class="img-fluid" alt="Project 2"><br><br><h2>Installation and project management of products supplied</h2></div>
         <div class="col-md-4"><img src="assets/advice.png" class="img-fluid" alt="Project 3"><br><br><h2>Professional advise on carpet investment</h2></div>
     </div>
-</div>
-
-<!-- Line -->
-<div class="container text-center my-5">
-    <br>
-    <hr class="border border-black border-0"> 
-    <br>
 </div>
 
 <!-- Footer -->
