@@ -156,8 +156,8 @@ body {
                     <!-- View Button -->
                     <a href="project_details.php?id=<?= $row['id'] ?>" class="view-btn">View</a>
                 </div>
-                <!-- Project Name -->
-                <div class="text-center mt-3">
+                    <!-- Project Name -->
+                    <div class="text-center mt-3">
                     <h5 class="card-title"><?= htmlspecialchars($row['name']) ?></h5>
                 </div>
             </div>
