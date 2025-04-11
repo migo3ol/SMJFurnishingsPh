@@ -42,13 +42,7 @@
             <a href="dashboard.php" class="text-dark mb-5"><img src="assets/dashboard.png" class="img-fluid me-3"> Dashboard</a>
             <a href="sales.php" class="text-dark mb-5"><img src="assets/sales.png" class="img-fluid me-3"> Sales</a>
             <a href="#" class="text-dark mb-5" id="inventoryLink"><img src="assets/inventory.png" class="img-fluid me-3"> Inventory</a>
-            <div class="submenu" id="inventorySubmenu">
-                <a href="" class="text-dark mb-5">Nylon Tiles</a>
-                <a href="#" class="text-dark mb-5">Polypropylene Tiles</a>
-                <a href="#" class="text-dark mb-5">Luxury Vinyl Tiles</a>
-            </div>
             <a href="admin_projects.php" class="text-dark mb-5"><img src="assets/project-icon.png" class="img-fluid me-3"> Projects</a>
-            <a href="#" class="text-dark mb-5"><img src="assets/employees.png" class="img-fluid me-3"> Employees</a>
         </div>
     </div>
 

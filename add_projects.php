@@ -64,8 +64,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             position: relative;
         }
         .preview-images img {
-            width: 150px; /* Increased width */
-            height: 150px; /* Increased height */
+            width: 300px; /* Increased width */
+            height: 300px; /* Increased height */
             object-fit: cover;
             border: 1px solid #ddd;
             border-radius: 5px;
@@ -74,13 +74,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             position: absolute;
             top: 5px;
             right: 5px;
-            background-color: red;
-            color: white;
+            background-color: white;
+            color: black;
             border: none;
             border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            font-size: 12px;
+            width: 32px;
+            height: 32px;
+            font-size: 24px;
             cursor: pointer;
         }
     </style>
