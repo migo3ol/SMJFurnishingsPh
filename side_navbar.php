@@ -32,6 +32,19 @@
             margin-bottom: 10px;
             color: #000;
         }
+        .logout-btn {
+            margin-top: auto;
+            background-color: #ED4135;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .logout-btn:hover {
+            background-color: #c7352b;
+        }
     </style>
 </head>
 <body>
@@ -41,8 +54,32 @@
             <img src="assets/navbar-logo1.png" alt="SMJ Logo" class="mb-5" width="100%">
             <a href="dashboard.php" class="text-dark mb-5"><img src="assets/dashboard.png" class="img-fluid me-3"> Dashboard</a>
             <a href="sales.php" class="text-dark mb-5"><img src="assets/sales.png" class="img-fluid me-3"> Sales</a>
-            <a href="#" class="text-dark mb-5" id="inventoryLink"><img src="assets/inventory.png" class="img-fluid me-3"> Inventory</a>
+            <a href="inventory.php" class="text-dark mb-5" id="inventoryLink"><img src="assets/inventory.png" class="img-fluid me-3"> Inventory</a>
             <a href="admin_projects.php" class="text-dark mb-5"><img src="assets/project-icon.png" class="img-fluid me-3"> Projects</a>
+            
+            <!-- Logout Button -->
+            <button type="button" class="logout-btn w-100" data-bs-toggle="modal" data-bs-target="#logoutModal">Log Out</button>
+        </div>
+    </div>
+
+    <!-- Logout Confirmation Modal -->
+    <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="logoutModalLabel">Confirm Logout</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to log out?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <form action="logout.php" method="POST">
+                        <button type="submit" class="btn btn-danger">Log Out</button>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 

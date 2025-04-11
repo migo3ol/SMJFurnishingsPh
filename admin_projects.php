@@ -127,7 +127,6 @@ $result = $conn->query($query);
             <table class="table table-bordered table-striped">
                 <thead class="table-dark">
                     <tr>
-                        <th>#</th>
                         <th>Project Name</th>
                         <th>Images</th>
                         <th>Action</th>
@@ -136,7 +135,6 @@ $result = $conn->query($query);
                 <tbody>
                 <?php while ($row = $result->fetch_assoc()): ?>
                     <tr>
-                        <td><?= $row['id'] ?></td>
                         <td><?= htmlspecialchars($row['name']) ?></td>
                         <td class="project-images">
                             <?php

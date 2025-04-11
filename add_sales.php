@@ -1,16 +1,30 @@
 <?php
 // add_sales.php - Add a new sale
 include 'database.php';
+session_start();
+
+// Ensure the user is logged in
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
+    exit();
+}
+
+// Get the logged-in user's ID
+$userId = $_SESSION['user_id'];
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $current_date = date('Y-m-d');
-    $stmt = $conn->prepare("INSERT INTO sales_records (order_no, po_no, client_name, project_name, product_specification, area, total_amount, or_no, dr_no, status, date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-    $stmt->bind_param("ssssssdssss", $_POST['order_no'], $_POST['po_no'], $_POST['client_name'], $_POST['project_name'], $_POST['product_classification'], $_POST['area'], $_POST['total_amount'], $_POST['or_no'], $_POST['dr_no'], $_POST['status'], $current_date);
-    $stmt->execute();
-    $stmt->close();
-    $conn->close();
-    header("Location: sales.php");
-    exit();
+    $stmt = $conn->prepare("INSERT INTO sales_records (user_id, order_no, po_no, client_name, project_name, product_specification, area, total_amount, or_no, dr_no, status, date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    $stmt->bind_param("isssssssssss", $userId, $_POST['order_no'], $_POST['po_no'], $_POST['client_name'], $_POST['project_name'], $_POST['product_classification'], $_POST['area'], $_POST['total_amount'], $_POST['or_no'], $_POST['dr_no'], $_POST['status'], $current_date);
+    
+    if ($stmt->execute()) {
+        $stmt->close();
+        $conn->close();
+        header("Location: sales.php");
+        exit();
+    } else {
+        $error = "Error: " . $stmt->error;
+    }
 }
 ?>
 
@@ -41,6 +55,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </div>
         <div class="container col-md-9 ms-auto">
             <h1 class="fw-bold mb-5">Add Sales</h1>
+
+            <?php if (isset($error)): ?>
+                <div class="alert alert-danger"><?= $error ?></div>
+            <?php endif; ?>
+
             <form action="add_sales.php" method="POST">
                 <div class="row">
                     <div class="col-md-6 mb-3">

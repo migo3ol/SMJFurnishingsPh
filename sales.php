@@ -1,6 +1,16 @@
 <?php
 // sales.php - Display all sales records
 include 'database.php';
+session_start();
+
+// Ensure the user is logged in
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
+    exit();
+}
+
+// Get the logged-in user's ID
+$userId = $_SESSION['user_id'];
 
 // Get the selected month from the query parameter or use the current month
 $selected_month = isset($_GET['month']) ? $_GET['month'] : date('Y-m');
@@ -11,7 +21,7 @@ $selected_month = isset($_GET['month']) ? $_GET['month'] : date('Y-m');
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Products | SMJ Furnishings</title>
+    <title>Sales Records | SMJ Furnishings</title>
     <!-- Bootstrap -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     
@@ -36,7 +46,7 @@ $selected_month = isset($_GET['month']) ? $_GET['month'] : date('Y-m');
         </div>
         <div class="container col-md-9 ms-auto">
             <div class="d-flex justify-content-between align-items-center mb-5">
-                <h1 class="fw-bold">Sales Record</h1>
+                <h1 class="fw-bold">Sales Records</h1>
                 <button class="btn btn-success" onclick="window.location.href='add_sales.php'">Add Sales</button>
             </div>
             <form method="GET" action="sales.php" class="mb-4">
@@ -68,7 +78,12 @@ $selected_month = isset($_GET['month']) ? $_GET['month'] : date('Y-m');
                 </thead>
                 <tbody>
                 <?php
-                $result = $conn->query("SELECT * FROM sales_records WHERE DATE_FORMAT(date, '%Y-%m') = '$selected_month'");
+                // Fetch sales records for the logged-in user and selected month
+                $stmt = $conn->prepare("SELECT * FROM sales_records WHERE user_id = ? AND DATE_FORMAT(date, '%Y-%m') = ?");
+                $stmt->bind_param("is", $userId, $selected_month);
+                $stmt->execute();
+                $result = $stmt->get_result();
+
                 $totalAmount = 0;
                 while ($row = $result->fetch_assoc()):
                     if ($row['status'] !== 'Pending' && $row['status'] !== 'Cancelled') {

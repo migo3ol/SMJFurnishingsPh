@@ -1,4 +1,3 @@
-<!-- Log in Process -->
 <?php
 session_start();
 include 'database.php';
@@ -10,31 +9,35 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = $_POST['password'];
 
     try {
-        $sql = "SELECT * FROM users_admin WHERE username = '$username'";
-        $result = $conn->query($sql);
+        // Fetch user details from the database
+        $sql = "SELECT * FROM users_admin WHERE username = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("s", $username);
+        $stmt->execute();
+        $result = $stmt->get_result();
 
         if ($result->num_rows == 1) {
             $user = $result->fetch_assoc();
             $hashed_password = $user['password'];
+
+            // Verify the password
             if (password_verify($password, $hashed_password)) {
-                $_SESSION['user_id'] = $user['id'];
+                // Store user details in the session
+                $_SESSION['user_id'] = $user['id']; // Store the user's ID
                 $_SESSION['username'] = $user['username'];
-                $_SESSION['pfp'] = $user['pfp'];
+                $_SESSION['pfp'] = $user['pfp']; // Profile picture (optional)
+
+                // Redirect to the dashboard
                 header("Location: dashboard.php");
                 exit();
             } else {
                 $message = 'Invalid password!';
-                error_log("Password verification failed for user: $username");
-                error_log("Hashed password from DB: $hashed_password");
-                error_log("Entered password: $password");
             }
         } else {
             $message = 'User not found!';
-            error_log("User not found: $username");
         }
     } catch (mysqli_sql_exception $e) {
         $message = 'Database error: ' . $e->getMessage();
-        error_log("Database error: " . $e->getMessage());
     }
 }
 ?>
@@ -69,21 +72,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             border: none;
         }
         .btn-primary:hover {
-            background-color: #ED4135
+            background-color: #ED4135;
         }
-
         .password-container {
             position: relative;
-}   
+        }   
         .toggle-password {
-        background: transparent;
-        border: none;
-        position: absolute;
-        right: 10px;
-        top: 50%;
-        transform: translateY(-50%);
-        cursor: pointer;
-}
+            background: transparent;
+            border: none;
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>

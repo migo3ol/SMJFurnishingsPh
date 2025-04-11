@@ -39,8 +39,10 @@ $images = json_decode($project['images'], true); // Decode the JSON-encoded imag
             font-family: 'Poppins', sans-serif;
         }
         .project-images img {
-            width: 100%;
-            height: auto;
+            width: 100%; /* Ensure the image takes up the full width of its container */
+            height: 500px; /* Set a fixed height for the images */
+            object-fit: cover; /* Crop the image to fit the dimensions */
+            border-radius: 5px; /* Optional: Add rounded corners */
             margin-bottom: 15px;
         }
     </style>
