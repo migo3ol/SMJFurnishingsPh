@@ -3,8 +3,8 @@
 include 'database.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $stmt = $conn->prepare("UPDATE sales_records SET order_no=?, po_no=?, client_name=?, project_name=?, product_specification=?, area=?, total_amount=?, or_no=?, dr_no=?, status=? WHERE id=?");
-    $stmt->bind_param("ssssssdsssi", $_POST['order_no'], $_POST['po_no'], $_POST['client_name'], $_POST['project_name'], $_POST['product_classification'], $_POST['area'], $_POST['total_amount'], $_POST['or_no'], $_POST['dr_no'], $_POST['status'], $_POST['id']);
+    $stmt = $conn->prepare("UPDATE sales_records SET po_no=?, client_name=?, project_name=?, product_classification=?, area=?, total_amount=?, or_no=?, sibi_no=?, dr_no=?, status=? WHERE id=?");
+    $stmt->bind_param("ssssssdsssi", $_POST['po_no'], $_POST['client_name'], $_POST['project_name'], $_POST['product_classification'], $_POST['area'], $_POST['total_amount'], $_POST['or_no'], $_POST['sibi_no'], $_POST['dr_no'], $_POST['status'], $_POST['id']);
     $stmt->execute();
     $stmt->close();
     $conn->close();
@@ -48,47 +48,47 @@ $sale = $result->fetch_assoc();
                 <input type="hidden" name="id" value="<?= $sale['id'] ?>">
                 <div class="row">
                     <div class="col-md-6 mb-3">
-                        <label class="form-label">Order No.</label>
-                        <input type="text" class="form-control" name="order_no" value="<?= $sale['order_no'] ?>" required>
-                    </div>
-                    <div class="col-md-6 mb-3">
                         <label class="form-label">PO No</label>
-                        <input type="text" class="form-control" name="po_no" value="<?= $sale['po_no'] ?>" required>
+                        <input type="text" class="form-control" name="po_no" value="<?= $sale['po_no'] ?>">
                     </div>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Client Name</label>
-                    <input type="text" class="form-control" name="client_name" value="<?= $sale['client_name'] ?>" required>
+                    <input type="text" class="form-control" name="client_name" value="<?= $sale['client_name'] ?>">
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Project Name</label>
-                    <input type="text" class="form-control" name="project_name" value="<?= $sale['project_name'] ?>" required>
+                    <input type="text" class="form-control" name="project_name" value="<?= $sale['project_name'] ?>">
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Product Classification</label>
-                    <input type="text" class="form-control" name="product_classification" value="<?= $sale['product_specification'] ?>" required>
+                    <input type="text" class="form-control" name="product_classification" value="<?= $sale['product_classification'] ?>">
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Area</label>
-                    <input type="text" class="form-control" name="area" value="<?= $sale['area'] ?>" required>
+                    <input type="text" class="form-control" name="area" value="<?= $sale['area'] ?>">
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Total Amount</label>
                     <input type="number" class="form-control" name="total_amount" step="0.01" value="<?= $sale['total_amount'] ?>" required>
                 </div>
                 <div class="row">
-                    <div class="col-md-6 mb-3">
+                    <div class="col-md-4 mb-3">
                         <label class="form-label">OR No.</label>
-                        <input type="text" class="form-control" name="or_no" value="<?= $sale['or_no'] ?>" required>
+                        <input type="text" class="form-control" name="or_no" value="<?= $sale['or_no'] ?>">
                     </div>
-                    <div class="col-md-6 mb-3">
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">SI/BI No.</label>
+                        <input type="text" class="form-control" name="sibi_no" value="<?= $sale['sibi_no'] ?>">
+                    </div>
+                    <div class="col-md-4 mb-3">
                         <label class="form-label">DR No.</label>
-                        <input type="text" class="form-control" name="dr_no" value="<?= $sale['dr_no'] ?>" required>
+                        <input type="text" class="form-control" name="dr_no" value="<?= $sale['dr_no'] ?>">
                     </div>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Status</label>
-                    <select class="form-select" name="status" required>
+                    <select class="form-select" name="status">
                         <option value="Pending" <?= $sale['status'] == 'Pending' ? 'selected' : '' ?>>Pending</option>
                         <option value="Delivered" <?= $sale['status'] == 'Delivered' ? 'selected' : '' ?>>Delivered</option>
                         <option value="Cancelled" <?= $sale['status'] == 'Cancelled' ? 'selected' : '' ?>>Cancelled</option>

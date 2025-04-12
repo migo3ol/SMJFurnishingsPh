@@ -63,15 +63,16 @@ $selected_month = isset($_GET['month']) ? $_GET['month'] : date('Y-m');
             <table class="table table-bordered table-striped">
                 <thead class="table-dark">
                     <tr>
-                        <th>Order No.</th>
+                        <th>Date</th>
                         <th>PO No</th>
                         <th>Client Name</th>
                         <th>Project Name</th>
                         <th>Product Classification</th>
                         <th>Area</th>
                         <th>Total Amount</th>
-                        <th>OR No.</th>
-                        <th>DR No.</th>
+                        <th>OR</th>
+                        <th>SI/BI</th>
+                        <th>DR</th>
                         <th>Status</th>
                         <th>Action</th>
                     </tr>
@@ -91,14 +92,15 @@ $selected_month = isset($_GET['month']) ? $_GET['month'] : date('Y-m');
                     }
                 ?>
                     <tr>
-                        <td><?= $row['order_no'] ?></td>
+                        <td><?= date('Y-m-d', strtotime($row['date'])) ?></td> <!-- Display Date -->
                         <td><?= $row['po_no'] ?></td>
                         <td><?= $row['client_name'] ?></td>
                         <td><?= $row['project_name'] ?></td>
-                        <td><?= $row['product_specification'] ?></td>
+                        <td><?= $row['product_classification'] ?></td>
                         <td><?= $row['area'] ?></td>
                         <td>₱<?= number_format($row['total_amount'], 2) ?></td>
                         <td><?= $row['or_no'] ?></td>
+                        <td><?= $row['sibi_no'] ?></td>
                         <td><?= $row['dr_no'] ?></td>
                         <td><?= $row['status'] ?></td>
                         <td>

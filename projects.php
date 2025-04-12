@@ -136,9 +136,7 @@ body {
 
 
     <div class="container my-5 text-center">
-    <h1 style="border-bottom: 2px solid #ED4135;" class="fw-bold d-inline-block pb-2 w-25 mb-5">
-    Projects
-    </h1>
+    <h1 style="border-bottom: 2px solid #ED4135;" class="fw-bold d-inline-block pb-2 w-25 mb-5">Projects</h1>
     </div>
 
     <div class="container projects-section">
