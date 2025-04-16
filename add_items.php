@@ -89,6 +89,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <input type="text" id="style_name" name="style_name" class="form-control" required>
                 </div>
 
+                <!-- Photo Upload -->
+                <div class="mb-3">
+                    <label for="photo" class="form-label">Photo</label>
+                    <input type="file" id="photo" name="photo" class="form-control" accept="image/*" required>
+                </div>
+
+                <!-- Variation Photo Upload -->
+                <div class="mb-3">
+                    <label for="variation_photo" class="form-label">Variation Photo/s</label>
+                    <input type="file" id="variation_photo" name="variation_photo" class="form-control" accept="image/*" required>
+                </div>
+
                 <!-- Nylon Tiles Fields -->
                 <div id="nylon_tiles_fields" class="form-section" style="display: none;">
                     <div class="mb-3">
@@ -138,7 +150,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
 
                 <!-- Colordot Collection Fields -->
-                 <!-- Nylon Tiles Fields -->
                 <div id="colordot_collections_fields" class="form-section" style="display: none;">
                     <div class="mb-3">
                         <label for="construction" class="form-label">Construction</label>
@@ -207,6 +218,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
 
                 <button type="submit" class="btn btn-primary">Add Item</button>
+                <button type="button" class="btn btn-secondary" onclick="window.location.href='inventory.php'">Cancel</button>
             </form>
         </div>
     </div>
