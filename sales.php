@@ -97,7 +97,7 @@ $total_sales = $total_sales_row['total_sales'] ?? 0;
                     <input type="month" id="month" name="month" class="form-control" value="<?= $selected_month ?>">
                 </div>
                 <div class="col-md-4">
-                    <label for="po_no" class="form-label">Search by PO No</label>
+                    <label for="po_no" class="form-label">Search PO No</label>
                     <input type="text" id="po_no" name="po_no" class="form-control" placeholder="Enter PO No" value="<?= $search_po_no ?>">
                 </div>
             </div>

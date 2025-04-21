@@ -28,6 +28,46 @@
         .project-img-container:hover img {
             transform: scale(1.2);
         }
+
+        /* Project Section */
+        .projects-section .project-card {
+             position: relative;
+            overflow: hidden;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .projects-section .project-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+        }
+
+        .projects-section .project-card img {
+            width: 100%;
+            height: 350px;
+            object-fit: cover;
+        }
+
+        .projects-section .view-btn {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color:rgba(0, 0, 0, 0.7);
+            color: white;
+            border: none;
+            padding: 10px 30px;
+            letter-spacing: 2px;
+            opacity: 0;
+            font-weight: 600;
+            transition: opacity 0.3s ease;
+            z-index: 3;
+        }
+
+        .projects-section .project-card:hover .view-btn {
+            opacity: 1;
+        }
     </style>
         
     </head>
@@ -180,31 +220,48 @@
 </div>
 
     <!-- Latest Projects -->
-    <div class="container text-center my-5">
-        <h1 class="fw-bold">Latest Projects</h1><br>
-        <div class="row g-4 mt-3">
-            <div class="col-12 col-md-4">
-                <div class="project-img-container">
-                    <img src="assets/projects/Project1.png" class="img-fluid" alt="Project 1">
+<div class="container projects-section text-center my-5">
+    <h1 class="fw-bold">Latest Projects</h1><br>
+    <div class="row g-4 mt-3">
+        <?php
+        // Include the database connection
+        include 'database.php';
+
+        // Query to fetch the latest 3 projects
+        $query = "SELECT * FROM projects ORDER BY created_at DESC LIMIT 3";
+        $result = $conn->query($query);
+
+        // Check if there are results
+        if ($result->num_rows > 0):
+            while ($row = $result->fetch_assoc()):
+                // Decode the JSON-encoded images and get the first image
+                $images = json_decode($row['images'], true);
+                $firstImage = $images[0] ?? 'default.jpg';
+        ?>
+                <div class="col-md-4 col-sm-6">
+                    <div class="project-card">
+                        <!-- Project Image -->
+                        <img src="uploads/projects/<?= htmlspecialchars($firstImage) ?>" alt="Project Image" class="card-img-top">
+                        
+                        <!-- View Button -->
+                        <a href="project_details.php?id=<?= $row['id'] ?>" class="view-btn">View</a>
+                    </div>
+                    <!-- Project Name -->
+                    <div class="text-center mt-3">
+                        <h5 class="card-title"><?= htmlspecialchars($row['name']) ?></h5>
+                    </div>
                 </div>
-                <h5 class="mt-2 fw-bold fs-6">@ Taguig City</h5>
-            </div>
-            <div class="col-12 col-md-4">
-                <div class="project-img-container">
-                    <img src="assets/projects/Project2.png" class="img-fluid" alt="Project 2">
-                </div>
-                <h5 class="mt-2 fw-bold fs-6">@ Makati City</h5>
-            </div>
-            <div class="col-12 col-md-4">
-                <div class="project-img-container">
-                    <img src="assets/projects/Project3.png" class="img-fluid" alt="Project 3">
-                </div>
-                <h5 class="mt-2 fw-bold fs-6">@ Taguig City</h5>
-            </div>
-        </div>
-        <br>
-        <a href="projects.php" class="btn btn-dark btn-lg mt-3" style="background-color: #333; color: white; transition: all 0.3s ease;">See more</a>
+        <?php
+            endwhile;
+        else:
+        ?>
+            <p class="text-muted">No projects available at the moment.</p>
+        <?php endif; ?>
     </div>
+    <br>
+    <a href="projects.php" class="btn btn-dark btn-lg mt-3" style="background-color: #333; color: white; transition: all 0.3s ease;">See more</a>
+</div>
+
 
         <!-- Line -->
     <div class="container text-center my-5">
@@ -233,11 +290,6 @@
 </div>
     </div>
 </div>
-
-
-
-
-
 
     <script>    
         document.addEventListener("DOMContentLoaded", function () {
@@ -269,8 +321,5 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" 
     integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
-
-
-
-    </body>
-    </html>
+</body>
+</html>

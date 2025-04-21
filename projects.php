@@ -32,7 +32,7 @@ body {
     position: relative;
     overflow: hidden;
     box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-    margin-bottom: 30px;
+    margin-bottom: 20px;
     margin-top: -20px;
     transition: all 0.3s ease;
     text-align: left;
@@ -40,7 +40,7 @@ body {
 
 .project-card:hover {
     transform: translateY(-10px);
-    box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+    box-shadow: 0 15px 20px rgba(0,0,0,0.15);
 }
 
 .project-card img {
@@ -91,42 +91,6 @@ body {
 .project-card:hover .view-btn {
     opacity: 1;
 }
-
-.project-location {
-    display: inline-block;
-    color: #333;
-    font-weight: 600;
-    padding: 10px 0 8px 15px;
-    margin-top: 15px;
-    font-size: 0.9rem;
-    position: relative;
-}
-
-.project-location::after {
-    content: '';
-    position: absolute;
-    bottom: 5px;
-    left: 15px;
-    width: 150px; /* Fixed width for the underline */
-    height: 2px;
-    background-color: #ED4135;
-}
-
-@media (max-width: 768px) {
-    .project-card {
-        margin-top: -10px;
-    }
-    .project-card img {
-        height: 250px;
-    }
-    .view-btn {
-        padding: 8px 20px;
-        font-size: 0.8rem;
-    }
-    .project-location::after {
-        width: 40px; /* Slightly smaller width for mobile */
-    }
-}
 </style>
 </head>
 
@@ -155,7 +119,7 @@ body {
                     <a href="project_details.php?id=<?= $row['id'] ?>" class="view-btn">View</a>
                 </div>
                     <!-- Project Name -->
-                    <div class="text-center mt-3">
+                    <div class="text-center mt-3 mb-5">
                     <h5 class="card-title"><?= htmlspecialchars($row['name']) ?></h5>
                 </div>
             </div>
