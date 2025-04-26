@@ -235,7 +235,52 @@ $total_sales = $total_sales_row['total_sales'] ?? 0;
     poNoInput.addEventListener('input', fetchSalesData);
     monthInput.addEventListener('change', fetchSalesData);
 </script>
+<script>
+    document.getElementById('generatePdf').addEventListener('click', function () {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
 
+        // Add title
+        doc.setFontSize(18);
+        doc.text('Sales Report', 105, 20, { align: 'center' });
+
+        // Add subtitle
+        const month = document.getElementById('month').value || 'Current Month';
+        doc.setFontSize(12);
+        doc.text(`Month: ${month}`, 105, 30, { align: 'center' });
+
+        // Fetch table data
+        const table = document.getElementById('salesTable');
+        const headers = Array.from(table.querySelectorAll('thead th')).map(th => th.innerText);
+        const rows = Array.from(table.querySelectorAll('tbody tr')).map(tr => {
+            return Array.from(tr.querySelectorAll('td')).map(td => {
+                // Replace peso sign with "P"
+                return td.innerText.replace('₱', 'P');
+            });
+        });
+
+        // Generate table in PDF
+        doc.autoTable({
+            head: [headers],
+            body: rows,
+            startY: 40,
+            theme: 'grid',
+            headStyles: { fillColor: [0, 0, 0], textColor: 255, fontStyle: 'bold' },
+            styles: { font: 'helvetica', fontSize: 9, cellPadding: 2, overflow: 'linebreak' },
+        });
+
+        // Add total sales at the bottom
+        const totalSales = document.querySelector('#salesTable tfoot th[colspan="5"]').innerText.replace('₱', 'P');
+        const finalY = doc.lastAutoTable.finalY + 10;
+        doc.setFontSize(12);
+        doc.setFont('helvetica', 'bold');
+        doc.text(`Total Sales: ${totalSales}`, 105, finalY, { align: 'center' });
+
+        // Save the PDF
+        doc.save(`sales_report_${month}.pdf`);
+    });
+</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+
 </body>
 </html>
