@@ -13,6 +13,34 @@ if (isset($_GET['ajax']) && $_GET['ajax'] == '1') {
     $selected_month = $_GET['month'] ?? date('Y-m');
     $search_po_no = $_GET['po_no'] ?? '';
 
+    if (isset($_GET['total_sales']) && $_GET['total_sales'] == '1') {
+        // Return only the total sales value
+        $total_sales_query = "SELECT SUM(total_amount) AS total_sales 
+                              FROM sales_records 
+                              WHERE user_id = ? 
+                              AND DATE_FORMAT(date, '%Y-%m') = ? 
+                              AND status = 'Delivered'";
+        $params = [$userId, $selected_month];
+        $types = "is";
+
+        if (!empty($search_po_no)) {
+            $total_sales_query .= " AND po_no LIKE ?";
+            $params[] = '%' . $search_po_no . '%';
+            $types .= "s";
+        }
+
+        $total_sales_stmt = $conn->prepare($total_sales_query);
+        $total_sales_stmt->bind_param($types, ...$params);
+        $total_sales_stmt->execute();
+        $total_sales_result = $total_sales_stmt->get_result();
+        $total_sales_row = $total_sales_result->fetch_assoc();
+        $total_sales = $total_sales_row['total_sales'] ?? 0;
+
+        echo number_format($total_sales, 2);
+        exit();
+    }
+
+    // Fetch sales records
     $query = "SELECT * FROM sales_records WHERE user_id = ? AND DATE_FORMAT(date, '%Y-%m') = ?";
     $params = [$userId, $selected_month];
     $types = "is";
@@ -55,7 +83,11 @@ $selected_month = $_GET['month'] ?? date('Y-m');
 $search_po_no = $_GET['po_no'] ?? '';
 
 // Total Sales
-$total_sales_query = "SELECT SUM(total_amount) AS total_sales FROM sales_records WHERE user_id = ? AND DATE_FORMAT(date, '%Y-%m') = ?";
+$total_sales_query = "SELECT SUM(total_amount) AS total_sales 
+                      FROM sales_records 
+                      WHERE user_id = ? 
+                      AND DATE_FORMAT(date, '%Y-%m') = ? 
+                      AND status = 'Delivered'";
 $total_sales_stmt = $conn->prepare($total_sales_query);
 $total_sales_stmt->bind_param("is", $userId, $selected_month);
 $total_sales_stmt->execute();
@@ -181,6 +213,20 @@ $total_sales = $total_sales_row['total_sales'] ?? 0;
         xhr.onload = function () {
             if (xhr.status === 200) {
                 document.querySelector('#salesTable tbody').innerHTML = xhr.responseText;
+
+                // Fetch updated total sales
+                fetchTotalSales(month);
+            }
+        };
+        xhr.send();
+    }
+
+    function fetchTotalSales(month) {
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', `sales.php?ajax=1&total_sales=1&month=${encodeURIComponent(month)}`, true);
+        xhr.onload = function () {
+            if (xhr.status === 200) {
+                document.querySelector('#salesTable tfoot th[colspan="5"]').innerHTML = `₱${xhr.responseText}`;
             }
         };
         xhr.send();

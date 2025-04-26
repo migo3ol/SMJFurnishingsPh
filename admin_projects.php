@@ -1,85 +1,6 @@
 <?php
 include 'database.php';
 
-// Handle Edit Form Submission
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_project_id'])) {
-    $projectId = $_POST['edit_project_id'];
-    $projectName = $_POST['edit_project_name'];
-    $uploadDir = 'uploads/projects/';
-    $uploadedFiles = [];
-
-    // Fetch existing images
-    $query = "SELECT images FROM projects WHERE id = ?";
-    $stmt = $conn->prepare($query);
-    $stmt->bind_param("i", $projectId);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $project = $result->fetch_assoc();
-    $existingImages = json_decode($project['images'], true);
-
-    // Handle new file uploads
-    if (!empty($_FILES['edit_project_images']['name'][0])) {
-        foreach ($_FILES['edit_project_images']['tmp_name'] as $key => $tmpName) {
-            $fileName = basename($_FILES['edit_project_images']['name'][$key]);
-            $targetFile = $uploadDir . $fileName;
-
-            if (move_uploaded_file($tmpName, $targetFile)) {
-                $uploadedFiles[] = $fileName;
-            }
-        }
-    } else {
-        $uploadedFiles = $existingImages; // Keep existing images if no new images are uploaded
-    }
-
-    // Update the project in the database
-    $query = "UPDATE projects SET name = ?, images = ? WHERE id = ?";
-    $stmt = $conn->prepare($query);
-    $imagesJson = json_encode($uploadedFiles);
-    $stmt->bind_param("ssi", $projectName, $imagesJson, $projectId);
-    $stmt->execute();
-    $stmt->close();
-
-    // Redirect to the same page to refresh the project list
-    header('Location: admin_projects.php');
-    exit();
-}
-
-// Handle Delete Request
-if (isset($_GET['delete_project_id'])) {
-    $projectId = $_GET['delete_project_id'];
-
-    // Fetch the project details to delete images
-    $query = "SELECT images FROM projects WHERE id = ?";
-    $stmt = $conn->prepare($query);
-    $stmt->bind_param("i", $projectId);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $project = $result->fetch_assoc();
-
-    if ($project) {
-        $images = json_decode($project['images'], true);
-
-        // Delete images from the server
-        foreach ($images as $image) {
-            $filePath = 'uploads/projects/' . $image;
-            if (file_exists($filePath)) {
-                unlink($filePath); // Delete the file
-            }
-        }
-
-        // Delete the project from the database
-        $query = "DELETE FROM projects WHERE id = ?";
-        $stmt = $conn->prepare($query);
-        $stmt->bind_param("i", $projectId);
-        $stmt->execute();
-        $stmt->close();
-    }
-
-    // Redirect to the same page to refresh the project list
-    header('Location: admin_projects.php');
-    exit();
-}
-
 // Fetch all projects from the database
 $query = "SELECT * FROM projects";
 $result = $conn->query($query);
@@ -100,17 +21,39 @@ $result = $conn->query($query);
         body {
             font-family: 'Poppins', sans-serif;
         }
-        .container {
-            margin-top: 50px;
+        .projects-section .project-card {
+            position: relative;
+            overflow: hidden;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
-        .table {
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        .projects-section .project-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
         }
-        .project-images img {
-            width: 100px;
-            height: 100px;
+        .projects-section .project-card img {
+            width: 100%;
+            height: 300px;
             object-fit: cover;
-            margin-right: 5px;
+        }
+        .projects-section .view-btn {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            border: none;
+            padding: 10px 30px;
+            letter-spacing: 2px;
+            opacity: 0;
+            font-weight: 600;
+            transition: opacity 0.3s ease;
+            z-index: 3;
+        }
+        .projects-section .project-card:hover .view-btn {
+            opacity: 1;
         }
     </style>
 </head>
@@ -121,130 +64,34 @@ $result = $conn->query($query);
         </div>
         <div class="container col-md-10">
             <div class="d-flex justify-content-between align-items-center mb-5">
-                <h1 class="fw-bold">Projects</h1>
-                <button class="btn btn-success" onclick="window.location.href='add_projects.php'">Add Project</button>
+                <h1 class="fw-bold mt-5">Projects</h1>
+                <button class="btn btn-success mt-5" onclick="window.location.href='add_projects.php'">Add Project</button>
             </div>
-            <table class="table table-bordered table-striped">
-                <thead class="table-dark">
-                    <tr>
-                        <th>Project Name</th>
-                        <th>Images</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
+            <div class="row g-4 projects-section">
                 <?php while ($row = $result->fetch_assoc()): ?>
-                    <tr>
-                        <td><?= htmlspecialchars($row['name']) ?></td>
-                        <td class="project-images">
-                            <?php
-                            $images = json_decode($row['images'], true); // Decode the JSON-encoded images
-                            foreach ($images as $image) {
-                                echo "<img src='uploads/projects/$image' alt='Project Image'>";
-                            }
-                            ?>
-                        </td>
-                        <td>
-                            <!-- Edit Button -->
-                            <button class="btn btn-outline-primary btn-sm" 
-                                    data-bs-toggle="modal" 
-                                    data-bs-target="#editModal" 
-                                    onclick="loadEditModal(<?= $row['id'] ?>, '<?= htmlspecialchars($row['name']) ?>', '<?= htmlspecialchars(json_encode($images)) ?>')">
-                                Edit
-                            </button>
-                            <!-- Delete Button -->
-                            <button class="btn btn-danger btn-sm" 
-                                    data-bs-toggle="modal" 
-                                    data-bs-target="#deleteModal" 
-                                    onclick="setDeleteId(<?= $row['id'] ?>)">
-                                Delete
-                            </button>
-                        </td>
-                    </tr>
+                    <?php
+                    $images = json_decode($row['images'], true); // Decode the JSON-encoded images
+                    $firstImage = $images[0] ?? 'default.jpg'; // Use the first image or a default image
+                    ?>
+                    <div class="col-md-4 col-sm-6">
+                        <div class="project-card">
+                            <!-- Project Image -->
+                            <img src="uploads/projects/<?= htmlspecialchars($firstImage) ?>" alt="Project Image" class="card-img-top">
+                            
+                            <!-- View Button -->
+                            <a href="admin_projectsdetails.php?id=<?= $row['id'] ?>" class="view-btn">View</a>
+                        </div>
+                        <!-- Project Name -->
+                        <div class="text-center mt-3">
+                            <h5 class="card-title"><?= htmlspecialchars($row['name']) ?></h5>
+                        </div>
+                    </div>
                 <?php endwhile; ?>
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-    <!-- Edit Modal -->
-    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-            <form id="editForm" action="admin_projects.php" method="POST" enctype="multipart/form-data">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="editModalLabel">Edit Project</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <input type="hidden" name="edit_project_id" id="edit_project_id">
-                    <div class="mb-3">
-                        <label for="edit_project_name" class="form-label">Project Name</label>
-                        <input type="text" class="form-control" id="edit_project_name" name="edit_project_name" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="edit_project_images" class="form-label">Project Images</label>
-                        <input type="file" class="form-control" id="edit_project_images" name="edit_project_images[]" multiple>
-                        <small class="text-muted">Upload new images to replace existing ones.</small>
-                    </div>
-                    <div class="mb-3">
-                        <label>Existing Images:</label>
-                        <div id="existing_images" class="d-flex flex-wrap gap-2"></div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Save Changes</button>
-                </div>
-            </form>
-            </div>
-        </div>
-    </div>
-
-    <!-- Delete Modal -->
-    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    Are you sure you want to delete this project?
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <a href="#" id="confirmDeleteBtn" class="btn btn-danger">Delete</a>
-                </div>
             </div>
         </div>
     </div>
 
     <!-- JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        function loadEditModal(id, name, images) {
-            document.getElementById('edit_project_id').value = id;
-            document.getElementById('edit_project_name').value = name;
-
-            const existingImagesContainer = document.getElementById('existing_images');
-            existingImagesContainer.innerHTML = ''; // Clear previous images
-            const imageArray = JSON.parse(images);
-            imageArray.forEach(image => {
-                const img = document.createElement('img');
-                img.src = 'uploads/projects/' + image;
-                img.style.width = '100px';
-                img.style.height = '100px';
-                img.style.objectFit = 'cover';
-                img.style.marginRight = '5px';
-                existingImagesContainer.appendChild(img);
-            });
-        }
-
-        function setDeleteId(id) {
-            const deleteBtn = document.getElementById('confirmDeleteBtn');
-            deleteBtn.href = `admin_projects.php?delete_project_id=${id}`;
-        }
-    </script>
 </body>
 </html>

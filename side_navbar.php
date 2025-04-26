@@ -17,7 +17,10 @@
       background-color: #f8f9fa;
       padding: 20px;
       border-right: 1px solid #ddd;
-      cursor: pointer;
+      position: fixed; /* Make the sidebar fixed */
+      top: 0;
+      left: 0;
+      overflow-y: auto; /* Add scrolling if content overflows */
     }
     .sidebar a {
       text-decoration: none;
@@ -53,21 +56,22 @@
     .logout-btn:hover {
       background-color: #c7352b;
     }
+    .content {
+      margin-left: 250px; /* Add margin to prevent overlap with the fixed sidebar */
+      padding: 20px;
+    }
   </style>
 </head>
 <body>
-  <div class="d-flex">
-    <!-- Sidebar -->
-    <div class="sidebar d-flex flex-column">
-      <img src="assets/navbar-logo1.png" alt="SMJ Logo" class="mb-5" width="100%">
-      <a href="dashboard.php" class="text-dark mb-3"><img src="assets/dashboard.png" class="img-fluid me-3"> Dashboard</a>
-      <a href="sales.php" class="text-dark mb-3"><img src="assets/sales.png" class="img-fluid me-3"> Sales</a>
-      <a href="inventory.php" class="text-dark mb-3" id="inventoryLink"><img src="assets/inventory.png" class="img-fluid me-3"> Inventory</a>
-      <a href="admin_projects.php" class="text-dark mb-3"><img src="assets/project-icon.png" class="img-fluid me-3"> Projects</a>
+  <div class="sidebar d-flex flex-column">
+    <img src="assets/navbar-logo1.png" alt="SMJ Logo" class="mb-5" width="100%">
+    <a href="dashboard.php" class="text-dark mb-3"><img src="assets/dashboard.png" class="img-fluid me-3"> Dashboard</a>
+    <a href="sales.php" class="text-dark mb-3"><img src="assets/sales.png" class="img-fluid me-3"> Sales</a>
+    <a href="inventory.php" class="text-dark mb-3" id="inventoryLink"><img src="assets/inventory.png" class="img-fluid me-3"> Inventory</a>
+    <a href="admin_projects.php" class="text-dark mb-3"><img src="assets/project-icon.png" class="img-fluid me-3"> Projects</a>
 
-      <!-- Logout Button -->
-      <button type="button" class="logout-btn w-100 mt-auto" data-bs-toggle="modal" data-bs-target="#logoutModal">Log Out</button>
-    </div>
+    <!-- Logout Button -->
+    <button type="button" class="logout-btn w-100 mt-auto" data-bs-toggle="modal" data-bs-target="#logoutModal">Log Out</button>
   </div>
 
   <!-- Logout Confirmation Modal -->
