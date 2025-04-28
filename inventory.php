@@ -9,6 +9,26 @@ $tile_types = [
     "Luxury Vinyl Tiles" => "SELECT * FROM luxury_vinyl",
     "Broadloom" => "SELECT * FROM broadloom"
 ];
+
+// Check if the request is for JSON data
+if (isset($_GET['format']) && $_GET['format'] === 'json') {
+    $inventory = [];
+    foreach ($tile_types as $tile_type => $query) {
+        $result = $conn->query($query);
+        if ($result->num_rows > 0) {
+            while ($item = $result->fetch_assoc()) {
+                $inventory[$tile_type][] = [
+                    'id' => $item['id'],
+                    'style_name' => $item['style_name'],
+                    'photo' => "Uploads/products/" . $item['photo']
+                ];
+            }
+        }
+    }
+    header('Content-Type: application/json');
+    echo json_encode($inventory);
+    exit;
+}
 ?>
 
 <!DOCTYPE html>
@@ -19,7 +39,8 @@ $tile_types = [
     <title>Inventory | SMJ Furnishings</title>
     <!-- Bootstrap -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    
+    <!-- FontAwesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <!-- Font -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
@@ -29,16 +50,39 @@ $tile_types = [
         .container {
             margin-top: 50px;
         }
-        .card {
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-            border: none;
+        .tile-section .item-card {
+            position: relative;
+            overflow: hidden;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
-        .card img {
-            height: 150px;
+        .tile-section .item-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+        }
+        .tile-section .item-card img {
+            width: 100%;
+            height: 300px;
             object-fit: cover;
         }
-        .tile-section {
-            margin-bottom: 50px;
+        .tile-section .view-btn {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            border: none;
+            padding: 10px 30px;
+            letter-spacing: 2px;
+            opacity: 0;
+            font-weight: 600;
+            transition: opacity 0.3s ease;
+            z-index: 3;
+        }
+        .tile-section .item-card:hover .view-btn {
+            opacity: 1;
         }
     </style>
 </head>
@@ -59,46 +103,25 @@ $tile_types = [
                 if ($result->num_rows > 0):
                 ?>
                     <div class="tile-section">
-                        <h2 class="fw-bold mb-4"><?= $tile_type ?></h2>
-                        <div class="row">
+                        <h2 class="fw-bold mb-3"><?= $tile_type ?></h2>
+                        <div class="row g-4">
                             <?php while ($item = $result->fetch_assoc()): ?>
-                                <div class="col-md-4 mb-4">
-                                    <div class="card">
-                                    <img src="uploads/<?= htmlspecialchars($item['photo']) ?>" class="card-img-top" alt="<?= htmlspecialchars($item['style_name']) ?>">
-                                        <div class="card-body">
-                                            <h5 class="card-title"><?= htmlspecialchars($item['style_name']) ?></h5>
-                                            <p class="card-text">
-                                                <?php if (isset($item['construction'])): ?>
-                                                    <strong>Construction:</strong> <?= htmlspecialchars($item['construction']) ?><br>
-                                                <?php endif; ?>
-                                                <?php if (isset($item['yarn_system'])): ?>
-                                                    <strong>Yarn System:</strong> <?= htmlspecialchars($item['yarn_system']) ?><br>
-                                                <?php endif; ?>
-                                                <?php if (isset($item['dye_method'])): ?>
-                                                    <strong>Dye Method:</strong> <?= htmlspecialchars($item['dye_method']) ?><br>
-                                                <?php endif; ?>
-                                                <?php if (isset($item['backing'])): ?>
-                                                    <strong>Backing:</strong> <?= htmlspecialchars($item['backing']) ?><br>
-                                                <?php endif; ?>
-                                                <?php if (isset($item['size'])): ?>
-                                                    <strong>Size:</strong> <?= htmlspecialchars($item['size']) ?><br>
-                                                <?php endif; ?>
-                                                <?php if (isset($item['overall_gauge'])): ?>
-                                                    <strong>Overall Gauge:</strong> <?= htmlspecialchars($item['overall_gauge']) ?><br>
-                                                <?php endif; ?>
-                                                <?php if (isset($item['wear_layer'])): ?>
-                                                    <strong>Wear Layer:</strong> <?= htmlspecialchars($item['wear_layer']) ?><br>
-                                                <?php endif; ?>
-                                                <?php if (isset($item['finish'])): ?>
-                                                    <strong>Finish:</strong> <?= htmlspecialchars($item['finish']) ?><br>
-                                                <?php endif; ?>
-                                                <?php if (isset($item['width'])): ?>
-                                                    <strong>Width:</strong> <?= htmlspecialchars($item['width']) ?><br>
-                                                <?php endif; ?>
-                                            </p>
-                                            <a href="edit_item.php?id=<?= $item['id'] ?>&type=<?= urlencode($tile_type) ?>" class="btn btn-warning btn-sm">Edit</a>
-                                            <button class="btn btn-danger btn-sm" onclick="showDeleteModal(<?= $item['id'] ?>, '<?= htmlspecialchars($tile_type) ?>')">Delete</button>
-                                        </div>
+                                <?php
+                                // Use the photo directly, with a fallback to a default image
+                                $photo = !empty($item['photo']) && file_exists("Uploads/products/" . $item['photo'])
+                                    ? $item['photo']
+                                    : 'placeholder.jpg';
+                                ?>
+                                <div class="col-md-4 col-sm-6">
+                                    <div class="item-card">
+                                        <!-- Product Image -->
+                                        <img src="Uploads/products/<?= htmlspecialchars($photo) ?>" alt="<?= htmlspecialchars($item['style_name']) ?>" class="card-img-top">
+                                        <!-- View Button -->
+                                        <a href="admin_itemdetails.php?id=<?= $item['id'] ?>&type=<?= urlencode($tile_type) ?>" class="view-btn">View</a>
+                                    </div>
+                                    <!-- Style Name -->
+                                    <div class="text-center mt-3">
+                                        <h5 class="card-title mb-5"><?= htmlspecialchars($item['style_name']) ?></h5>
                                     </div>
                                 </div>
                             <?php endwhile; ?>
@@ -109,34 +132,7 @@ $tile_types = [
         </div>
     </div>
 
-    <!-- Delete Confirmation Modal -->
-    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    Are you sure you want to delete this item?
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <a href="delete_item.php" id="confirmDeleteButton" class="btn btn-danger">Delete</a>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        function showDeleteModal(itemId, tileType) {
-            const deleteUrl = `delete_item.php?id=${itemId}&type=${encodeURIComponent(tileType)}`;
-            document.getElementById('confirmDeleteButton').setAttribute('href', deleteUrl);
-            const deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
-            deleteModal.show();
-        }
-    </script>
 </body>
 </html>

@@ -75,12 +75,13 @@ $result = $conn->query($query);
                     ?>
                     <div class="col-md-4 col-sm-6">
                         <div class="project-card">
-                            <!-- Project Image -->
-                            <img src="uploads/projects/<?= htmlspecialchars($firstImage) ?>" alt="Project Image" class="card-img-top">
+                        <!-- Project Image -->
+                        <img src="uploads/projects/<?= htmlspecialchars($firstImage) ?>" alt="Project Image" class="card-img-top">
                             
-                            <!-- View Button -->
-                            <a href="admin_projectsdetails.php?id=<?= $row['id'] ?>" class="view-btn">View</a>
+                        <!-- View Button -->
+                        <a href="admin_projectsdetails.php?id=<?= $row['id'] ?>" class="view-btn">View</a>
                         </div>
+
                         <!-- Project Name -->
                         <div class="text-center mt-3">
                             <h5 class="card-title"><?= htmlspecialchars($row['name']) ?></h5>
