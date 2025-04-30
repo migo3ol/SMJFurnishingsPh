@@ -60,6 +60,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $wear_layer = $_POST['wear_layer'] ?? null;
     $finish = $_POST['finish'] ?? null;
     $width = $_POST['width'] ?? null;
+    $in_stock = isset($_POST['in_stock']) ? 1 : 0; // Checkbox: 1 if checked, 0 if not
+    $on_sale = isset($_POST['on_sale']) ? 1 : 0; // Checkbox: 1 if checked, 0 if not
 
     // Handle main photo upload (optional)
     $photo_name = $item['photo'];
@@ -85,14 +87,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Update main item
     try {
         if ($tile_type == "Nylon Tiles" || $tile_type == "Polypropylene Tiles" || $tile_type == "Colordot Collection") {
-            $stmt = $conn->prepare("UPDATE `$table` SET style_name = ?, construction = ?, yarn_system = ?, dye_method = ?, backing = ?, size = ?, photo = ? WHERE id = ?");
-            $stmt->bind_param("sssssssi", $style_name, $construction, $yarn_system, $dye_method, $backing, $size, $photo_name, $item_id);
+            $stmt = $conn->prepare("UPDATE `$table` SET style_name = ?, construction = ?, yarn_system = ?, dye_method = ?, backing = ?, size = ?, photo = ?, in_stock = ?, on_sale = ? WHERE id = ?");
+            $stmt->bind_param("sssssssiii", $style_name, $construction, $yarn_system, $dye_method, $backing, $size, $photo_name, $in_stock, $on_sale, $item_id);
         } elseif ($tile_type == "Luxury Vinyl Tiles") {
-            $stmt = $conn->prepare("UPDATE `$table` SET style_name = ?, overall_gauge = ?, wear_layer = ?, finish = ?, size = ?, photo = ? WHERE id = ?");
-            $stmt->bind_param("ssssssi", $style_name, $overall_gauge, $wear_layer, $finish, $size, $photo_name, $item_id);
+            $stmt = $conn->prepare("UPDATE `$table` SET style_name = ?, overall_gauge = ?, wear_layer = ?, finish = ?, size = ?, photo = ?, in_stock = ?, on_sale = ? WHERE id = ?");
+            $stmt->bind_param("ssssssiii", $style_name, $overall_gauge, $wear_layer, $finish, $size, $photo_name, $in_stock, $on_sale, $item_id);
         } elseif ($tile_type == "Broadloom") {
-            $stmt = $conn->prepare("UPDATE `$table` SET style_name = ?, construction = ?, yarn_system = ?, dye_method = ?, backing = ?, width = ?, photo = ? WHERE id = ?");
-            $stmt->bind_param("sssssssi", $style_name, $construction, $yarn_system, $dye_method, $backing, $width, $photo_name, $item_id);
+            $stmt = $conn->prepare("UPDATE `$table` SET style_name = ?, construction = ?, yarn_system = ?, dye_method = ?, backing = ?, width = ?, photo = ?, in_stock = ?, on_sale = ? WHERE id = ?");
+            $stmt->bind_param("sssssssiii", $style_name, $construction, $yarn_system, $dye_method, $backing, $width, $photo_name, $in_stock, $on_sale, $item_id);
         }
 
         // Start transaction
@@ -309,6 +311,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <input type="text" id="style_name" name="style_name" class="form-control" value="<?= htmlspecialchars($item['style_name']) ?>" required>
                 </div>
 
+                <!-- Stock and Sale Status -->
+                <div class="mb-3">
+                    <div class="form-check">
+                        <input type="checkbox" id="in_stock" name="in_stock" class="form-check-input" <?= $item['in_stock'] ? 'checked' : '' ?>>
+                        <label for="in_stock" class="form-check-label">In Stock</label>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <div class="form-check">
+                        <input type="checkbox" id="on_sale" name="on_sale" class="form-check-input" <?= $item['on_sale'] ? 'checked' : '' ?>>
+                        <label for="on_sale" class="form-check-label">On Sale</label>
+                    </div>
+                </div>
+
                 <!-- Photo Upload -->
                 <div class="mb-3">
                     <label for="photo" class="form-label">Photo</label>
@@ -397,7 +413,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <div id="colordot_collections_fields" class="form-section" style="display: <?= in_array($tile_type, ["Colordot Collection"]) ? 'block' : 'none' ?>;">
                     <div class="mb-3">
                         <label for="construction_colordot" class="form-label">Construction</label>
-                        <input type="text" id="construction_colordot" name="construction" class="form-control" value="<?= htmlspecialchars($item['construction'] ?? '') ?>">
+                        <input type="text" idkis="construction_colordot" name="construction" class="form-control" value="<?= htmlspecialchars($item['construction'] ?? '') ?>">
                     </div>
                     <div class="mb-3">
                         <label for="yarn_system_colordot" class="form-label">Yarn System</label>

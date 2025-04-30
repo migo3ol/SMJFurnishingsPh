@@ -13,6 +13,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $wear_layer = $_POST['wear_layer'] ?? null;
     $finish = $_POST['finish'] ?? null;
     $width = $_POST['width'] ?? null;
+    $in_stock = isset($_POST['in_stock']) ? 1 : 0; // Checkbox: 1 if checked, 0 if not
+    $on_sale = isset($_POST['on_sale']) ? 1 : 0; // Checkbox: 1 if checked, 0 if not
 
     // Log submitted data for debugging
     error_log("POST Data: " . print_r($_POST, true));
@@ -41,24 +43,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Insert into the correct table
     try {
         if ($tile_type == "Nylon Tiles") {
-            $stmt = $conn->prepare("INSERT INTO nylon_tiles (style_name, construction, yarn_system, dye_method, backing, size, photo) VALUES (?, ?, ?, ?, ?, ?, ?)");
-            $stmt->bind_param("sssssss", $style_name, $construction, $yarn_system, $dye_method, $backing, $size, $photo_name);
+            $stmt = $conn->prepare("INSERT INTO nylon_tiles (style_name, construction, yarn_system, dye_method, backing, size, photo, in_stock, on_sale) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            $stmt->bind_param("sssssssii", $style_name, $construction, $yarn_system, $dye_method, $backing, $size, $photo_name, $in_stock, $on_sale);
             $variation_table = "nylon_tiles_variations";
         } elseif ($tile_type == "Polypropylene Tiles") {
-            $stmt = $conn->prepare("INSERT INTO polypropylene_tiles (style_name, construction, yarn_system, dye_method, backing, size, photo) VALUES (?, ?, ?, ?, ?, ?, ?)");
-            $stmt->bind_param("sssssss", $style_name, $construction, $yarn_system, $dye_method, $backing, $size, $photo_name);
+            $stmt = $conn->prepare("INSERT INTO polypropylene_tiles (style_name, construction, yarn_system, dye_method, backing, size, photo, in_stock, on_sale) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            $stmt->bind_param("sssssssii", $style_name, $construction, $yarn_system, $dye_method, $backing, $size, $photo_name, $in_stock, $on_sale);
             $variation_table = "polypropylene_tiles_variations";
         } elseif ($tile_type == "Colordot Collection") {
-            $stmt = $conn->prepare("INSERT INTO colordot_collections (style_name, construction, yarn_system, dye_method, backing, size, photo) VALUES (?, ?, ?, ?, ?, ?, ?)");
-            $stmt->bind_param("sssssss", $style_name, $construction, $yarn_system, $dye_method, $backing, $size, $photo_name);
+            $stmt = $conn->prepare("INSERT INTO colordot_collections (style_name, construction, yarn_system, dye_method, backing, size, photo, in_stock, on_sale) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            $stmt->bind_param("sssssssii", $style_name, $construction, $yarn_system, $dye_method, $backing, $size, $photo_name, $in_stock, $on_sale);
             $variation_table = "colordot_collections_variations";
         } elseif ($tile_type == "Luxury Vinyl Tiles") {
-            $stmt = $conn->prepare("INSERT INTO luxury_vinyl (style_name, overall_gauge, wear_layer, finish, size, photo) VALUES (?, ?, ?, ?, ?, ?)");
-            $stmt->bind_param("ssssss", $style_name, $overall_gauge, $wear_layer, $finish, $size, $photo_name);
+            $stmt = $conn->prepare("INSERT INTO luxury_vinyl (style_name, overall_gauge, wear_layer, finish, size, photo, in_stock, on_sale) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+            $stmt->bind_param("ssssssii", $style_name, $overall_gauge, $wear_layer, $finish, $size, $photo_name, $in_stock, $on_sale);
             $variation_table = "luxury_vinyl_variations";
         } elseif ($tile_type == "Broadloom") {
-            $stmt = $conn->prepare("INSERT INTO broadloom (style_name, construction, yarn_system, dye_method, backing, width, photo) VALUES (?, ?, ?, ?, ?, ?, ?)");
-            $stmt->bind_param("sssssss", $style_name, $construction, $yarn_system, $dye_method, $backing, $width, $photo_name);
+            $stmt = $conn->prepare("INSERT INTO broadloom (style_name, construction, yarn_system, dye_method, backing, width, photo, in_stock, on_sale) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            $stmt->bind_param("sssssssii", $style_name, $construction, $yarn_system, $dye_method, $backing, $width, $photo_name, $in_stock, $on_sale);
             $variation_table = "broadloom_variations";
         } else {
             $error_message = "Invalid tile type selected.";
@@ -66,7 +68,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
         // Log data before insertion
-        error_log("Inserting $tile_type: style_name=$style_name, construction=$construction, yarn_system=$yarn_system, dye_method=$dye_method, backing=$backing, size=$size, photo=$photo_name");
+        error_log("Inserting $tile_type: style_name=$style_name, construction=$construction, yarn_system=$yarn_system, dye_method=$dye_method, backing=$backing, size=$size, photo=$photo_name, in_stock=$in_stock, on_sale=$on_sale");
 
         if ($stmt->execute()) {
             $item_id = $stmt->insert_id;
@@ -240,6 +242,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <input type="text" id="style_name" name="style_name" class="form-control" required>
                 </div>
 
+                <!-- Stock and Sale Status -->
+                <div class="mb-3">
+                    <div class="form-check">
+                        <input type="checkbox" id="in_stock" name="in_stock" class="form-check-input" checked>
+                        <label for="in_stock" class="form-check-label">In Stock</label>
+                    </div>
+                </div> 
+                <div class="mb-3"> 
+                    <div class="form-check">
+                        <input type="checkbox" id="on_sale" name="on_sale" class="form-check-input">
+                        <label for="on_sale" class="form-check-label">On Sale</label>
+                    </div>
+                </div>
+
                 <!-- Photo Upload -->
                 <div class="mb-3">
                     <label for="photo" class="form-label">Photo</label>
@@ -360,7 +376,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </div>
                     <div class="mb-3">
                         <label for="backing_broadloom" class="form-label">Backing</label>
-                        <input type=" personally identifiable informationacking_broadloom" name="backing" class="form-control">
+                        <input type="text" id="backing_broadloom" name="backing" class="form-control">
                     </div>
                     <div class="mb-3">
                         <label for="width" class="form-label">Width</label>

@@ -49,6 +49,10 @@ include 'database.php';
         .product-card:hover .view-btn {
             opacity: 1;
         }
+        .status-text {
+            color: red;
+            font-size: 0.9rem;
+        }
     </style>
 </head>
 <body>
@@ -57,7 +61,7 @@ include 'database.php';
         <h1 class="fw-bold mb-5">Polypropylene Tiles</h1>
         <div class="row g-4">
             <?php
-            $result = $conn->query("SELECT * FROM polypropylene_tiles");
+            $result = $conn->query("SELECT id, style_name, photo, in_stock, on_sale FROM polypropylene_tiles");
             if ($result->num_rows > 0):
                 while ($item = $result->fetch_assoc()):
                     $photo = !empty($item['photo']) && file_exists("Uploads/products/" . $item['photo'])
@@ -71,6 +75,10 @@ include 'database.php';
                         </div>
                         <div class="text-center mt-3">
                             <h5 class="card-title"><?= htmlspecialchars($item['style_name']) ?></h5>
+                            <p class="status-text">
+                                <?= $item['in_stock'] ? 'In Stock' : 'Out of Stock' ?>
+                                <?= $item['on_sale'] ? ' | On Sale' : '' ?>
+                            </p>
                         </div>
                     </div>
             <?php
@@ -80,7 +88,7 @@ include 'database.php';
                 <p class="text-muted">No products available at the moment.</p>
             <?php endif; ?>
         </div>
-        <a href="products.php" class="btn btn-dark btn-lg mt-5">Back to Products</a>
+        <a href="products.php" class="btn btn-dark btn-lg mt-5 mb-5">Back to Products</a>
     </div>
     <?php include 'footer.php'; ?>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

@@ -3,11 +3,11 @@ include 'database.php';
 
 // Fetch items grouped by tile types
 $tile_types = [
-    "Nylon Tiles" => "SELECT * FROM nylon_tiles",
-    "Polypropylene Tiles" => "SELECT * FROM polypropylene_tiles",
-    "Colordot Collection" => "SELECT * FROM colordot_collections",
-    "Luxury Vinyl Tiles" => "SELECT * FROM luxury_vinyl",
-    "Broadloom" => "SELECT * FROM broadloom"
+    "Nylon Tiles" => "SELECT id, style_name, photo, in_stock, on_sale FROM nylon_tiles",
+    "Polypropylene Tiles" => "SELECT id, style_name, photo, in_stock, on_sale FROM polypropylene_tiles",
+    "Colordot Collection" => "SELECT id, style_name, photo, in_stock, on_sale FROM colordot_collections",
+    "Luxury Vinyl Tiles" => "SELECT id, style_name, photo, in_stock, on_sale FROM luxury_vinyl",
+    "Broadloom" => "SELECT id, style_name, photo, in_stock, on_sale FROM broadloom"
 ];
 
 // Check if the request is for JSON data
@@ -20,7 +20,9 @@ if (isset($_GET['format']) && $_GET['format'] === 'json') {
                 $inventory[$tile_type][] = [
                     'id' => $item['id'],
                     'style_name' => $item['style_name'],
-                    'photo' => "Uploads/products/" . $item['photo']
+                    'photo' => "Uploads/products/" . $item['photo'],
+                    'in_stock' => (bool)$item['in_stock'],
+                    'on_sale' => (bool)$item['on_sale']
                 ];
             }
         }
@@ -84,6 +86,10 @@ if (isset($_GET['format']) && $_GET['format'] === 'json') {
         .tile-section .item-card:hover .view-btn {
             opacity: 1;
         }
+        .status-text {
+            color: red;
+            font-size: 0.9rem;
+        }
     </style>
 </head>
 <body>
@@ -119,9 +125,13 @@ if (isset($_GET['format']) && $_GET['format'] === 'json') {
                                         <!-- View Button -->
                                         <a href="admin_itemdetails.php?id=<?= $item['id'] ?>&type=<?= urlencode($tile_type) ?>" class="view-btn">View</a>
                                     </div>
-                                    <!-- Style Name -->
+                                    <!-- Style Name and Status -->
                                     <div class="text-center mt-3">
-                                        <h5 class="card-title mb-5"><?= htmlspecialchars($item['style_name']) ?></h5>
+                                        <h5 class="card-title"><?= htmlspecialchars($item['style_name']) ?></h5>
+                                        <p class="status-text">
+                                            <?= $item['in_stock'] ? 'In Stock' : 'Out of Stock' ?>
+                                            <?= $item['on_sale'] ? ' | On Sale' : '' ?>
+                                        </p>
                                     </div>
                                 </div>
                             <?php endwhile; ?>
