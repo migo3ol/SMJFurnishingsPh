@@ -58,7 +58,7 @@ include 'database.php';
 <body>
     <?php include 'navbar.php'; ?>
     <div class="container mt-5 mb-5">
-        <h1 class="fw-bold mb-5">Nylon Tiles</h1>
+        <h1 class="fw-bold mb-5 title-text" >Nylon Tiles</h1>
         <div class="row g-4">
             <?php
             $result = $conn->query("SELECT id, style_name, photo, in_stock, on_sale FROM nylon_tiles");
