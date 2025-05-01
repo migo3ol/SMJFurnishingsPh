@@ -54,14 +54,14 @@ include 'database.php';
             font-size: 0.9rem; /* Slightly smaller font for status */
         }
     </style>
-</head>
+</head> 
 <body>
     <?php include 'navbar.php'; ?>
     <div class="container mt-5 mb-5">
-        <h1 class="fw-bold mb-5 title-text" >Nylon Tiles</h1>
+        <h1 class="fw-bold mb-5">Nylon Tiles</h1>
         <div class="row g-4">
             <?php
-            $result = $conn->query("SELECT id, style_name, photo, in_stock, on_sale FROM nylon_tiles");
+            $result = $conn->query("SELECT id, style_name, photo, in_stock, on_sale FROM polypropylene_tiles");
             if ($result->num_rows > 0):
                 while ($item = $result->fetch_assoc()):
                     $photo = !empty($item['photo']) && file_exists("Uploads/products/" . $item['photo'])
@@ -71,7 +71,7 @@ include 'database.php';
                     <div class="col-md-4 col-sm-6">
                         <div class="product-card">
                             <img src="Uploads/products/<?= htmlspecialchars($photo) ?>" alt="<?= htmlspecialchars($item['style_name']) ?>" class="card-img-top">
-                            <a href="item_details.php?id=<?= $item['id'] ?>&type=Nylon Tiles" class="view-btn">View</a>
+                            <a href="item_details.php?id=<?= $item['id'] ?>&type=Polypropylene Tiles" class="view-btn">View</a>
                         </div>
                         <div class="text-center mt-3">
                             <h5 class="card-title"><?= htmlspecialchars($item['style_name']) ?></h5>
