@@ -13,18 +13,7 @@
     <!-- CSS -->
     <link rel="stylesheet" href="index.css">
     <style>
-        /* Project img zoom effect */
-        .project-img-container {
-            overflow: hidden;
-            position: relative;
-        }
-        .project-img-container img {
-            transition: transform 0.5s ease;
-            object-fit: cover;
-        }
-        .project-img-container:hover img {
-            transform: scale(1.2);
-        }
+
         /* Project Section */
         .projects-section .project-card {
             position: relative;
@@ -73,6 +62,7 @@
         .picture-btn:hover {
             background-color: #555;
         }
+
         /* Featured Products */
         .btn-dark {
             background-color: #333;
@@ -99,6 +89,25 @@
             transform: translateX(0);
             opacity: 1;
         }
+        #productContainer a {
+            text-decoration: none; /* Remove underline from links */
+        }
+        #productContainer h5 {
+            font-size: 1.25rem; /* Adjust the font size */
+            color: #212529;
+        }
+        .project-img-container {
+            overflow: hidden;
+            position: relative;
+        }   
+        .project-img-container img {
+            transition: transform 0.5s ease;
+            object-fit: cover;
+        }
+        .project-img-container:hover img {
+            transform: scale(1.2);
+        }
+
     </style>
 </head>
 <body>
@@ -177,7 +186,7 @@
         </div>
     </div>
 
-    <!-- Line -->
+    <!-- Line -->   
     <div class="container text-center my-5">
         <br><br> 
         <div style="border-bottom: 1px solid #ED4135; width: 90%; max-width: 750px; margin: 10px auto;"></div>
@@ -318,11 +327,13 @@
 
         // Featured Products Navigation
         const products = [
-            { image: "assets/bluestone-sq.jpg", alt: "Bluestone SQ", title: "Nylon Tiles", link: "nylon.php" },
-            { image: "assets/brightstone-sq.jpg", alt: "Brightstone SQ", title: "Polypropylene Tiles", link: "polypropylene.php" },
-            { image: "assets/cadence-sq.jpg", alt: "Candence SQ", title: "Colordot Collection", link: "colordot.php" },
-            { image: "assets/camborne-sq.jpg", alt: "Camborne SQ", title: "Print Broadloom Collection", link: "printbroadloom.php" },
-            { image: "assets/brightstone-sq.jpg", alt: "Brightstone SQ", title: "Broadloom", link: "broadloom.php" }
+            { image: "assets/BLUESTONE SQ Room Scene 1.jpg", alt: "Bluestone SQ", title: "Nylon Tiles", link: "nylon.php" },
+            { image: "assets/BASICAL SQ Room Scene 1.jpg", alt: "Basical SQ", title: "Polypropylene Tiles", link: "polypropylene.php" },
+            { image: "assets/Cloudy Ridge Plank.jpg", alt: "Cloudy Ridge Plank", title: "Colordot Collection", link: "colordot.php" },
+            { image: "assets/Infinity-Dye-Collection.jpg", alt: "Infinity Dye", title: "Infinity Dye Collection", link: "infinitydye.php" },
+            { image: "assets/Print-Broadloom-Collection.jpg", alt: "Print Broadloom", title: "Print Broadloom Collection", link: "printbroadloom.php" },
+            { image: "assets/LVT SERIES 1 Room Scene 1.jpg", alt: "LVT Series 1", title: "Luxury Vinyl Collection", link: "luxuryvinyl.php" },
+            { image: "assets/Frieze-Panel.jpg", alt: "Frieze Panel", title: "Broadloom", link: "broadloom.php" }
         ];
 
         let currentIndex = 0;
@@ -353,7 +364,7 @@
                     <div class="col-md-4 col-sm-6">
                         <a href="${product.link}" class="d-block">
                             <div class="project-img-container">
-                                <img src="${product.image}" class="img-fluid" alt="${product.alt}" style="height: 300px; object-fit: cover;">
+                                <img src="${product.image}" class="img-fluid" alt="${product.alt}" style=" width: 350px; height: 467px; object-fit: cover;">
                             </div>
                             <h5 class="mt-2 fs-6 fw-600">${product.title}</h5>
                         </a>

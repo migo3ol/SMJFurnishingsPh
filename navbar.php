@@ -40,6 +40,7 @@
                         <li><a class="dropdown-item" href="polypropylene.php">Polypropylene Tiles</a></li>
                         <li><a class="dropdown-item" href="colordot.php">Colordot Collection</a></li>
                         <li><a class="dropdown-item" href="infinitydye.php">Infinity Dye Collection</a></li>
+                        <li><a class="dropdown-item" href="printbroadloom.php">Print Broadloom Collection</a></li>
                         <li><a class="dropdown-item" href="luxuryvinyl.php">Luxury Vinyl Tiles</a></li>
                         <li><a class="dropdown-item" href="broadloom.php">Broadloom</a></li>
                     </ul>
