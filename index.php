@@ -91,6 +91,11 @@
         }
         #productContainer a {
             text-decoration: none; /* Remove underline from links */
+            transition: color 0.3s ease; /* Add smooth transition for color change */
+        }
+
+        #productContainer a h5:hover {
+            color:  #ED4135; /* Change to blue color on hover (you can use any color) */
         }
         #productContainer h5 {
             font-size: 1.25rem; /* Adjust the font size */
