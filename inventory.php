@@ -10,10 +10,21 @@ $tile_types = [
     "Broadloom" => "SELECT id, style_name, photo, in_stock, on_sale FROM broadloom"
 ];
 
+// Handle search and tile type filter
+$search_query = isset($_GET['search']) ? trim($_GET['search']) : '';
+$selected_tile_type = isset($_GET['tile_type']) && $_GET['tile_type'] !== 'all' ? $_GET['tile_type'] : null;
+
+// Modify queries based on search and filter
+$filtered_tile_types = $selected_tile_type ? [$selected_tile_type => $tile_types[$selected_tile_type]] : $tile_types;
+
 // Check if the request is for JSON data
 if (isset($_GET['format']) && $_GET['format'] === 'json') {
     $inventory = [];
-    foreach ($tile_types as $tile_type => $query) {
+    foreach ($filtered_tile_types as $tile_type => $query) {
+        // Add search condition if search query exists
+        if ($search_query) {
+            $query .= " WHERE style_name LIKE '%" . $conn->real_escape_string($search_query) . "%'";
+        }
         $result = $conn->query($query);
         if ($result->num_rows > 0) {
             while ($item = $result->fetch_assoc()) {
@@ -90,6 +101,9 @@ if (isset($_GET['format']) && $_GET['format'] === 'json') {
             color: red;
             font-size: 0.9rem;
         }
+        .search-bar {
+            max-width: 400px;
+        }
     </style>
 </head>
 <body>
@@ -98,14 +112,39 @@ if (isset($_GET['format']) && $_GET['format'] === 'json') {
             <?php include 'side_navbar.php'; ?>
         </div>
         <div class="container col-md-10">
-            <div class="d-flex justify-content-between align-items-center mb-5">
+            <div class="d-flex justify-content-between align-items-center mb-4">
                 <h1 class="fw-bold">Inventory</h1>
                 <button class="btn btn-success" onclick="window.location.href='add_items.php'">Add new item</button>
             </div>
+            <!-- Search and Filter Form -->
+            <div class="mb-4">
+                <form method="GET" class="d-flex gap-3 align-items-center" id="search-form">
+                    <div class="search-bar flex-grow-1">
+                        <label for="tile" class="form-label">Search Tile</label>
+                        <input type="text" name="search" class="form-control" placeholder="Search by style name..." value="<?= htmlspecialchars($search_query) ?>" id="search-input">
+                    </div>
+                    <div>
+                        <label for="filter" class="form-label">Filter</label>
+                        <select name="tile_type" class="form-select" id="tile-type-select">
+                            <option value="all" <?= !$selected_tile_type ? 'selected' : '' ?>>All Tile Types</option>
+                            <?php foreach ($tile_types as $tile_type => $query): ?>
+                                <option value="<?= htmlspecialchars($tile_type) ?>" <?= $selected_tile_type === $tile_type ? 'selected' : '' ?>>
+                                    <?= htmlspecialchars($tile_type) ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                </form>
+            </div>
 
-            <?php foreach ($tile_types as $tile_type => $query): ?>
+            <?php foreach ($filtered_tile_types as $tile_type => $query): ?>
                 <?php
-                $result = $conn->query($query);
+                // Add search condition to the query if search term exists
+                $modified_query = $query;
+                if ($search_query) {
+                    $modified_query .= " WHERE style_name LIKE '%" . $conn->real_escape_string($search_query) . "%'";
+                }
+                $result = $conn->query($modified_query);
                 if ($result->num_rows > 0):
                 ?>
                     <div class="tile-section">
@@ -144,5 +183,39 @@ if (isset($_GET['format']) && $_GET['format'] === 'json') {
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Auto-submit form on input change with debounce
+        let debounceTimeout;
+        const form = document.getElementById('search-form');
+        const searchInput = document.getElementById('search-input');
+        const tileTypeSelect = document.getElementById('tile-type-select');
+
+        function submitForm() {
+            clearTimeout(debounceTimeout);
+            // Only submit if search input is empty or has 2 or more characters
+            const searchValue = searchInput.value.trim();
+            if (searchValue.length === 0 || searchValue.length >= 2) {
+                debounceTimeout = setTimeout(() => {
+                    form.submit();
+                }, 500); // 500ms debounce
+            }
+        }
+
+        searchInput.addEventListener('input', submitForm);
+        tileTypeSelect.addEventListener('change', () => {
+            clearTimeout(debounceTimeout);
+            form.submit(); // Immediate submit on tile type change
+        });
+
+        // Maintain focus and cursor position on search input after submission
+        window.addEventListener('load', () => {
+            if (searchInput.value.trim().length > 0) {
+                searchInput.focus();
+                // Set cursor to the end of the input value
+                const valueLength = searchInput.value.length;
+                searchInput.setSelectionRange(valueLength, valueLength);
+            }
+        });
+    </script>
 </body>
 </html>

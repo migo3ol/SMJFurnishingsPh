@@ -41,6 +41,41 @@ $images = json_decode($project['images'], true);
             object-fit: cover;
             margin-bottom: 15px;
         }
+        .drop-zone {
+            border: 2px dashed #ccc;
+            padding: 20px;
+            text-align: center;
+            background: #f9f9f9;
+            margin-bottom: 15px;
+        }
+        .drop-zone.dragover {
+            background: #e1f5fe;
+            border-color: #2196f3;
+        }
+        .image-preview {
+            position: relative;
+            display: inline-block;
+            margin: 5px;
+        }
+        .image-preview img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+        }
+        .delete-btn {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background: red;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            line-height: 20px;
+            text-align: center;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -52,24 +87,23 @@ $images = json_decode($project['images'], true);
 
         <!-- Main Content -->
         <div class="container col-md-10 my-5">
-            <div class="d-flex justify-content-between align-items-center mb-5">
-                <h2 class="fw-bold mb-4"><?= htmlspecialchars($project['name']) ?></h2>
-                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editModal">Edit</button>
-                <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">Delete</button>
+            <h1 class="fw-bold mb-4"><?= htmlspecialchars($project['name']) ?></h1>
+            <div class="header-buttons d-flex justify-content-between align-items-center mb-5">
+                <a href="inventory.php" class="btn btn-secondary">Back to Inventory</a>
+                <div class="right-buttons d-flex gap-2">
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editModal">Edit</button>
+                    <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">Delete</button>
+                </div>
             </div>
             
             <!-- Project Images -->
             <div class="row">
                 <?php foreach ($images as $image): ?>
                     <div class="col-md-4 col-sm-6 mb-4">
-                        <img src="uploads/projects/<?= htmlspecialchars($image) ?>" alt="Project Image" class="project-image">
+                        <img src="Uploads/projects/<?= htmlspecialchars($image) ?>" alt="Project Image" class="project-image">
                     </div>
                 <?php endforeach; ?>
             </div>
-
-            
-            <!-- Back Button -->
-            <a href="admin_projects.php" class="btn btn-secondary mt-3">Back to Projects</a>
         </div>
     </div>
 
@@ -77,7 +111,7 @@ $images = json_decode($project['images'], true);
     <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
-                <form action="admin_projectsdetails.php?id=<?= $projectId ?>" method="POST" enctype="multipart/form-data">
+                <form action="admin_projectsdetails.php?id=<?= $projectId ?>" method="POST" enctype="multipart/form-data" id="editForm">
                     <div class="modal-header">
                         <h5 class="modal-title" id="editModalLabel">Edit Project</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -89,16 +123,27 @@ $images = json_decode($project['images'], true);
                         </div>
                         <div class="mb-3">
                             <label for="project_images" class="form-label">Project Images</label>
-                            <input type="file" class="form-control" id="project_images" name="project_images[]" multiple>
-                            <small class="text-muted">Upload new images to replace existing ones.</small>
+                            <div class="drop-zone" id="dropZone">
+                                Drag and drop images here or click to select
+                                <input type="file" class="form-control d-none" id="project_images" name="project_images[]" multiple accept="image/*">
+                            </div>
+                            <small class="text-muted">Upload new images or delete existing ones.</small>
                         </div>
                         <div class="mb-3">
                             <label>Existing Images:</label>
-                            <div class="d-flex flex-wrap gap-2">
-                                <?php foreach ($images as $image): ?>
-                                    <img src="uploads/projects/<?= htmlspecialchars($image) ?>" alt="Existing Image" style="width: 100px; height: 100px; object-fit: cover;">
+                            <div class="d-flex flex-wrap gap-2" id="existingImages">
+                                <?php foreach ($images as $index => $image): ?>
+                                    <div class="image-preview" data-image="<?= htmlspecialchars($image) ?>">
+                                        <img src="Uploads/projects/<?= htmlspecialchars($image) ?>" alt="Existing Image">
+                                        <button type="button" class="delete-btn" data-index="<?= $index ?>">×</button>
+                                        <input type="hidden" name="existing_images[]" value="<?= htmlspecialchars($image) ?>">
+                                    </div>
                                 <?php endforeach; ?>
                             </div>
+                        </div>
+                        <div class="mb-3">
+                            <label>New Images Preview:</label>
+                            <div class="d-flex flex-wrap gap-2" id="newImagesPreview"></div>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -131,6 +176,79 @@ $images = json_decode($project['images'], true);
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const dropZone = document.getElementById('dropZone');
+            const fileInput = document.getElementById('project_images');
+            const existingImages = document.getElementById('existingImages');
+            const newImagesPreview = document.getElementById('newImagesPreview');
+
+            // Handle click to open file input
+            dropZone.addEventListener('click', () => fileInput.click());
+
+            // Handle drag and drop
+            dropZone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                dropZone.classList.add('dragover');
+            });
+
+            dropZone.addEventListener('dragleave', () => {
+                dropZone.classList.remove('dragover');
+            });
+
+            dropZone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                dropZone.classList.remove('dragover');
+                const files = e.dataTransfer.files;
+                fileInput.files = files;
+                previewImages(files);
+            });
+
+            // Handle file input change
+            fileInput.addEventListener('change', () => {
+                previewImages(fileInput.files);
+            });
+
+            // Preview images
+            function previewImages(files) {
+                newImagesPreview.innerHTML = '';
+                Array.from(files).forEach((file, index) => {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        const div = document.createElement('div');
+                        div.className = 'image-preview';
+                        div.innerHTML = `
+                            <img src="${e.target.result}" alt="New Image">
+                            <button type="button" class="delete-btn" data-new-index="${index}">×</button>
+                        `;
+                        newImagesPreview.appendChild(div);
+                    };
+                    reader.readAsDataURL(file);
+                });
+            }
+
+            // Handle delete existing images
+            existingImages.addEventListener('click', (e) => {
+                if (e.target.classList.contains('delete-btn')) {
+                    const preview = e.target.parentElement;
+                    preview.remove();
+                }
+            });
+
+            // Handle delete new images
+            newImagesPreview.addEventListener('click', (e) => {
+                if (e.target.classList.contains('delete-btn')) {
+                    const index = e.target.dataset.newIndex;
+                    const dt = new DataTransfer();
+                    Array.from(fileInput.files).forEach((file, i) => {
+                        if (i != index) dt.items.add(file);
+                    });
+                    fileInput.files = dt.files;
+                    e.target.parentElement.remove();
+                }
+            });
+        });
+    </script>
 </body>
 </html>
 
@@ -138,27 +256,41 @@ $images = json_decode($project['images'], true);
 // Handle Edit Form Submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['project_name'])) {
     $projectName = $_POST['project_name'];
-    $uploadDir = 'uploads/projects/';
+    $uploadDir = 'Uploads/projects/';
     $uploadedFiles = [];
+    $existingImages = isset($_POST['existing_images']) ? $_POST['existing_images'] : [];
 
     // Handle new file uploads
     if (!empty($_FILES['project_images']['name'][0])) {
         foreach ($_FILES['project_images']['tmp_name'] as $key => $tmpName) {
-            $fileName = basename($_FILES['project_images']['name'][$key]);
-            $targetFile = $uploadDir . $fileName;
-
-            if (move_uploaded_file($tmpName, $targetFile)) {
-                $uploadedFiles[] = $fileName;
+            if ($_FILES['project_images']['error'][$key] === UPLOAD_ERR_OK) {
+                $fileName = basename($_FILES['project_images']['name'][$key]);
+                $targetFile = $uploadDir . $fileName;
+                if (move_uploaded_file($tmpName, $targetFile)) {
+                    $uploadedFiles[] = $fileName;
+                }
             }
         }
-    } else {
-        $uploadedFiles = $images; // Keep existing images if no new images are uploaded
+    }
+
+    // Combine existing images (those not deleted) with new uploads
+    $finalImages = array_merge($existingImages, $uploadedFiles);
+
+    // Delete removed images from server
+    $originalImages = json_decode($project['images'], true);
+    foreach ($originalImages as $image) {
+        if (!in_array($image, $existingImages)) {
+            $filePath = $uploadDir . $image;
+            if (file_exists($filePath)) {
+                unlink($filePath);
+            }
+        }
     }
 
     // Update the project in the database
     $query = "UPDATE projects SET name = ?, images = ? WHERE id = ?";
     $stmt = $conn->prepare($query);
-    $imagesJson = json_encode($uploadedFiles);
+    $imagesJson = json_encode($finalImages);
     $stmt->bind_param("ssi", $projectName, $imagesJson, $projectId);
     $stmt->execute();
     $stmt->close();
@@ -185,7 +317,7 @@ if (isset($_GET['delete_project_id'])) {
 
         // Delete images from the server
         foreach ($imagesToDelete as $image) {
-            $filePath = 'uploads/projects/' . $image;
+            $filePath = 'Uploads/projects/' . $image;
             if (file_exists($filePath)) {
                 unlink($filePath); // Delete the file
             }

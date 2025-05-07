@@ -175,6 +175,7 @@ $conn->close();
                     <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">Delete</button>
                 </div>
             </div>
+            
             <div class="row">
                 <!-- Item Image -->
                 <div class="col-md-6">
