@@ -278,7 +278,7 @@
         <?php include 'navbar.php'; ?>
 
         <!-- Hero Section -->
-        <div class="container">
+        <div class="container-fluid px-0">
             <div id="imageSlider" class="carousel slide position-relative" data-bs-ride="carousel" data-bs-interval="3000">
                 <!-- Hero Text -->
                 <div class="hero-text text-center position-absolute top-50 start-50 translate-middle text-white"
