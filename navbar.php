@@ -12,15 +12,15 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="navbar.css">
+    <link rel="stylesheet" href="navbar.css">           
 </head>
 <body>
 
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm p-3 bg-body-tertiary sticky-top">
+    <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm p-3 sticky-top">
     <div class="container">
         <a class="navbar-brand" href="index.php">
-            <img src="assets/navbar-logo1.png" alt="Logo">
+            <img src="assets/smj_logo.png" alt="Logo" style="margin-left: -50px; width: 120px; height: auto;">
         </a>        
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
