@@ -37,6 +37,11 @@ if (!$item) {
     die("Item not found.");
 }
 
+// Validate specification file
+$spec_file = !empty($item['item_fullspecs']) && file_exists("Uploads/specs/" . $item['item_fullspecs'])
+    ? $item['item_fullspecs']
+    : null;
+
 // Fetch variations
 $stmt = $conn->prepare("SELECT variation_name, variation_photo FROM `$variation_table` WHERE item_id = ?");
 $stmt->bind_param("i", $item_id);
@@ -86,7 +91,7 @@ $conn->close();
             font-weight: 600;
             color: #333;
         }
-        /* Modal */
+        /* Image Modal */
         .modal-content {
             background-color: transparent;
             border: none;
@@ -165,13 +170,24 @@ $conn->close();
             font-size: 0.9rem;
             margin-top: 8px;
             color: #333;
-            text-decoration: none; /* Remove underline */
+            text-decoration: none;
             display: block;
-            pointer-events: none; /* Disable link behavior */
+            pointer-events: none;
         }
         .related-name:hover {
             color: #007bff;
             text-decoration: none;
+        }
+        /* Specification Modal */
+        #specModal .modal-content {
+            background-color: #fff;
+            border-radius: 8px;
+        }
+        #specModal .modal-body {
+            padding: 0;
+        }
+        #specModal iframe {
+            border-radius: 4px;
         }
     </style>
 </head>
@@ -195,8 +211,8 @@ $conn->close();
 
             <!-- Item Details -->
             <div class="col-md-6">
-                <h3 class="fw-bold mb-4"><?= htmlspecialchars($item['style_name']) ?></h3>
-                <div class="mb-3">
+                
+                <div class="mb-3 mt-3">
                     <span class="detail-label">Style Name:</span> <?= htmlspecialchars($item['style_name']) ?>
                 </div>
                 <?php if ($tile_type == "Nylon Tiles" || $tile_type == "Polypropylene Tiles" || $tile_type == "Colordot Collection"): ?>
@@ -215,6 +231,7 @@ $conn->close();
                     <div class="mb-3">
                         <span class="detail-label">Size:</span> <?= htmlspecialchars($item['size'] ?? 'N/A') ?>
                     </div>
+
                     <!-- Variations Section -->
                     <?php if (!empty($variations)): ?>
                         <h5 class="fw-bold mt-4 mb-3">Variations</h5>
@@ -238,6 +255,7 @@ $conn->close();
                             <?php endforeach; ?>
                         </div>
                     <?php endif; ?>
+
                 <?php elseif ($tile_type == "Luxury Vinyl Tiles"): ?>
                     <div class="mb-3">
                         <span class="detail-label">Overall Gauge:</span> <?= htmlspecialchars($item['overall_gauge'] ?? 'N/A') ?>
@@ -251,6 +269,7 @@ $conn->close();
                     <div class="mb-3">
                         <span class="detail-label">Size:</span> <?= htmlspecialchars($item['size'] ?? 'N/A') ?>
                     </div>
+
                     <!-- Variations Section -->
                     <?php if (!empty($variations)): ?>
                         <h5 class="fw-bold mt-4 mb-3">Variations</h5>
@@ -274,6 +293,7 @@ $conn->close();
                             <?php endforeach; ?>
                         </div>
                     <?php endif; ?>
+
                 <?php elseif ($tile_type == "Broadloom"): ?>
                     <div class="mb-3">
                         <span class="detail-label">Construction:</span> <?= htmlspecialchars($item['construction'] ?? 'N/A') ?>
@@ -290,6 +310,7 @@ $conn->close();
                     <div class="mb-3">
                         <span class="detail-label">Width:</span> <?= htmlspecialchars($item['width'] ?? 'N/A') ?>
                     </div>
+
                     <!-- Variations Section -->
                     <?php if (!empty($variations)): ?>
                         <h5 class="fw-bold mt-4 mb-3">Variations</h5>
@@ -314,6 +335,13 @@ $conn->close();
                         </div>
                     <?php endif; ?>
                 <?php endif; ?>
+
+                <!-- Download Specification Button -->
+                <?php if ($spec_file): ?>
+                    <button class="btn btn-danger mt-4" data-bs-toggle="modal" data-bs-target="#specModal" data-spec="Uploads/specs/<?= htmlspecialchars($spec_file) ?>">Download Specification</button>
+                <?php else: ?>
+                    <button class="btn btn-danger mt-4" disabled>Specification Not Available</button>
+                <?php endif; ?>
             </div>
         </div>
 
@@ -330,12 +358,12 @@ $conn->close();
                         ?>
                         <div class="col-6 col-md-3 mb-4">
                             <div class="related-item">
-                        <a href="item_details.php?id=<?= $related_item['id'] ?>&type=<?= urlencode($tile_type) ?>">
-                            <img src="Uploads/products/<?= htmlspecialchars($related_photo) ?>" 
-                            alt="<?= htmlspecialchars($related_item['style_name']) ?>" 
-                            class="related-thumbnail">
-                            <div class="related-name"><?= htmlspecialchars($related_item['style_name']) ?></div>
-                        </a>
+                                <a href="item_details.php?id=<?= $related_item['id'] ?>&type=<?= urlencode($tile_type) ?>">
+                                    <img src="Uploads/products/<?= htmlspecialchars($related_photo) ?>" 
+                                         alt="<?= htmlspecialchars($related_item['style_name']) ?>" 
+                                         class="related-thumbnail">
+                                    <div class="related-name"><?= htmlspecialchars($related_item['style_name']) ?></div>
+                                </a>
                             </div>
                         </div>
                     <?php endforeach; ?>
@@ -352,6 +380,25 @@ $conn->close();
             <div class="modal-content">
                 <span class="close-btn" data-bs-dismiss="modal" aria-label="Close"><i class="fas fa-times"></i></span>
                 <img src="" alt="" class="modal-image" id="modalImage">
+            </div>
+        </div>
+    </div>
+
+    <!-- Specification Modal -->
+    <div class="modal fade" id="specModal" tabindex="-1" aria-labelledby="specModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="specModalLabel">Specification Preview</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <iframe id="specIframe" src="" style="width: 100%; height: 500px; border: none;"></iframe>
+                </div>
+                <div class="modal-footer">
+                    <a id="downloadSpecBtn" href="" download class="btn btn-success">Save Specification</a>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
             </div>
         </div>
     </div>
@@ -376,6 +423,21 @@ $conn->close();
                     modalImage.src = this.dataset.image;
                     modalImage.alt = this.dataset.alt;
                 });
+            });
+
+            // Specification Modal Handling
+            const specModal = document.getElementById('specModal');
+            specModal.addEventListener('show.bs.modal', function (event) {
+                const button = event.relatedTarget; // Button that triggered the modal
+                const specUrl = button.getAttribute('data-spec'); // Get the PDF URL
+                const specIframe = document.getElementById('specIframe');
+                const downloadBtn = document.getElementById('downloadSpecBtn');
+
+                // Set the iframe source for preview
+                specIframe.src = specUrl;
+
+                // Set the download button href
+                downloadBtn.href = specUrl;
             });
         });
     </script>

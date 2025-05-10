@@ -60,8 +60,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $wear_layer = $_POST['wear_layer'] ?? null;
     $finish = $_POST['finish'] ?? null;
     $width = $_POST['width'] ?? null;
-    $in_stock = isset($_POST['in_stock']) ? 1 : 0; // Checkbox: 1 if checked, 0 if not
-    $on_sale = isset($_POST['on_sale']) ? 1 : 0; // Checkbox: 1 if checked, 0 if not
+    $in_stock = isset($_POST['in_stock']) ? 1 : 0;
+    $on_sale = isset($_POST['on_sale']) ? 1 : 0;
 
     // Handle main photo upload (optional)
     $photo_name = $item['photo'];
@@ -77,24 +77,51 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $photo_path = $uploadDir . $photo_name;
 
         if ($_FILES['photo']['error'] !== UPLOAD_ERR_OK) {
-            $error_message = "File upload error: " . $_FILES['photo']['error'];
+            $error_message = "Photo upload error: " . $_FILES['photo']['error'];
         } elseif (!move_uploaded_file($photo_tmp, $photo_path)) {
-            $error_message = "Failed to move uploaded file to $photo_path";
+            $error_message = "Failed to move uploaded photo to $photo_path";
             $photo_name = $item['photo'];
         }
     }
 
+    // Handle the file upload
+$uploadDir = 'Uploads/specs/';
+if (!is_dir($uploadDir)) {
+    mkdir($uploadDir, 0777, true);
+}
+
+$item_fullspecs = null;
+if (!empty($_FILES['item_fullspecs']['name'])) {
+    $extension = strtolower(pathinfo($_FILES['item_fullspecs']['name'], PATHINFO_EXTENSION));
+    $allowed_extensions = ['pdf', 'png', 'jpg', 'jpeg'];
+    
+    if (!in_array($extension, $allowed_extensions)) {
+        $error_message = "Item full specs must be a PDF, PNG, or JPEG file.";
+    } else {
+        $item_fullspecs = uniqid() . '.' . $extension;
+        $file_tmp = $_FILES['item_fullspecs']['tmp_name'];
+        $file_path = $uploadDir . $item_fullspecs;
+
+        if ($_FILES['item_fullspecs']['error'] !== UPLOAD_ERR_OK) {
+            $error_message = "File upload error: " . $_FILES['item_fullspecs']['error'];
+        } elseif (!move_uploaded_file($file_tmp, $file_path)) {
+            $error_message = "Failed to move uploaded file to $file_path";
+            $item_fullspecs = null;
+        }
+    }
+}
+
     // Update main item
     try {
         if ($tile_type == "Nylon Tiles" || $tile_type == "Polypropylene Tiles" || $tile_type == "Colordot Collection") {
-            $stmt = $conn->prepare("UPDATE `$table` SET style_name = ?, construction = ?, yarn_system = ?, dye_method = ?, backing = ?, size = ?, photo = ?, in_stock = ?, on_sale = ? WHERE id = ?");
-            $stmt->bind_param("sssssssiii", $style_name, $construction, $yarn_system, $dye_method, $backing, $size, $photo_name, $in_stock, $on_sale, $item_id);
+            $stmt = $conn->prepare("UPDATE `$table` SET style_name = ?, construction = ?, yarn_system = ?, dye_method = ?, backing = ?, size = ?, photo = ?, item_fullspecs = ?, in_stock = ?, on_sale = ? WHERE id = ?");
+            $stmt->bind_param("ssssssssiii", $style_name, $construction, $yarn_system, $dye_method, $backing, $size, $photo_name, $item_fullspecs, $in_stock, $on_sale, $item_id);
         } elseif ($tile_type == "Luxury Vinyl Tiles") {
-            $stmt = $conn->prepare("UPDATE `$table` SET style_name = ?, overall_gauge = ?, wear_layer = ?, finish = ?, size = ?, photo = ?, in_stock = ?, on_sale = ? WHERE id = ?");
-            $stmt->bind_param("ssssssiii", $style_name, $overall_gauge, $wear_layer, $finish, $size, $photo_name, $in_stock, $on_sale, $item_id);
+            $stmt = $conn->prepare("UPDATE `$table` SET style_name = ?, overall_gauge = ?, wear_layer = ?, finish = ?, size = ?, photo = ?, item_fullspecs = ?, in_stock = ?, on_sale = ? WHERE id = ?");
+            $stmt->bind_param("sssssssiii", $style_name, $overall_gauge, $wear_layer, $finish, $size, $photo_name, $item_fullspecs, $in_stock, $on_sale, $item_id);
         } elseif ($tile_type == "Broadloom") {
-            $stmt = $conn->prepare("UPDATE `$table` SET style_name = ?, construction = ?, yarn_system = ?, dye_method = ?, backing = ?, width = ?, photo = ?, in_stock = ?, on_sale = ? WHERE id = ?");
-            $stmt->bind_param("sssssssiii", $style_name, $construction, $yarn_system, $dye_method, $backing, $width, $photo_name, $in_stock, $on_sale, $item_id);
+            $stmt = $conn->prepare("UPDATE `$table` SET style_name = ?, construction = ?, yarn_system = ?, dye_method = ?, backing = ?, width = ?, photo = ?, item_fullspecs = ?, in_stock = ?, on_sale = ? WHERE id = ?");
+            $stmt->bind_param("sssssssiii", $style_name, $construction, $yarn_system, $dye_method, $backing, $width, $photo_name, $item_fullspecs, $in_stock, $on_sale, $item_id);
         }
 
         // Start transaction
@@ -332,6 +359,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <small class="form-text text-muted">Current photo: <?= htmlspecialchars($item['photo'] ?: 'None') ?>. Leave blank to keep existing.</small>
                 </div>
 
+                <!-- File Upload -->
+                <div class="mb-3">
+                    <label for="item_fullspecs" class="form-label">Item Full Specifications (PDF, PNG, JPEG)</label>
+                    <input type="file" id="item_fullspecs" name="item_fullspecs" class="form-control" accept=".pdf,image/png,image/jpeg">
+                    <small class="form-text text-muted">Current File: <?= htmlspecialchars($item['item_fullspecs'] ?: 'None') ?>. Leave blank to keep existing.</small>
+                </div>
+
                 <!-- Variations Section -->
                 <div id="variation_container">
                     <h5 class="fw-bold">Variations</h5>
@@ -413,7 +447,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <div id="colordot_collections_fields" class="form-section" style="display: <?= in_array($tile_type, ["Colordot Collection"]) ? 'block' : 'none' ?>;">
                     <div class="mb-3">
                         <label for="construction_colordot" class="form-label">Construction</label>
-                        <input type="text" idkis="construction_colordot" name="construction" class="form-control" value="<?= htmlspecialchars($item['construction'] ?? '') ?>">
+                        <input type="text" id="construction_colordot" name="construction" class="form-control" value="<?= htmlspecialchars($item['construction'] ?? '') ?>">
                     </div>
                     <div class="mb-3">
                         <label for="yarn_system_colordot" class="form-label">Yarn System</label>

@@ -13,8 +13,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $wear_layer = $_POST['wear_layer'] ?? null;
     $finish = $_POST['finish'] ?? null;
     $width = $_POST['width'] ?? null;
-    $in_stock = isset($_POST['in_stock']) ? 1 : 0; // Checkbox: 1 if checked, 0 if not
-    $on_sale = isset($_POST['on_sale']) ? 1 : 0; // Checkbox: 1 if checked, 0 if not
+    $in_stock = isset($_POST['in_stock']) ? 1 : 0;
+    $on_sale = isset($_POST['on_sale']) ? 1 : 0;
 
     // Log submitted data for debugging
     error_log("POST Data: " . print_r($_POST, true));
@@ -28,39 +28,66 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $photo_name = null;
     if (!empty($_FILES['photo']['name'])) {
         $extension = pathinfo($_FILES['photo']['name'], PATHINFO_EXTENSION);
-        $photo_name = uniqid() . '.' . $extension; // Store only the file name
+        $photo_name = uniqid() . '.' . $extension;
         $photo_tmp = $_FILES['photo']['tmp_name'];
         $photo_path = $uploadDir . $photo_name;
 
         if ($_FILES['photo']['error'] !== UPLOAD_ERR_OK) {
-            $error_message = "File upload error: " . $_FILES['photo']['error'];
+            $error_message = "Photo upload error: " . $_FILES['photo']['error'];
         } elseif (!move_uploaded_file($photo_tmp, $photo_path)) {
-            $error_message = "Failed to move uploaded file to $photo_path";
+            $error_message = "Failed to move uploaded photo to $photo_path";
             $photo_name = null;
         }
     }
 
+    // Handle the file upload
+$uploadDir = 'Uploads/specs/';
+if (!is_dir($uploadDir)) {
+    mkdir($uploadDir, 0777, true);
+}
+
+$item_fullspecs = null;
+if (!empty($_FILES['item_fullspecs']['name'])) {
+    $extension = strtolower(pathinfo($_FILES['item_fullspecs']['name'], PATHINFO_EXTENSION));
+    $allowed_extensions = ['pdf', 'png', 'jpg', 'jpeg'];
+    
+    if (!in_array($extension, $allowed_extensions)) {
+        $error_message = "Item full specs must be a PDF, PNG, or JPEG file.";
+    } else {
+        $item_fullspecs = uniqid() . '.' . $extension;
+        $file_tmp = $_FILES['item_fullspecs']['tmp_name'];
+        $file_path = $uploadDir . $item_fullspecs;
+
+        if ($_FILES['item_fullspecs']['error'] !== UPLOAD_ERR_OK) {
+            $error_message = "File upload error: " . $_FILES['item_fullspecs']['error'];
+        } elseif (!move_uploaded_file($file_tmp, $file_path)) {
+            $error_message = "Failed to move uploaded file to $file_path";
+            $item_fullspecs = null;
+        }
+    }
+}
+
     // Insert into the correct table
     try {
         if ($tile_type == "Nylon Tiles") {
-            $stmt = $conn->prepare("INSERT INTO nylon_tiles (style_name, construction, yarn_system, dye_method, backing, size, photo, in_stock, on_sale) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
-            $stmt->bind_param("sssssssii", $style_name, $construction, $yarn_system, $dye_method, $backing, $size, $photo_name, $in_stock, $on_sale);
+            $stmt = $conn->prepare("INSERT INTO nylon_tiles (style_name, construction, yarn_system, dye_method, backing, size, photo, item_fullspecs, in_stock, on_sale) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            $stmt->bind_param("ssssssssii", $style_name, $construction, $yarn_system, $dye_method, $backing, $size, $photo_name, $item_fullspecs, $in_stock, $on_sale);
             $variation_table = "nylon_tiles_variations";
         } elseif ($tile_type == "Polypropylene Tiles") {
-            $stmt = $conn->prepare("INSERT INTO polypropylene_tiles (style_name, construction, yarn_system, dye_method, backing, size, photo, in_stock, on_sale) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
-            $stmt->bind_param("sssssssii", $style_name, $construction, $yarn_system, $dye_method, $backing, $size, $photo_name, $in_stock, $on_sale);
+            $stmt = $conn->prepare("INSERT INTO polypropylene_tiles (style_name, construction, yarn_system, dye_method, backing, size, photo, item_fullspecs, in_stock, on_sale) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            $stmt->bind_param("ssssssssii", $style_name, $construction, $yarn_system, $dye_method, $backing, $size, $photo_name, $item_fullspecs, $in_stock, $on_sale);
             $variation_table = "polypropylene_tiles_variations";
         } elseif ($tile_type == "Colordot Collection") {
-            $stmt = $conn->prepare("INSERT INTO colordot_collections (style_name, construction, yarn_system, dye_method, backing, size, photo, in_stock, on_sale) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
-            $stmt->bind_param("sssssssii", $style_name, $construction, $yarn_system, $dye_method, $backing, $size, $photo_name, $in_stock, $on_sale);
+            $stmt = $conn->prepare("INSERT INTO colordot_collections (style_name, construction, yarn_system, dye_method, backing, size, photo, item_fullspecs, in_stock, on_sale) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            $stmt->bind_param("ssssssssii", $style_name, $construction, $yarn_system, $dye_method, $backing, $size, $photo_name, $item_fullspecs, $in_stock, $on_sale);
             $variation_table = "colordot_collections_variations";
         } elseif ($tile_type == "Luxury Vinyl Tiles") {
-            $stmt = $conn->prepare("INSERT INTO luxury_vinyl (style_name, overall_gauge, wear_layer, finish, size, photo, in_stock, on_sale) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-            $stmt->bind_param("ssssssii", $style_name, $overall_gauge, $wear_layer, $finish, $size, $photo_name, $in_stock, $on_sale);
+            $stmt = $conn->prepare("INSERT INTO luxury_vinyl (style_name, overall_gauge, wear_layer, finish, size, photo, item_fullspecs, in_stock, on_sale) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            $stmt->bind_param("sssssssii", $style_name, $overall_gauge, $wear_layer, $finish, $size, $photo_name, $item_fullspecs, $in_stock, $on_sale);
             $variation_table = "luxury_vinyl_variations";
         } elseif ($tile_type == "Broadloom") {
-            $stmt = $conn->prepare("INSERT INTO broadloom (style_name, construction, yarn_system, dye_method, backing, width, photo, in_stock, on_sale) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
-            $stmt->bind_param("sssssssii", $style_name, $construction, $yarn_system, $dye_method, $backing, $width, $photo_name, $in_stock, $on_sale);
+            $stmt = $conn->prepare("INSERT INTO broadloom (style_name, construction, yarn_system, dye_method, backing, width, photo, item_fullspecs, in_stock, on_sale) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            $stmt->bind_param("ssssssssii", $style_name, $construction, $yarn_system, $dye_method, $backing, $width, $photo_name, $item_fullspecs, $in_stock, $on_sale);
             $variation_table = "broadloom_variations";
         } else {
             $error_message = "Invalid tile type selected.";
@@ -68,7 +95,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
         // Log data before insertion
-        error_log("Inserting $tile_type: style_name=$style_name, construction=$construction, yarn_system=$yarn_system, dye_method=$dye_method, backing=$backing, size=$size, photo=$photo_name, in_stock=$in_stock, on_sale=$on_sale");
+        error_log("Inserting $tile_type: style_name=$style_name, construction=$construction, yarn_system=$yarn_system, dye_method=$dye_method, backing=$backing, size=$size, photo=$photo_name, item_fullspecs=$item_fullspecs, in_stock=$in_stock, on_sale=$on_sale");
 
         if ($stmt->execute()) {
             $item_id = $stmt->insert_id;
@@ -83,7 +110,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 foreach ($_POST['variation_name'] as $index => $variation_name) {
                     if (!empty($_FILES['variation_photo']['name'][$index])) {
                         $extension = pathinfo($_FILES['variation_photo']['name'][$index], PATHINFO_EXTENSION);
-                        $variation_photo = uniqid() . '.' . $extension; // Store only file name
+                        $variation_photo = uniqid() . '.' . $extension;
                         $variation_tmp = $_FILES['variation_photo']['tmp_name'][$index];
                         $variation_path = $upload_dir . $variation_photo;
 
@@ -248,8 +275,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <input type="checkbox" id="in_stock" name="in_stock" class="form-check-input" checked>
                         <label for="in_stock" class="form-check-label">In Stock</label>
                     </div>
-                </div> 
-                <div class="mb-3"> 
+                </div>
+                <div class="mb-3">
                     <div class="form-check">
                         <input type="checkbox" id="on_sale" name="on_sale" class="form-check-input">
                         <label for="on_sale" class="form-check-label">On Sale</label>
@@ -260,6 +287,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <div class="mb-3">
                     <label for="photo" class="form-label">Photo</label>
                     <input type="file" id="photo" name="photo" class="form-control" accept="image/*" required>
+                </div>
+
+                <!-- File Upload -->
+                <div class="mb-3">
+                    <label for="item_fullspecs" class="form-label">Item Full Specifications (PDF, PNG, JPEG)</label>
+                    <input type="file" id="item_fullspecs" name="item_fullspecs" class="form-control" accept=".pdf,image/png,image/jpeg">
                 </div>
 
                 <!-- Variations Section -->
