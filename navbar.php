@@ -30,21 +30,30 @@
                 <li class="nav-item"><a class="nav-link" href="index.php">Home</a></li>
                 <li class="nav-item"><a class="nav-link" href="aboutus.php">About us</a></li>
 
-                <!-- Collections Dropdown -->
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="collectionsDropdown" role="button" data-bs-toggle="dropdown">
-                        Collections
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="nylon.php">Nylon Tiles</a></li>
-                        <li><a class="dropdown-item" href="polypropylene.php">Polypropylene Tiles</a></li>
-                        <li><a class="dropdown-item" href="colordot.php">Colordot Collection</a></li>
-                        <li><a class="dropdown-item" href="infinitydye.php">Infinity Dye Collection</a></li>
-                        <li><a class="dropdown-item" href="printbroadloom.php">Print Broadloom Collection</a></li>
-                        <li><a class="dropdown-item" href="luxuryvinyl.php">Luxury Vinyl Tiles</a></li>
-                        <li><a class="dropdown-item" href="broadloom.php">Broadloom</a></li>
-                    </ul>
-                </li>
+    <a class="nav-link dropdown-toggle" href="#" id="productsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        Products
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="productsDropdown">
+        <li class="dropdown-submenu">
+            <a class="dropdown-item dropdown-toggle" href="#">Carpets</a>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="nylon.php">Nylon Tiles</a></li>
+                <li><a class="dropdown-item" href="polypropylene.php">Polypropylene Tiles</a></li>
+            </ul>
+        </li>
+        <li class="dropdown-submenu">
+            <a class="dropdown-item dropdown-toggle" href="#">Signature Series</a>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="colordot.php">Colordot Collection</a></li>
+                <li><a class="dropdown-item" href="infinitydye.php">Infinity Dye Collection</a></li>
+                <li><a class="dropdown-item" href="printbroadloom.php">Print Broadloom Collection</a></li>
+            </ul>
+        </li>
+        <li><a class="dropdown-item" href="luxuryvinyl.php">Luxury Vinyl Tiles</a></li>
+        <li><a class="dropdown-item" href="broadloom.php">Broadloom</a></li>
+    </ul>
+</li>
                 
                 <li class="nav-item"><a class="nav-link" href="projects.php">Projects</a></li>
                 <li class="nav-item"><a class="nav-link" href="contactus.php">Contact us</a></li>
