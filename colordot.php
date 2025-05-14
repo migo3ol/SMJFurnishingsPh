@@ -76,7 +76,7 @@ include 'database.php';
                         <div class="text-center mt-3">
                             <h5 class="card-title"><?= htmlspecialchars($item['style_name']) ?></h5>
                             <p class="status-text">
-                                <?= $item['in_stock'] ? 'In Stock' : 'Out of Stock' ?>
+                                <?= $item['in_stock'] ? 'In Stock' : 'Indent' ?>
                                 <?= $item['on_sale'] ? ' | On Sale' : '' ?>
                             </p>
                         </div>
