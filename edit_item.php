@@ -118,7 +118,7 @@ if (!empty($_FILES['item_fullspecs']['name'])) {
             $stmt->bind_param("sssssssiii", $style_name, $overall_gauge, $wear_layer, $finish, $size, $photo_name, $item_fullspecs, $in_stock, $on_sale, $item_id);
         } elseif ($tile_type == "Broadloom") {
             $stmt = $conn->prepare("UPDATE `$table` SET style_name = ?, construction = ?, yarn_system = ?, dye_method = ?, backing = ?, width = ?, photo = ?, item_fullspecs = ?, in_stock = ?, on_sale = ? WHERE id = ?");
-            $stmt->bind_param("sssssssiii", $style_name, $construction, $yarn_system, $dye_method, $backing, $width, $photo_name, $item_fullspecs, $in_stock, $on_sale, $item_id);
+            $stmt->bind_param("ssssssssiii", $style_name, $construction, $yarn_system, $dye_method, $backing, $width, $photo_name, $item_fullspecs, $in_stock, $on_sale, $item_id);
         }
 
         // Start transaction
