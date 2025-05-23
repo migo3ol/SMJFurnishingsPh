@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Floor Tile Changer</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.2/p5.min.js"></script>
+</head>
+<body>
+  <input type="file" id="imageUpload" accept="image/*">
+  <div id="canvasContainer"></div>
+  <script>
+    let img;
+    let tiles = [];
+    let tileSize = 50;
+    let tileTypes = [
+      { r: 139, g: 69, b: 19, a: 0.5 }, // Brown tile
+      { r: 128, g: 128, b: 128, a: 0.5 }, // Gray tile
+      { r: 255, g: 245, b: 238, a: 0.5 }, // Beige tile
+    ];
+
+    function setup() {
+      let canvas = createCanvas(800, 600);
+      canvas.parent('canvasContainer');
+      document.getElementById('imageUpload').addEventListener('change', handleImageUpload);
+    }
+
+    function handleImageUpload(event) {
+      const file = event.target.files[0];
+      if (file) {
+        img = createImg(URL.createObjectURL(file), '');
+        img.hide();
+        img.elt.onload = () => {
+          resizeCanvas(img.width, img.height);
+          initializeTiles();
+        };
+      }
+    }
+
+    function initializeTiles() {
+      tiles = [];
+      for (let x = 0; x < width; x += tileSize) {
+        for (let y = 0; y < height; y += tileSize) {
+          tiles.push({ x, y, type: 0 });
+        }
+      }
+    }
+
+    function draw() {
+      background(220);
+      if (img) {
+        image(img, 0, 0, width, height);
+        for (let tile of tiles) {
+          let col = tileTypes[tile.type];
+          fill(col.r, col.g, col.b, col.a * 255);
+          stroke(0);
+          rect(tile.x, tile.y, tileSize, tileSize);
+        }
+      } else {
+        textAlign(CENTER);
+        text("Please upload a room image", width / 2, height / 2);
+      }
+    }
+
+    function mousePressed() {
+      if (img) {
+        let tileX = floor(mouseX / tileSize) * tileSize;
+        let tileY = floor(mouseY / tileSize) * tileSize;
+        for (let tile of tiles) {
+          if (tile.x === tileX && tile.y === tileY) {
+            tile.type = (tile.type + 1) % tileTypes.length;
+            break;
+          }
+        }
+      }
+    }
+  </script>
+</body>
+</html>
