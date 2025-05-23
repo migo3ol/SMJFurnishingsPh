@@ -49,7 +49,7 @@ if ($spec_file) {
 } else {
     $file_name = null;
 }
-?>
+
 
 // Fetch variations
 $stmt = $conn->prepare("SELECT variation_name, variation_photo FROM `$variation_table` WHERE item_id = ?");
@@ -347,7 +347,8 @@ $conn->close();
 
                 <!-- Download Specification Button -->
                 <?php if ($spec_file): ?>
-                    <button class="btn btn-danger mt-4" data-bs-toggle="modal" data-bs-target="#specModal" data-spec="Uploads/specs/<?= htmlspecialchars($file_name) ?>">Download Specification</button>
+                    <button class="btn btn-danger mt-4" data-bs-toggle="modal" data-bs-target="#specModal" data-spec="Uploads/specs/<?= htmlspecialchars($file_name) ?>"
+                    data-filename="<?= htmlspecialchars($file_name) ?>" >Download Specification</button>
                 <?php else: ?>
                     <button class="btn btn-danger mt-4" disabled>Specification Not Available</button>
                 <?php endif; ?>
