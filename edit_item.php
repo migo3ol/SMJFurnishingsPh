@@ -92,22 +92,19 @@ if (!is_dir($uploadDir)) {
 
 $item_fullspecs = null;
 if (!empty($_FILES['item_fullspecs']['name'])) {
-    $extension = strtolower(pathinfo($_FILES['item_fullspecs']['name'], PATHINFO_EXTENSION));
+    // Sanitize and get the original file name
+    $item_fullspecs = basename($_FILES['item_fullspecs']['name']);
     $allowed_extensions = ['pdf', 'png', 'jpg', 'jpeg'];
-    
-    if (!in_array($extension, $allowed_extensions)) {
-        $error_message = "Item full specs must be a PDF, PNG, or JPEG file.";
-    } else {
-        $item_fullspecs = uniqid() . '.' . $extension;
-        $file_tmp = $_FILES['item_fullspecs']['tmp_name'];
-        $file_path = $uploadDir . $item_fullspecs;
+    $item_fullspecs = preg_replace("/[^a-zA-Z0-9\._-]/", "_", $item_fullspecs); // Replace special characters with "_"
 
-        if ($_FILES['item_fullspecs']['error'] !== UPLOAD_ERR_OK) {
-            $error_message = "File upload error: " . $_FILES['item_fullspecs']['error'];
-        } elseif (!move_uploaded_file($file_tmp, $file_path)) {
-            $error_message = "Failed to move uploaded file to $file_path";
-            $item_fullspecs = null;
-        }
+    $file_tmp = $_FILES['item_fullspecs']['tmp_name'];
+    $file_path = $uploadDir . $item_fullspecs;
+
+    if ($_FILES['item_fullspecs']['error'] !== UPLOAD_ERR_OK) {
+        $error_message = "File upload error: " . $_FILES['item_fullspecs']['error'];
+    } elseif (!move_uploaded_file($file_tmp, $file_path)) {
+        $error_message = "Failed to move uploaded file to $file_path";
+        $item_fullspecs = null;
     }
 }
 
