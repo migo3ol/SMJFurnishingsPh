@@ -42,6 +42,15 @@ $spec_file = !empty($item['item_fullspecs']) && file_exists("Uploads/specs/" . $
     ? $item['item_fullspecs']
     : null;
 
+// Check if specification file exists
+if ($spec_file) {
+    // Extract the file name from the path
+    $file_name = basename($spec_file);
+} else {
+    $file_name = null;
+}
+?>
+
 // Fetch variations
 $stmt = $conn->prepare("SELECT variation_name, variation_photo FROM `$variation_table` WHERE item_id = ?");
 $stmt->bind_param("i", $item_id);
@@ -338,7 +347,7 @@ $conn->close();
 
                 <!-- Download Specification Button -->
                 <?php if ($spec_file): ?>
-                    <button class="btn btn-danger mt-4" data-bs-toggle="modal" data-bs-target="#specModal" data-spec="Uploads/specs/<?= htmlspecialchars($spec_file) ?>">Download Specification</button>
+                    <button class="btn btn-danger mt-4" data-bs-toggle="modal" data-bs-target="#specModal" data-spec="Uploads/specs/<?= htmlspecialchars($file_name) ?>">Download Specification</button>
                 <?php else: ?>
                     <button class="btn btn-danger mt-4" disabled>Specification Not Available</button>
                 <?php endif; ?>
@@ -430,6 +439,7 @@ $conn->close();
             specModal.addEventListener('show.bs.modal', function (event) {
                 const button = event.relatedTarget; // Button that triggered the modal
                 const specUrl = button.getAttribute('data-spec'); // Get the PDF URL
+                const fileName = button.getAttribute('data-filename');
                 const specIframe = document.getElementById('specIframe');
                 const downloadBtn = document.getElementById('downloadSpecBtn');
 
@@ -438,6 +448,7 @@ $conn->close();
 
                 // Set the download button href
                 downloadBtn.href = specUrl;
+                downloadBtn.download = fileName;
             });
         });
     </script>
