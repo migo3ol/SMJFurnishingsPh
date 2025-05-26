@@ -69,6 +69,7 @@
     <a href="sales.php" class="text-dark mb-3"><img src="assets/sales.png" class="img-fluid me-3"> Sales</a>
     <a href="inventory.php" class="text-dark mb-3" id="inventoryLink"><img src="assets/inventory.png" class="img-fluid me-3"> Inventory</a>
     <a href="admin_projects.php" class="text-dark mb-3"><img src="assets/project-icon.png" class="img-fluid me-3"> Projects</a>
+    <a href="edit_profile.php" class="text-dark mb-3"><img src="assets/profile.png" class="img-fluid me-3"> Profile</a>
 
     <!-- Logout Button -->
     <button type="button" class="logout-btn w-100 mt-auto" data-bs-toggle="modal" data-bs-target="#logoutModal">Log Out</button>
@@ -121,3 +122,4 @@
   </script>
 </body>
 </html>
+

@@ -257,6 +257,8 @@ if (!empty($_FILES['item_fullspecs']['name'])) {
                         <option value="Colordot Collection">Colordot Collection</option>
                         <option value="Luxury Vinyl Tiles">Luxury Vinyl Tiles</option>
                         <option value="Broadloom">Broadloom</option>
+                        <option value="Infinity Dye Collection">Infinity Dye Collection</option>
+                        <option value="Print Broadloom">Print Broadloom</option>
                     </select>
                 </div>
 
