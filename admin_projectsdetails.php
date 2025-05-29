@@ -1,29 +1,41 @@
 <?php
 include 'database.php';
 
+// Enable error reporting for debugging (remove in production)
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 // Get the project ID from the URL
 if (!isset($_GET['id'])) {
-    header('Location: admin_projects.php'); // Redirect if no ID is provided
+    error_log("No project ID provided in URL");
+    header('Location: admin_projects.php');
     exit();
 }
 
-$projectId = $_GET['id'];
+$projectId = (int)$_GET['id'];
+error_log("Project ID: $projectId");
 
 // Fetch project details from the database
 $query = "SELECT * FROM projects WHERE id = ?";
 $stmt = $conn->prepare($query);
 $stmt->bind_param("i", $projectId);
-$stmt->execute();
+if (!$stmt->execute()) {
+    error_log("Failed to fetch project: " . $stmt->error);
+    header('Location: admin_projects.php');
+    exit();
+}
 $result = $stmt->get_result();
 $project = $result->fetch_assoc();
+$stmt->close();
 
 if (!$project) {
-    header('Location: admin_projects.php'); // Redirect if project not found
+    error_log("Project ID $projectId not found");
+    header('Location: admin_projects.php');
     exit();
 }
 
 // Decode the images JSON
-$images = json_decode($project['images'], true);
+$images = json_decode($project['images'], true) ?? [];
 ?>
 
 <!DOCTYPE html>
@@ -62,6 +74,10 @@ $images = json_decode($project['images'], true);
             height: 100px;
             object-fit: cover;
         }
+        .image-preview.marked-for-deletion {
+            opacity: 0.5;
+            text-decoration: line-through;
+        }
         .delete-btn {
             position: absolute;
             top: -10px;
@@ -89,7 +105,7 @@ $images = json_decode($project['images'], true);
         <div class="container col-md-10 my-5">
             <h1 class="fw-bold mb-4"><?= htmlspecialchars($project['name']) ?></h1>
             <div class="header-buttons d-flex justify-content-between align-items-center mb-5">
-                <a href="inventory.php" class="btn btn-secondary">Back to Inventory</a>
+                <a href="admin_projects.php" class="btn btn-secondary">Back to Projects</a>
                 <div class="right-buttons d-flex gap-2">
                     <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editModal">Edit</button>
                     <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">Delete</button>
@@ -137,6 +153,7 @@ $images = json_decode($project['images'], true);
                                         <img src="Uploads/projects/<?= htmlspecialchars($image) ?>" alt="Existing Image">
                                         <button type="button" class="delete-btn" data-index="<?= $index ?>">×</button>
                                         <input type="hidden" name="existing_images[]" value="<?= htmlspecialchars($image) ?>">
+                                        <input type="hidden" name="delete_images[]" value="<?= htmlspecialchars($image) ?>" disabled>
                                     </div>
                                 <?php endforeach; ?>
                             </div>
@@ -168,7 +185,10 @@ $images = json_decode($project['images'], true);
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <a href="admin_projectsdetails.php?delete_project_id=<?= $projectId ?>" class="btn btn-danger">Delete</a>
+                    <form action="admin_projectsdetails.php" method="POST" style="display: inline;">
+                        <input type="hidden" name="delete_project_id" value="<?= $projectId ?>">
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -231,7 +251,24 @@ $images = json_decode($project['images'], true);
             existingImages.addEventListener('click', (e) => {
                 if (e.target.classList.contains('delete-btn')) {
                     const preview = e.target.parentElement;
-                    preview.remove();
+                    const deleteInput = preview.querySelector('input[name="delete_images[]"]');
+                    const existingInput = preview.querySelector('input[name="existing_images[]"]');
+
+                    if (preview.classList.contains('marked-for-deletion')) {
+                        // Undo deletion
+                        preview.classList.remove('marked-for-deletion');
+                        deleteInput.disabled = true;
+                        existingInput.disabled = false;
+                        e.target.textContent = '×';
+                        e.target.title = 'Delete this image';
+                    } else {
+                        // Mark for deletion
+                        preview.classList.add('marked-for-deletion');
+                        deleteInput.disabled = false;
+                        existingInput.disabled = true;
+                        e.target.textContent = '↺';
+                        e.target.title = 'Undo delete';
+                    }
                 }
             });
 
@@ -258,31 +295,45 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['project_name'])) {
     $projectName = $_POST['project_name'];
     $uploadDir = 'Uploads/projects/';
     $uploadedFiles = [];
-    $existingImages = isset($_POST['existing_images']) ? $_POST['existing_images'] : [];
+    $existingImages = isset($_POST['existing_images']) && is_array($_POST['existing_images']) ? $_POST['existing_images'] : [];
+    $deleteImages = isset($_POST['delete_images']) && is_array($_POST['delete_images']) ? array_filter($_POST['delete_images']) : [];
 
-    // Handle new file uploads
+    // Log submitted data for debugging
+    error_log("POST data: " . print_r($_POST, true));
+    error_log("Existing images: " . print_r($existingImages, true));
+    error_log("Delete images: " . print_r($deleteImages, true));
+
+    // Validate and handle new file uploads
     if (!empty($_FILES['project_images']['name'][0])) {
         foreach ($_FILES['project_images']['tmp_name'] as $key => $tmpName) {
             if ($_FILES['project_images']['error'][$key] === UPLOAD_ERR_OK) {
-                $fileName = basename($_FILES['project_images']['name'][$key]);
+                $fileName = uniqid() . '_' . preg_replace("/[^a-zA-Z0-9._-]/", "_", basename($_FILES['project_images']['name'][$key]));
                 $targetFile = $uploadDir . $fileName;
                 if (move_uploaded_file($tmpName, $targetFile)) {
                     $uploadedFiles[] = $fileName;
+                    error_log("Uploaded file: $fileName");
+                } else {
+                    error_log("Failed to upload file: " . $_FILES['project_images']['name'][$key]);
                 }
             }
         }
     }
 
-    // Combine existing images (those not deleted) with new uploads
-    $finalImages = array_merge($existingImages, $uploadedFiles);
+    // Filter out deleted images from existing images
+    $finalImages = array_diff($existingImages, $deleteImages);
+    $finalImages = array_merge(array_values($finalImages), $uploadedFiles);
 
-    // Delete removed images from server
-    $originalImages = json_decode($project['images'], true);
+    // Log final images
+    error_log("Final images: " . print_r($finalImages, true));
+
+    // Delete removed images from the server
+    $originalImages = json_decode($project['images'], true) ?? [];
     foreach ($originalImages as $image) {
-        if (!in_array($image, $existingImages)) {
+        if (!in_array($image, $finalImages)) {
             $filePath = $uploadDir . $image;
             if (file_exists($filePath)) {
                 unlink($filePath);
+                error_log("Deleted file: $filePath");
             }
         }
     }
@@ -292,7 +343,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['project_name'])) {
     $stmt = $conn->prepare($query);
     $imagesJson = json_encode($finalImages);
     $stmt->bind_param("ssi", $projectName, $imagesJson, $projectId);
-    $stmt->execute();
+    if ($stmt->execute()) {
+        error_log("Database updated successfully. Images JSON: $imagesJson");
+    } else {
+        error_log("Database update failed: " . $stmt->error);
+    }
     $stmt->close();
 
     // Redirect to refresh the page
@@ -300,26 +355,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['project_name'])) {
     exit();
 }
 
-// Handle Delete Request
-if (isset($_GET['delete_project_id'])) {
-    $deleteProjectId = $_GET['delete_project_id'];
+// Handle Delete Project Request
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_project_id'])) {
+    $deleteProjectId = (int)$_POST['delete_project_id'];
+    error_log("Attempting to delete project ID: $deleteProjectId");
 
-    // Fetch the project details to delete images
+    // Fetch the project details to get images
     $query = "SELECT images FROM projects WHERE id = ?";
     $stmt = $conn->prepare($query);
     $stmt->bind_param("i", $deleteProjectId);
-    $stmt->execute();
+    if (!$stmt->execute()) {
+        error_log("Failed to fetch project: " . $stmt->error);
+        header('Location: admin_projects.php');
+        exit();
+    }
     $result = $stmt->get_result();
     $projectToDelete = $result->fetch_assoc();
+    $stmt->close();
 
     if ($projectToDelete) {
-        $imagesToDelete = json_decode($projectToDelete['images'], true);
-
         // Delete images from the server
+        $imagesToDelete = json_decode($projectToDelete['images'], true) ?? [];
         foreach ($imagesToDelete as $image) {
             $filePath = 'Uploads/projects/' . $image;
             if (file_exists($filePath)) {
-                unlink($filePath); // Delete the file
+                if (unlink($filePath)) {
+                    error_log("Deleted project image: $filePath");
+                } else {
+                    error_log("Failed to delete project image: $filePath");
+                }
+            } else {
+                error_log("Image file not found: $filePath");
             }
         }
 
@@ -327,12 +393,21 @@ if (isset($_GET['delete_project_id'])) {
         $query = "DELETE FROM projects WHERE id = ?";
         $stmt = $conn->prepare($query);
         $stmt->bind_param("i", $deleteProjectId);
-        $stmt->execute();
+        if ($stmt->execute()) {
+            error_log("Project ID $deleteProjectId deleted successfully");
+        } else {
+            error_log("Failed to delete project: " . $stmt->error);
+        }
         $stmt->close();
+    } else {
+        error_log("Project ID $deleteProjectId not found");
     }
 
     // Redirect to the admin projects page
     header('Location: admin_projects.php');
     exit();
 }
+
+// Close database connection
+$conn->close();
 ?>

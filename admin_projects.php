@@ -79,7 +79,7 @@ $result = $conn->query($query);
                         <img src="uploads/projects/<?= htmlspecialchars($firstImage) ?>" alt="Project Image" class="card-img-top">
                             
                         <!-- View Button -->
-                        <a href="admin_projectsdetails.php?id=<?= $row['id'] ?>" class="view-btn">View</a>
+                        <a href="admin_projects_details.php?id=<?= $row['id'] ?>" class="view-btn">View</a>
                         </div>
 
                         <!-- Project Name -->

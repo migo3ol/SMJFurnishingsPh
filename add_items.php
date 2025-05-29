@@ -416,6 +416,11 @@ if (!empty($_FILES['item_fullspecs']['name'])) {
                     </div>
                 </div>
 
+                <!-- Infinity Dye Collection -->
+
+
+
+                <!-- Submit Button -->
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#confirmationModal">Add Item</button>
                 <button type="button" class="btn btn-secondary" onclick="window.location.href='inventory.php'">Cancel</button>
             </form>

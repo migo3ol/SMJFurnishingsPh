@@ -63,54 +63,66 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $in_stock = isset($_POST['in_stock']) ? 1 : 0;
     $on_sale = isset($_POST['on_sale']) ? 1 : 0;
 
-    // Handle main photo upload (optional)
-    $photo_name = $item['photo'];
+    // Initialize variables
+    $error_message = '';
+    $success_message = '';
     $uploadDir = 'Uploads/products/';
-    if (!is_dir($uploadDir)) {
-        mkdir($uploadDir, 0777, true);
-    }
+    $variation_uploadDir = 'Uploads/variations/';
+    $spec_uploadDir = 'Uploads/specs/';
+    $allowed_image_types = ['image/jpeg', 'image/png', 'image/gif'];
+    $allowed_spec_types = ['application/pdf', 'image/png', 'image/jpeg'];
+    $max_file_size = 5 * 1024 * 1024; // 5MB
 
-    if (!empty($_FILES['photo']['name'])) {
-        $extension = pathinfo($_FILES['photo']['name'], PATHINFO_EXTENSION);
-        $photo_name = uniqid() . '.' . $extension;
-        $photo_tmp = $_FILES['photo']['tmp_name'];
-        $photo_path = $uploadDir . $photo_name;
-
-        if ($_FILES['photo']['error'] !== UPLOAD_ERR_OK) {
-            $error_message = "Photo upload error: " . $_FILES['photo']['error'];
-        } elseif (!move_uploaded_file($photo_tmp, $photo_path)) {
-            $error_message = "Failed to move uploaded photo to $photo_path";
-            $photo_name = $item['photo'];
+    // Create upload directories if they don't exist
+    foreach ([$uploadDir, $variation_uploadDir, $spec_uploadDir] as $dir) {
+        if (!is_dir($dir)) {
+            mkdir($dir, 0777, true);
         }
     }
 
-    // Handle the file upload
-$uploadDir = 'Uploads/specs/';
-if (!is_dir($uploadDir)) {
-    mkdir($uploadDir, 0777, true);
-}
-
-$item_fullspecs = null;
-if (!empty($_FILES['item_fullspecs']['name'])) {
-    // Sanitize and get the original file name
-    $item_fullspecs = basename($_FILES['item_fullspecs']['name']);
-    $allowed_extensions = ['pdf', 'png', 'jpg', 'jpeg'];
-    $item_fullspecs = preg_replace("/[^a-zA-Z0-9\._-]/", "_", $item_fullspecs); // Replace special characters with "_"
-
-    $file_tmp = $_FILES['item_fullspecs']['tmp_name'];
-    $file_path = $uploadDir . $item_fullspecs;
-
-    if ($_FILES['item_fullspecs']['error'] !== UPLOAD_ERR_OK) {
-        $error_message = "File upload error: " . $_FILES['item_fullspecs']['error'];
-    } elseif (!move_uploaded_file($file_tmp, $file_path)) {
-        $error_message = "Failed to move uploaded file to $file_path";
-        $item_fullspecs = null;
+    // Handle main photo upload
+    $photo_name = $item['photo'];
+    if (!empty($_FILES['photo']['name']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
+        $file_type = mime_content_type($_FILES['photo']['tmp_name']);
+        if (!in_array($file_type, $allowed_image_types)) {
+            $error_message = "Invalid photo type. Only JPEG, PNG, or GIF allowed.";
+        } elseif ($_FILES['photo']['size'] > $max_file_size) {
+            $error_message = "Photo size exceeds 5MB limit.";
+        } else {
+            $extension = pathinfo($_FILES['photo']['name'], PATHINFO_EXTENSION);
+            $photo_name = uniqid() . '.' . $extension;
+            $photo_path = $uploadDir . $photo_name;
+            if (!move_uploaded_file($_FILES['photo']['tmp_name'], $photo_path)) {
+                $error_message = "Failed to upload photo.";
+                $photo_name = $item['photo'];
+            }
+        }
     }
-}
 
-    // Update main item
+    // Handle specification file upload
+    $item_fullspecs = $item['item_fullspecs'];
+    if (!empty($_FILES['item_fullspecs']['name']) && $_FILES['item_fullspecs']['error'] === UPLOAD_ERR_OK) {
+        $file_type = mime_content_type($_FILES['item_fullspecs']['tmp_name']);
+        if (!in_array($file_type, $allowed_spec_types)) {
+            $error_message = "Invalid specification file type. Only PDF, PNG, or JPEG allowed.";
+        } elseif ($_FILES['item_fullspecs']['size'] > $max_file_size) {
+            $error_message = "Specification file size exceeds 5MB limit.";
+        } else {
+            $item_fullspecs = preg_replace("/[^a-zA-Z0-9\._-]/", "_", basename($_FILES['item_fullspecs']['name']));
+            $file_path = $spec_uploadDir . $item_fullspecs;
+            if (!move_uploaded_file($_FILES['item_fullspecs']['tmp_name'], $file_path)) {
+                $error_message = "Failed to upload specification file.";
+                $item_fullspecs = $item['item_fullspecs'];
+            }
+        }
+    }
+
+    // Start transaction
+    $conn->begin_transaction();
+
     try {
-        if ($tile_type == "Nylon Tiles" || $tile_type == "Polypropylene Tiles" || $tile_type == "Colordot Collection") {
+        // Update main item
+        if (in_array($tile_type, ["Nylon Tiles", "Polypropylene Tiles", "Colordot Collection"])) {
             $stmt = $conn->prepare("UPDATE `$table` SET style_name = ?, construction = ?, yarn_system = ?, dye_method = ?, backing = ?, size = ?, photo = ?, item_fullspecs = ?, in_stock = ?, on_sale = ? WHERE id = ?");
             $stmt->bind_param("ssssssssiii", $style_name, $construction, $yarn_system, $dye_method, $backing, $size, $photo_name, $item_fullspecs, $in_stock, $on_sale, $item_id);
         } elseif ($tile_type == "Luxury Vinyl Tiles") {
@@ -121,90 +133,127 @@ if (!empty($_FILES['item_fullspecs']['name'])) {
             $stmt->bind_param("ssssssssiii", $style_name, $construction, $yarn_system, $dye_method, $backing, $width, $photo_name, $item_fullspecs, $in_stock, $on_sale, $item_id);
         }
 
-        // Start transaction
-        $conn->begin_transaction();
+        if (!$stmt->execute()) {
+            throw new Exception("Failed to update item: " . $stmt->error);
+        }
+        $stmt->close();
 
-        if ($stmt->execute()) {
-            // Handle variations
-            $variation_ids = $_POST['variation_id'] ?? [];
-            $variation_names = $_POST['variation_name'] ?? [];
-            $variation_photos = $_FILES['variation_photo'] ?? [];
-            $delete_variations = $_POST['delete_variation'] ?? [];
+        // Handle variations
+        $variation_ids = $_POST['variation_id'] ?? [];
+        $variation_names = $_POST['variation_name'] ?? [];
+        $variation_photos = $_FILES['variation_photo'] ?? [];
+        $delete_variations = $_POST['delete_variation'] ?? [];
 
-            $upload_dir = 'Uploads/variations/';
-            if (!is_dir($upload_dir)) {
-                mkdir($upload_dir, 0777, true);
-            }
-
-            // Update or delete existing variations
-            foreach ($variation_ids as $index => $var_id) {
-                if (in_array($var_id, $delete_variations)) {
-                    // Delete variation
-                    $stmt_var = $conn->prepare("DELETE FROM `$variation_table` WHERE id = ? AND item_id = ?");
-                    $stmt_var->bind_param("ii", $var_id, $item_id);
-                    $stmt_var->execute();
-                    $stmt_var->close();
-                } else {
-                    // Update variation
-                    $var_name = $variation_names[$index] ?? '';
-                    $var_photo = null;
-
-                    if (!empty($variation_photos['name'][$index])) {
-                        $extension = pathinfo($variation_photos['name'][$index], PATHINFO_EXTENSION);
-                        $var_photo = uniqid() . '.' . $extension;
-                        $var_tmp = $variation_photos['tmp_name'][$index];
-                        $var_path = $upload_dir . $var_photo;
-
-                        if (!move_uploaded_file($var_tmp, $var_path)) {
-                            $error_message = "Failed to upload variation photo: $var_photo";
-                            continue;
-                        }
-                    }
-
-                    if ($var_photo) {
-                        $stmt_var = $conn->prepare("UPDATE `$variation_table` SET variation_name = ?, variation_photo = ? WHERE id = ? AND item_id = ?");
-                        $stmt_var->bind_param("ssii", $var_name, $var_photo, $var_id, $item_id);
-                    } else {
-                        $stmt_var = $conn->prepare("UPDATE `$variation_table` SET variation_name = ? WHERE id = ? AND item_id = ?");
-                        $stmt_var->bind_param("sii", $var_name, $var_id, $item_id);
-                    }
-                    $stmt_var->execute();
-                    $stmt_var->close();
+        // Delete variations and their photos
+        if (!empty($delete_variations)) {
+            $placeholders = implode(',', array_fill(0, count($delete_variations), '?'));
+            // Fetch photos to delete
+            $stmt = $conn->prepare("SELECT variation_photo FROM `$variation_table` WHERE id IN ($placeholders) AND item_id = ?");
+            $stmt->bind_param(str_repeat('i', count($delete_variations)) . 'i', ...array_merge($delete_variations, [$item_id]));
+            $stmt->execute();
+            $result = $stmt->get_result();
+            while ($row = $result->fetch_assoc()) {
+                if ($row['variation_photo'] && file_exists($variation_uploadDir . $row['variation_photo'])) {
+                    unlink($variation_uploadDir . $row['variation_photo']);
                 }
             }
+            $stmt->close();
 
-            // Add new variations
-            if (!empty($_POST['new_variation_name'])) {
-                foreach ($_POST['new_variation_name'] as $index => $new_var_name) {
-                    if (!empty($variation_photos['name'][$index + count($variation_ids)])) {
-                        $extension = pathinfo($variation_photos['name'][$index + count($variation_ids)], PATHINFO_EXTENSION);
-                        $new_var_photo = uniqid() . '.' . $extension;
-                        $new_var_tmp = $variation_photos['tmp_name'][$index + count($variation_ids)];
-                        $new_var_path = $upload_dir . $new_var_photo;
-
-                        if (move_uploaded_file($new_var_tmp, $new_var_path)) {
-                            $stmt_var = $conn->prepare("INSERT INTO `$variation_table` (item_id, variation_name, variation_photo) VALUES (?, ?, ?)");
-                            $stmt_var->bind_param("iss", $item_id, $new_var_name, $new_var_photo);
-                            $stmt_var->execute();
-                            $stmt_var->close();
-                        } else {
-                            $error_message = "Failed to upload new variation photo: $new_var_photo";
-                        }
-                    }
-                }
+            // Delete variations
+            $stmt = $conn->prepare("DELETE FROM `$variation_table` WHERE id IN ($placeholders) AND item_id = ?");
+            $stmt->bind_param(str_repeat('i', count($delete_variations)) . 'i', ...array_merge($delete_variations, [$item_id]));
+            if (!$stmt->execute()) {
+                throw new Exception("Failed to delete variations: " . $stmt->error);
             }
-
-            $conn->commit();
-            $success_message = "Item and variations updated successfully!";
-        } else {
-            $conn->rollback();
-            $error_message = "Database error: " . $stmt->error;
+            $stmt->close();
         }
 
-        $stmt->close();
+        // Update existing variations
+        foreach ($variation_ids as $index => $var_id) {
+            if (in_array($var_id, $delete_variations)) {
+                continue; // Skip if marked for deletion
+            }
+
+            $var_name = $variation_names[$index] ?? '';
+            $var_photo = null;
+
+            if (!empty($variation_photos['name'][$index]) && $variation_photos['error'][$index] === UPLOAD_ERR_OK) {
+                $file_type = mime_content_type($variation_photos['tmp_name'][$index]);
+                if (!in_array($file_type, $allowed_image_types)) {
+                    $error_message = "Invalid variation photo type for variation $var_name. Only JPEG, PNG, or GIF allowed.";
+                    continue;
+                } elseif ($variation_photos['size'][$index] > $max_file_size) {
+                    $error_message = "Variation photo size for $var_name exceeds 5MB limit.";
+                    continue;
+                }
+
+                $extension = pathinfo($variation_photos['name'][$index], PATHINFO_EXTENSION);
+                $var_photo = uniqid() . '.' . $extension;
+                $var_path = $variation_uploadDir . $var_photo;
+                if (!move_uploaded_file($variation_photos['tmp_name'][$index], $var_path)) {
+                    $error_message = "Failed to upload variation photo for $var_name.";
+                    continue;
+                }
+            }
+
+            // Update variation
+            $query = $var_photo
+                ? "UPDATE `$variation_table` SET variation_name = ?, variation_photo = ? WHERE id = ? AND item_id = ?"
+                : "UPDATE `$variation_table` SET variation_name = ? WHERE id = ? AND item_id = ?";
+            $stmt = $conn->prepare($query);
+            if ($var_photo) {
+                $stmt->bind_param("ssii", $var_name, $var_photo, $var_id, $item_id);
+            } else {
+                $stmt->bind_param("sii", $var_name, $var_id, $item_id);
+            }
+            if (!$stmt->execute()) {
+                throw new Exception("Failed to update variation ID $var_id: " . $stmt->error);
+            }
+            $stmt->close();
+        }
+
+        // Add new variations
+        if (!empty($_POST['new_variation_name'])) {
+            foreach ($_POST['new_variation_name'] as $index => $new_var_name) {
+                $new_var_photo = null;
+                $photo_index = $index;
+
+                if (!empty($variation_photos['name'][$photo_index]) && $variation_photos['error'][$photo_index] === UPLOAD_ERR_OK) {
+                    $file_type = mime_content_type($variation_photos['tmp_name'][$photo_index]);
+                    if (!in_array($file_type, $allowed_image_types)) {
+                        $error_message = "Invalid photo type for new variation $new_var_name. Only JPEG, PNG, or GIF allowed.";
+                        continue;
+                    } elseif ($variation_photos['size'][$photo_index] > $max_file_size) {
+                        $error_message = "Photo size for new variation $new_var_name exceeds 5MB limit.";
+                        continue;
+                    }
+
+                    $extension = pathinfo($variation_photos['name'][$photo_index], PATHINFO_EXTENSION);
+                    $new_var_photo = uniqid() . '.' . $extension;
+                    $new_var_path = $variation_uploadDir . $new_var_photo;
+                    if (!move_uploaded_file($variation_photos['tmp_name'][$photo_index], $new_var_path)) {
+                        $error_message = "Failed to upload photo for new variation $new_var_name.";
+                        continue;
+                    }
+                }
+
+                $stmt = $conn->prepare("INSERT INTO `$variation_table` (item_id, variation_name, variation_photo) VALUES (?, ?, ?)");
+                $stmt->bind_param("iss", $item_id, $new_var_name, $new_var_photo);
+                if (!$stmt->execute()) {
+                    throw new Exception("Failed to add new variation $new_var_name: " . $stmt->error);
+                }
+                $stmt->close();
+            }
+        }
+
+        // Commit transaction
+        $conn->commit();
+        $success_message = "Item and variations updated successfully!";
     } catch (Exception $e) {
         $conn->rollback();
-        $error_message = "Exception: " . $e->getMessage();
+        $error_message = "Error: " . $e->getMessage();
+        // In production, log the error instead of displaying it
+        // error_log($e->getMessage());
     }
 
     $conn->close();
@@ -233,6 +282,15 @@ if (!empty($_FILES['item_fullspecs']['name'])) {
             margin-bottom: 15px;
             border-radius: 5px;
         }
+        .variation-group.disabled {
+            opacity: 0.5;
+            text-decoration: line-through;
+        }
+        .delete-variation-btn {
+            font-size: 1.2rem;
+            line-height: 1;
+            padding: 0.25rem 0.5rem;
+        }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
@@ -241,33 +299,24 @@ if (!empty($_FILES['item_fullspecs']['name'])) {
             const variationContainer = document.getElementById("variation_container");
 
             // Disable and hide all form sections
-            document.querySelectorAll(".form-section input").forEach(input => {
-                input.disabled = true;
-            });
             document.querySelectorAll(".form-section").forEach(section => {
                 section.style.display = "none";
+                section.querySelectorAll("input").forEach(input => input.disabled = true);
             });
 
             // Enable and show relevant section
-            if (tileType === "Nylon Tiles") {
-                document.getElementById("nylon_tiles_fields").style.display = "block";
-                document.querySelectorAll("#nylon_tiles_fields input").forEach(input => input.disabled = false);
-                variationContainer.style.display = "block";
-            } else if (tileType === "Polypropylene Tiles") {
-                document.getElementById("polypropylene_tiles_fields").style.display = "block";
-                document.querySelectorAll("#polypropylene_tiles_fields input").forEach(input => input.disabled = false);
-                variationContainer.style.display = "block";
-            } else if (tileType === "Colordot Collection") {
-                document.getElementById("colordot_collections_fields").style.display = "block";
-                document.querySelectorAll("#colordot_collections_fields input").forEach(input => input.disabled = false);
-                variationContainer.style.display = "block";
-            } else if (tileType === "Luxury Vinyl Tiles") {
-                document.getElementById("luxury_vinyl_fields").style.display = "block";
-                document.querySelectorAll("#luxury_vinyl_fields input").forEach(input => input.disabled = false);
-                variationContainer.style.display = "block";
-            } else if (tileType === "Broadloom") {
-                document.getElementById("broadloom_fields").style.display = "block";
-                document.querySelectorAll("#broadloom_fields input").forEach(input => input.disabled = false);
+            const sections = {
+                "Nylon Tiles": "nylon_tiles_fields",
+                "Polypropylene Tiles": "polypropylene_tiles_fields",
+                "Colordot Collection": "colordot_collections_fields",
+                "Luxury Vinyl Tiles": "luxury_vinyl_fields",
+                "Broadloom": "broadloom_fields"
+            };
+
+            if (sections[tileType]) {
+                const section = document.getElementById(sections[tileType]);
+                section.style.display = "block";
+                section.querySelectorAll("input").forEach(input => input.disabled = false);
                 variationContainer.style.display = "block";
             } else {
                 variationContainer.style.display = "none";
@@ -276,23 +325,23 @@ if (!empty($_FILES['item_fullspecs']['name'])) {
 
         function addVariationField() {
             const variationContainer = document.getElementById("new_variation_container");
+            const index = variationContainer.children.length;
             const variationGroup = document.createElement("div");
             variationGroup.classList.add("mb-3", "variation-group", "new-variation");
-
             variationGroup.innerHTML = `
                 <div class="row">
                     <div class="col-md-6">
-                        <label for="new_variation_name[]" class="form-label">Variation Name</label>
+                        <label for="new_variation_name_${index}" class="form-label">Variation Name</label>
                         <input type="text" name="new_variation_name[]" class="form-control" placeholder="Enter variation name" required>
                     </div>
                     <div class="col-md-6">
-                        <label for="variation_photo[]" class="form-label">Variation Photo</label>
-                        <input type="file" name="variation_photo[]" class="form-control" accept="image/*" required>
+                        <label for="variation_photo_${index}" class="form-label">Variation Photo</label>
+                        <input type="file" name="variation_photo[]" class="form-control" accept="image/*">
+                        <small class="form-text text-muted">Optional: Upload a photo for this variation.</small>
                     </div>
                 </div>
                 <button type="button" class="btn btn-danger btn-sm mt-2" onclick="removeVariationField(this)">Remove</button>
             `;
-
             variationContainer.appendChild(variationGroup);
         }
 
@@ -300,13 +349,30 @@ if (!empty($_FILES['item_fullspecs']['name'])) {
             button.parentElement.remove();
         }
 
-        function toggleDeleteVariation(checkbox, index) {
-            const variationGroup = checkbox.closest('.variation-group');
-            const inputs = variationGroup.querySelectorAll('input');
-            inputs.forEach(input => {
-                input.disabled = checkbox.checked;
-            });
+        function toggleDeleteVariation(button, variationId, index) {
+            const variationGroup = button.closest('.variation-group');
+            const inputs = variationGroup.querySelectorAll('input:not([type="hidden"])');
+            const deleteInput = variationGroup.querySelector('input[name="delete_variation[]"]');
+
+            if (deleteInput.disabled) {
+                // Undo deletion
+                deleteInput.disabled = false;
+                variationGroup.classList.remove('disabled');
+                inputs.forEach(input => input.disabled = false);
+                button.innerHTML = '<i class="fas fa-times"></i>';
+                button.title = 'Delete this variation';
+            } else {
+                // Mark for deletion
+                deleteInput.disabled = false; // Enable the hidden input to submit the ID
+                variationGroup.classList.add('disabled');
+                inputs.forEach(input => input.disabled = true);
+                button.innerHTML = '<i class="fas fa-undo"></i>';
+                button.title = 'Undo delete';
+            }
         }
+
+        // Initialize form fields on page load
+        document.addEventListener('DOMContentLoaded', updateFormFields);
     </script>
 </head>
 <body>
@@ -317,9 +383,9 @@ if (!empty($_FILES['item_fullspecs']['name'])) {
         <div class="container col-md-9 ms-auto">
             <h1 class="mb-5 fw-bold">Edit Item</h1>
             <?php if (isset($success_message)): ?>
-                <p class="text-success"><?= htmlspecialchars($success_message) ?></p>
+                <div class="alert alert-success" role="alert"><?= htmlspecialchars($success_message) ?></div>
             <?php elseif (isset($error_message)): ?>
-                <p class="text-danger"><?= htmlspecialchars($error_message) ?></p>
+                <div class="alert alert-danger" role="alert"><?= htmlspecialchars($error_message) ?></div>
             <?php endif; ?>
             <form id="editItemForm" method="POST" action="edit_item.php?id=<?= $item_id ?>&type=<?= urlencode($tile_type) ?>" enctype="multipart/form-data">
                 <div class="mb-3">
@@ -374,6 +440,7 @@ if (!empty($_FILES['item_fullspecs']['name'])) {
                                     <label for="variation_name_<?= $index ?>" class="form-label">Variation Name</label>
                                     <input type="text" name="variation_name[]" class="form-control" value="<?= htmlspecialchars($variation['variation_name']) ?>" required>
                                     <input type="hidden" name="variation_id[]" value="<?= $variation['id'] ?>">
+                                    <input type="hidden" name="delete_variation[]" value="<?= $variation['id'] ?>" disabled>
                                 </div>
                                 <div class="col-md-6">
                                     <label for="variation_photo_<?= $index ?>" class="form-label">Variation Photo</label>
@@ -381,9 +448,10 @@ if (!empty($_FILES['item_fullspecs']['name'])) {
                                     <small class="form-text text-muted">Current photo: <?= htmlspecialchars($variation['variation_photo'] ?: 'None') ?>. Leave blank to keep existing.</small>
                                 </div>
                             </div>
-                            <div class="form-check mt-2">
-                                <input type="checkbox" name="delete_variation[]" value="<?= $variation['id'] ?>" class="form-check-input" id="delete_variation_<?= $index ?>" onchange="toggleDeleteVariation(this, <?= $index ?>)">
-                                <label class="form-check-label" for="delete_variation_<?= $index ?>">Delete this variation</label>
+                            <div class="mt-2">
+                                <button type="button" class="btn btn-danger btn-sm delete-variation-btn" onclick="toggleDeleteVariation(this, <?= $variation['id'] ?>, <?= $index ?>)" title="Delete this variation">
+                                    <i class="fas fa-times"></i>
+                                </button>
                             </div>
                         </div>
                     <?php endforeach; ?>
@@ -540,9 +608,6 @@ if (!empty($_FILES['item_fullspecs']['name'])) {
         confirmSaveButton.addEventListener('click', function () {
             form.submit();
         });
-
-        // Initialize form fields on page load
-        document.addEventListener('DOMContentLoaded', updateFormFields);
     </script>
 </body>
 </html>
